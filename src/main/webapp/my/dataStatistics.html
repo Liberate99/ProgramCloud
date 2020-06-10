@@ -94,7 +94,7 @@
                 <!--总计实验时长-->
                 <div style="width: 150px; height: 70px; background-color: #68d890; padding: 5px; border-radius:6px; box-shadow: 0 0 12px 3px #00000040;">
                     <p style="width:80%;color: #ffffff;margin: 3px auto;display:-webkit-flex;display: flex;justify-content: space-around;font-family: monospace;">全站累计实验时长</p>
-                    <div>
+                    <div style="display:flex;align-items:center;">
                         <p id="fpag_total_duration" style="width:80%; color: #ffffff; margin: 4px auto; display:-webkit-flex; display: flex; justify-content: space-around; font-size: 21px; font-family: monospace; font-weight: bolder;">-</p>
                         <p style="width:15%; color: #ffffff; margin: 4px auto; display:-webkit-flex; display: flex; justify-content: space-around; font-size: 11px; font-family: monospace; font-weight: normal;">min</p>
                     </div>
@@ -157,7 +157,7 @@
                 data-pic=<%= value[i].pic %>
                 data-view=<%= value[i].view %>
                 data-focus=<%= value[i].focus %>
-                onclick="courseStatisticDetail('<%= value[i].id %>')">
+                onclick="courseStatisticDetail('<%= value[i].id %>','<%= value[i].title %>')">
                 <div class="col-md-3 col-xs-6 courseBox">
                     <div class="courseMain">
                         <% if (value[i].pic != "") { %>
@@ -205,7 +205,6 @@
 </div>
 
 <script>
-
     $(document).ready(function () {
 
         // 获取全站累计实验次数、实验时长、文件上传次数
@@ -214,23 +213,18 @@
         // 获取近一周 实验次数、实验时长 - echarts
         getLastWeekStatistics()
 
-
         // 获取所有实验课
         // 获取我所创建的FPGA类课程
         getFPGACourseICreated()
         courseImgs()
-
     });
     $(window).resize(function () {
         courseImgs();
     });
 
-
-
-    function courseStatisticDetail(id){
-        window.location.href = "dataStatisticsOfCourse.html?course=" + id;
+    function courseStatisticDetail(id, title){
+        window.location.href = "dataStatisticsOfCourse.html?courseID=" + id + "&courseTitle=" + title;
     }
-
 </script>
 </body>
 </html>

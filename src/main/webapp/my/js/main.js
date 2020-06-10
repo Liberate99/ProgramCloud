@@ -54,12 +54,13 @@ $(function(){
 		});
 	});
     var identityRole = JSON.parse(getCookie('loginResult')).identityRole;
-	var userName = JSON.parse(getCookie('loginResult')).loginName;
+	// var userName = JSON.parse(getCookie('loginResult')).loginName;
     if(identityRole == "1" || identityRole == "2"){
         // 老师 或 管理员
         //layer.msg("老师或管理员", {time:3000});
         //console.log("老师 或 管理员");
-        var a = '<li><a href="dataStatistics.html?user_name='+ userName +' ">数据统计</a></li>';
+        // var a = '<li><a href="dataStatistics.html?user_name='+ userName + ">数据统计</a></li>';
+        var a = '<li><a href="dataStatistics.html">数据统计</a></li>';
         $("#cloud-navbar-collapse ul ul").prepend(a);
 
     }else{
@@ -215,7 +216,7 @@ function request(func,data,callback,type,loading){
 
 //Cookie存储   onLoad="checkCookie()"
 function getCookie(c_name) {
-	// console.log(document.cookie);
+	console.log(document.cookie);
 	if (document.cookie.length>0) {
 		c_start = document.cookie.indexOf(c_name + "=")
 		if (c_start!=-1) {
@@ -589,9 +590,7 @@ function getFPGATotalStatistics(){
     });
 }
 
-var week_exp_num = [];
-var week_duration = [];
-var week_file_upload_num = [];
+
 // 获取近一周 实验次数、实验时长
 function getLastWeekStatistics(){
     $.ajax({
@@ -604,24 +603,28 @@ function getLastWeekStatistics(){
             	console.log(data.result.expNum)
 				console.log(data.result.expNum[0])
                 console.log((data.result.expNum)[0])
-                week_exp_num = [data.result.expNum[0], data.result.expNum[1], data.result.expNum[2], data.result.expNum[3],
+                var week_exp_num = [data.result.expNum[0], data.result.expNum[1], data.result.expNum[2], data.result.expNum[3],
                     			data.result.expNum[4], data.result.expNum[5], data.result.expNum[6]];
-                week_duration = [data.result.duration[0], data.result.duration[1], data.result.duration[2], data.result.duration[3],
+                var week_duration = [data.result.duration[0], data.result.duration[1], data.result.duration[2], data.result.duration[3],
 								data.result.duration[4], data.result.duration[5], data.result.duration[6]];
-                week_file_upload_num = [data.result.fileUploadNum[0], data.result.fileUploadNum[1], data.result.fileUploadNum[2], data.result.fileUploadNum[3],
+                var week_file_upload_num = [data.result.fileUploadNum[0], data.result.fileUploadNum[1], data.result.fileUploadNum[2], data.result.fileUploadNum[3],
                     					data.result.fileUploadNum[4], data.result.fileUploadNum[5], data.result.fileUploadNum[6]];
-                setTotalEchartsOption();
+                setTotalEchartsOption(week_exp_num, week_duration, week_file_upload_num);
             }else{
                 console.log(data);
+                var nodata = [0, 0, 0, 0, 0, 0, 0];
+                setTotalEchartsOption(nodata,nodata,nodata);
             }
         },
         error: function(xhr){
             console.log(xhr);
+            var nodata = [0, 0, 0, 0, 0, 0, 0];
+            setTotalEchartsOption(nodata,nodata,nodata);
         }
     });
 
 }
-function setTotalEchartsOption(){
+function setTotalEchartsOption(week_exp_num, week_duration, week_file_upload_num){
     var chart_total = echarts.init(document.getElementById('Echarts_last_week'));
     var total_option = {
         title:{
@@ -1982,8 +1985,6 @@ function  getPersonalOverview() {
 		}
 
 	},false);
-	
-	
 }
 // ***************scratch作品列表****************
 function proList(){

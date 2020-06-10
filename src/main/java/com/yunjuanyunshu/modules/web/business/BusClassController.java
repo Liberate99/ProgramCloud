@@ -137,6 +137,17 @@ public class BusClassController  {
         }
 
         /**
+         * 获取该课程所有由该用户创建的班级信息
+         * @param user
+         * @param busCourse
+         * @param respInfo
+         */
+        @MethodAnnot
+        public static void getClassesByCourseCreatedByUser(User user, BusCourse busCourse, RespInfo respInfo) {
+                busClassService.getClassesByCourseCreatedByUser(user, busCourse, respInfo);
+        }
+
+        /**
          * 加入班级
          * @param user
          * @param busCourse

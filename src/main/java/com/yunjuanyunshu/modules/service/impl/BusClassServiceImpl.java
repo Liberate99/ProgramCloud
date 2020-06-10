@@ -134,6 +134,22 @@ public class BusClassServiceImpl extends ServiceImpl<BusClassDao, BusClass> impl
     }
 
     @Override
+    public void getClassesByCourseCreatedByUser(User user, BusCourse busCourse, RespInfo respInfo) {
+        try {
+            List<BusClass> busClasses = super.selectList(new EntityWrapper<BusClass>()
+                    .eq("course_id", busCourse.getId())
+                    .eq("create_by", user.getId()));
+            respInfo.setValue(busClasses);
+            respInfo.setMsg("success");
+            respInfo.setCode(ServiceErrorCodeEnum.SUCCESS.getErrorCode());
+        } catch (Exception e) {
+            respInfo.setMsg("操作失败");
+            respInfo.setError(e.getMessage());
+            respInfo.setCode(ServiceErrorCodeEnum.ERROR.getErrorCode());
+        }
+    }
+
+    @Override
     public void hasClass(BusCourse busCourse, RespInfo respInfo) {
         try {
             int count = busClassService.selectCount(new EntityWrapper<BusClass>()
@@ -155,8 +171,8 @@ public class BusClassServiceImpl extends ServiceImpl<BusClassDao, BusClass> impl
     @Override
     public void isJoinClass(User user, BusCourse busCourse, RespInfo respInfo) {
         try {
-            System.out.println(user.getLoginName());
-            System.out.println(busCourse.getTitle());
+//            System.out.println(user.getLoginName());
+//            System.out.println(busCourse.getTitle());
             BusCourseRecord busCourseRecord = busCourseRecordService.selectOne(new EntityWrapper<BusCourseRecord>().eq("user_id", user.getId()).eq("course_id", busCourse.getId()));
             if (busCourseRecord != null) {
                 if ("0".equals(busCourseRecord.getClassId())) {

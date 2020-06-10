@@ -26,6 +26,7 @@ public interface BusClassService extends IService<BusClass> {
         void isJoinClass(User user, BusCourse busCourse, RespInfo respInfo);
         void joinClass(User user, BusCourse busCourse, BusClass busClass, RespInfo respInfo);
         void getClassesByCourse(BusCourse busCourse, RespInfo respInfo);
+        void getClassesByCourseCreatedByUser(User user, BusCourse busCourse, RespInfo respInfo);
         void getBusCourseRecordByClassId(BusClass busClass, RespInfo respInfo);
         void quitClass(BusCourseRecord busCourseRecord, RespInfo respInfo);
         void deleteClass(BusClass busClass, RespInfo respInfo);
