@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.OjSubmissionDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.OjSubmission">
+		<id column="id" property="id" />
+		<result column="task_id" property="taskId" />
+		<result column="problem_id" property="problemId" />
+		<result column="user_id" property="userId" />
+		<result column="language_id" property="languageId" />
+		<result column="submit_time" property="submitTime" />
+		<result column="execute_time" property="executeTime" />
+		<result column="used_time" property="usedTime" />
+		<result column="used_memory" property="usedMemory" />
+		<result column="judge_result" property="judgeResult" />
+		<result column="judge_score" property="judgeScore" />
+		<result column="judge_log" property="judgeLog" />
+		<result column="submit_code" property="submitCode" />
+		<result column="submit_input" property="submitInput" />
+	</resultMap>
+ 	<insert id="createSubmission"
+			parameterType="com.yunjuanyunshu.modules.entity.OjSubmission"
+			flushCache="true"
+			keyProperty="id"
+			keyColumn="id"
+			useGeneratedKeys="true">
+		INSERT INTO oj_submission(task_id,problem_id,user_id,language_id,submit_time,submit_code,submit_input)
+		VALUES (#{taskId},#{problemId},#{userId},#{languageId},#{submitTime},#{submitCode},#{submitInput})
+	</insert>
+
+</mapper>

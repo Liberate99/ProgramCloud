@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>开始测试使用activemq</p>
+<p id="name"></p>
+<form action="" onsubmit="return false;">
+    <label for="code"></label>
+    <textarea name="code" id="code" cols="30" rows="10"></textarea>
+    <button id="submit">提交</button>
+    <textarea name="code" id="input" cols="30" rows="10"></textarea>
+    <div id="result">
+        <p>运行结果:</p>
+        <p id="judge-result">PD</p>
+        <p id="used-time">0ms</p>
+        <p id="used-memory">0KB</p>
+        <p id="execute-time"></p>
+        <textarea name="" id="judge-log" cols="30" rows="10"></textarea>
+    </div>
+</form>
+<script type="text/javascript" src="js/jquery-1.10.0.js"></script>
+<script type="text/javascript" src="layer/layer.js"></script>
+<script type="text/javascript" src="js/HOST.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#result').hide();
+
+        var data = {
+            busProgrammingTask : {
+                id : "844608277e3940688aebf92211094ae0"
+            }
+        };
+
+        request('business.busProgrammingTask.getBusProgrammingTaskWithProblem',data,function callback(result) {
+            $('#name').html(result.value.ojProblem.name);
+
+        },true);
+    });
+
+    $('#submit').on('click',function () {
+
+        var code = $('#code').val();
+        var input = $('#input').val();
+        var userId = JSON.parse(getCookie('loginResult')).id;
+        console.log(code);
+        var submissionData = {
+            ojSubmission :{
+                taskId : "0",
+                problemId : 1022,
+                userId : userId,
+                submitCode : code,
+                submitInput: input,
+                languageId : 3
+            }
+        };
+
+        request('business.ojSubmission.createSubmission',submissionData,function callback(result) {
+            console.log(result.value);
+            $('#submit').attr('disabled',true);
+            $('#result').show();
+
+//            var subscriptionUrl = "127.0.0.1:8080/business.vojSubmissions.getRealTimeJudgeResult.hsr?userId=" + userId + "&submissionId=" + result.value,
+//                source          = new EventSource(subscriptionUrl),
+//                lastMessage     = '';
+//
+//            source.onmessage    = function(e) {
+//                var message     = e['data'];
+////                console.log(message);
+//                if ( message == lastMessage ) {
+//                    return;
+//                }
+//                lastMessage     = message;
+//
+//                if ( message == 'Established' ) {
+//                    $('#judge-log').append('<p>Connected to Server.</p>');
+//                    return;
+//                }
+//                var mapMessage  = JSON.parse(message),
+//                    judgeResult = mapMessage['judgeResult'],
+//                    judgeLog    = mapMessage['message'];
+//
+//                $('#judge-result').html(judgeResult);
+//                $('#judge-log').append('<p>' +judgeLog +'<p>');
+//            };
+
+            //处理运行结果
+            var currentJudgeResult = 'PD',
+                getterInterval     = setInterval(function() {
+                    getRealTimeJudgeResult(result.value);
+                    currentJudgeResult = $('#judge-result').html();
+
+                    if ( currentJudgeResult != 'PD' ) {
+                        clearInterval(getterInterval);
+                    }
+                }, 1000);
+
+        },true);
+    });
+
+
+    function getRealTimeJudgeResult(submissionId) {
+        var pageRequests = {
+            ojSubmission : {
+                id : submissionId
+            }
+        };
+
+        request('business.ojSubmission.get',pageRequests,function callback(result) {
+            if ( result.code == 0 && result.value.judgeResult != 'PD' ) {
+                $('#judge-result').html(result.value.judgeResult);
+                $('#used-time').html(result.value.usedTime + " ms");
+                $('#used-memory').html(result.value.usedMemory + " KB");
+                $('#execute-time').html(getFormatedDateString(result.value.executeTime, 'zh_CN'));
+                $('#judge-log').val(result.value.judgeLog);
+            }
+        },true);
+    }
+
+    function getFormatedDateString(dateTime, locale) {
+        var dateObject = new Date(dateTime),
+            dateString = dateObject.toString();
+
+        if ( locale == 'en_US' ) {
+            dateString = dateObject.toString('MMM d, yyyy h:mm:ss tt');
+        } else if ( locale == 'zh_CN' ) {
+            dateString = dateObject.toString('yyyy-M-dd HH:mm:ss');
+        }
+
+        return dateString;
+    }
+</script>
+</body>
+</html>

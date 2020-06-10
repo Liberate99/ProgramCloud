@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<!--响应式布局，宽度等于设备宽度-->
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+	<title>实验云</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/head.css">
+	<link rel="stylesheet" type="text/css" href="css/mycourse.css">
+	<link rel="stylesheet" type="text/css" href="css/page.css">
+	<script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<script type="text/javascript" src="js/jquery-1.10.0.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/jquery.page.js"></script>
+	<script type="text/javascript" src="js/artTemplate.js"></script>
+	<script type="text/javascript" src="js/template-native.js"></script>
+	<script type="text/javascript" src="layer/layer.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	<script src="js/bootstrap.min.js" charset="utf-8"></script>
+	<!--[if lt IE 9]>
+    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+	<!--[endif]-->
+	<style type="text/css">
+		body {
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+			font-size: 14px;
+			line-height: 1.42857143;
+			color: #333;
+			background-color: #fff;
+		}
+		.cousewareinfo {
+			background-color: #429AFF;
+			filter: alpha(opacity=70);
+			-moz-opacity: .7;
+			opacity: .7;
+			border: 1px;
+			position: relative;
+			width: 100%;
+			height: 260px;
+			color: #fff;
+		}
+
+		.cousewareinfo .stat, .cousewareinfo .title {
+			padding-left: 40px;
+			padding-top: 30px;
+		}
+
+		.cousewareinfo .title {
+			float: left;
+			font-size: 28px;
+		}
+		.cousewareinfo {
+			background-color: #429AFF;
+			filter: alpha(opacity=70);
+			-moz-opacity: .7;
+			opacity: .7;
+			border: 1px;
+			position: relative;
+			width: 100%;
+			height: 260px;
+			color: #fff;
+		}
+		.cousewareinfo .stat .col {
+			border-right: 2px solid #fff;
+			float: left;
+			min-width: 200px;
+			padding-left: 80px;
+			padding-right: 80px;
+		}
+		.cousewareinfo .stat .lastcol {
+			float: left;
+			min-width: 200px;
+			padding-left: 80px;
+		}
+		.cousewareinfo .stat .cousrewarebtn {
+			float: left;
+			padding-left: 80px;
+		}
+		.ib-selfstudy-btn {
+			height: 60px;
+			width: 200px;
+		}
+		.ib-selfstudy-bfont {
+			font-size: 36px!important;
+		}
+		.cousewareinfo .stat span {
+			font-size: 20px;
+		}
+		.cousewareinfo em {
+			align: center;
+			position: absolute;
+			margin-bottom: 0;
+			display: block;
+			width: 0;
+			height: 0;
+			top: 100%;
+			left: 50%;
+			border-top: 30px solid #429AFF;
+			border-right: 40px solid transparent;
+			border-left: 40px solid transparent;
+		}
+		.cousewarelist {
+			width: 70%;
+			margin: 0 auto;
+			margin-top: 32px;
+			margin-bottom: 10px;
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+		.list-group {
+			padding-left: 0;
+			margin-bottom: 0;
+		}
+		.panel-group .panel-heading {
+			color: #333;
+			background-color: #f5f5f5;
+			border-color: #ddd;
+			border-bottom: 1px solid #ddd;
+			height: 60px;
+		}
+		.panel-body {
+			padding: 0;
+		}
+		.panel-title {
+			padding-top: 10px!important;
+		}
+		.badge{
+			float: right;
+		}
+		a{text-decoration:none}
+		a:link{
+			text-decoration:none;
+		}
+		a:hover{
+			text-decoration:none;
+		}
+	</style>
+</head>
+<body>
+	<div class="menu">
+		<div class="container con_header">
+			<nav class="navbar" role="navigation">
+			    <div class="container-fluid">
+				    <div class="navbar-header">
+				        <button type="button" class="navbar-toggle" data-toggle="collapse"
+				                data-target="#cloud-navbar-collapse">
+				            <span class="sr-only">切换导航</span>
+				            <span class="icon-bar"></span>
+				            <span class="icon-bar"></span>
+				            <span class="icon-bar"></span>
+				        </button>
+				        <a class="navbar-brand" href="index.html">
+							<img src="img/logo.png" style="width: 50px;">
+							<!--<span class="glyphicon glyphicon-cloud"></span>-->
+						</a>
+				    </div>
+				    <div class="collapse navbar-collapse" id="cloud-navbar-collapse">
+				        <ul class="nav navbar-nav">
+				            <li class="active"><a href="courseLibrary.html">课程库</a></li>
+				            <li><a href="scrachPro.html">Scratch作品展</a></li>
+				            <li><a href="personalMain.html">个人总览</a></li>
+				            <li><a href="myCourse.html">我的课程</a></li>
+				            <div class="mobile-show">
+				            	<li><a href="personalCenter.html">个人信息</a></li>
+	            				<li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+				            </div>
+				            <li class="dropdown head-box">
+				            	<a href="#" class="head-pic" data-toggle="dropdown">
+				            		<img id="userImg" src="img/head_pic.png">
+				            		<span id="userName">编程云</span>
+				            	</a>
+				            	<ul class="dropdown-menu">
+				            		<li><a href="personalCenter.html">个人信息</a></li>
+				            		<li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+				            	</ul>
+				            </li>
+				        </ul>
+				    </div>
+			    </div>
+			</nav>
+		</div>
+	</div>
+	<div class="main">
+		<div class="cousewareinfo">
+			<div class="title">C++语言基础</div>
+			<div style="clear:both;"></div>
+			<div class="stat">
+				<div class="col"><span id="sectionsize" class="ib-selfstudy-bfont">10</span><br/><span>章节</span></div>
+				<div class="col"><span id="knowledgesize" class="ib-selfstudy-bfont">94</span><br/><span>知识点</span></div>
+				<div class="lastcol"><span id="questionsize" class="ib-selfstudy-bfont">284</span><br/><span>实验代码</span></div>
+				<div  class="cousrewarebtn"><button type="button" class="btn btn-danger btn-lg ib-selfstudy-btn" id="studybtn">继续学习</button></div>
+			</div>
+			<em></em>
+		</div>
+		<div class="cousewarelist">
+
+			<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+				<div class="panel panel-default">
+					<a  data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						<div class="panel-heading" role="tab" id="headingOne">
+							<h4 class="panel-title">
+								<span class="badge">1/4</span>
+								章节 #1
+							</h4>
+						</div>
+					</a>
+					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+						<div class="panel-body">
+							<ul class="list-group">
+								<li class="list-group-item">
+									<span class="badge">1/4</span>
+									第一节
+								</li>
+								<li class="list-group-item">
+									<span class="badge">1/4</span>
+									第二节
+								</li>
+								<li class="list-group-item">
+									<span class="badge">1/4</span>
+									第三节
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<a  data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+						<div class="panel-heading" role="tab" id="headingTwo">
+							<h4 class="panel-title">
+								<span class="badge">1/4</span>
+								章节 #2
+							</h4>
+						</div>
+					</a>
+					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+						<div class="panel-body">
+							<ul class="list-group">
+								<li class="list-group-item">
+									<span class="badge">1/4</span>
+									第一节
+								</li>
+								<li class="list-group-item">
+									<span class="badge">1/4</span>
+									第二节
+								</li>
+								<li class="list-group-item">
+									<span class="badge">1/4</span>
+									第三节
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		<!--<div class="container">-->
+			<!--<div class="row">-->
+				<!--<p class="main-tit col-md-12 col-xs-12" id="title">课程库&#45;&#45;C++基础课程（一）</p>-->
+			<!--</div>-->
+			<!--<div class="row">-->
+				<!--<img src="img/course02.png" class="col-md-3 col-sm-5 col-xs-12">-->
+				<!--<div class="col-md-9 col-sm-7 col-xs-12">-->
+					<!--<p class="courseTit" id="courseTitle">C++基础课程（一）</p>-->
+					<!--<p class="classHour"><span id="classTime">20</span>课时<span style="margin-left:20px;" id="score">10</span>学分</p>-->
+					<!--<p class="courseDetail" id="desc">C语言是一门通用计算机编程语言，应用广泛。C语言的设计目标是提供一种能以简易的方式编译、处理低级存储器、产生少量的机器码以及不需要任何运行环境支持便能运行的编程语言。</p>-->
+					<!--&lt;!&ndash;<a href="#" class="continueL">继续学习</a>&ndash;&gt;-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</div>-->
+		<!--<div class="container" style="padding-top: 20px">-->
+			<!--<div class="main-tit">-->
+				<!--<span>章节</span>-->
+			<!--</div>-->
+			<!--<div class="row" id="show">-->
+
+			<!--</div>-->
+
+			<!--<div class="panel-group" id="accordion">-->
+				<!--<script id="content" type="text/html">-->
+					<!--<% for (var i = 0; i < value.length; i ++) { %>-->
+					<!--<div class="panel panel-default">-->
+						<!--<div class="panel-heading">-->
+							<!--<h4 class="panel-title">-->
+								<!--<a data-toggle="collapse" data-parent="#accordion"-->
+								   <!--href=#collapse<%= i+1 %> >-->
+									<!--第<%=i+1%>章&nbsp;<%=value[i].title%>-->
+								<!--</a>-->
+							<!--</h4>-->
+						<!--</div>-->
+						<!--<div id=collapse<%= i+1 %> class="panel-collapse collapse">-->
+							<!--<% for (var j = 0; j < value[i].children.length; j ++) { %>-->
+							<!--<div class="panel-body" style="padding:10px 20px 5px 20px">-->
+								<!--<div  data-chapterid=<%= value[i].children[j].id %> data-resourceurl=<%= value[i].children[j].resourceUrl %> data-chaptertype=<%=value[i].children[j].type %> data-chaptertitle=<%= value[i].children[j].title %> data-chapterdes=<%= value[i].children[j].des %> >-->
+									<!--<a href="code.html?chapterId=<%= value[i].children[j].id %>" target="_blank">-->
+										<!--<% if(value[i].children[j].hasFinished==1) { %>-->
+										<!--<div class="course" style="background:#429AFF;color: #ffffff;">-->
+											<!--<div>-->
+												<!--<%=i+1%>-<%=j+1%>&nbsp;&nbsp;<%=value[i].children[j].title%>-->
+												<!--<p class="finishDate"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> <%=value[i].children[j].finishDate%></p>-->
+											<!--</div>-->
+										<!--</div>-->
+										<!--<% }else{ %>-->
+										<!--<div class="course">-->
+											<!--<div>-->
+												<!--<%=i+1%>-<%=j+1%>&nbsp;&nbsp;<%=value[i].children[j].title%>-->
+											<!--</div>-->
+											<!--&lt;!&ndash;<p><%=value[i].children[j].title%></p>&ndash;&gt;-->
+											<!--&lt;!&ndash;<p class="finishDate"><%=value[i].children[j].des%></p>&ndash;&gt;-->
+										<!--</div>-->
+										<!--<% } %>-->
+
+									<!--</a>-->
+								<!--</div>-->
+							<!--</div>-->
+
+							<!--<% } %>-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="layui-collapse">-->
+						<!--<div class="layui-colla-item">-->
+							<!--<h2 class="layui-colla-title"></h2>-->
+							<!--<div class="layui-colla-content">-->
+
+
+								<!--&lt;!&ndash;<div class="col-md-3 col-sm-4 col-xs-12" style="height: 100px; width:100px; border: 1px red solid;">&ndash;&gt;-->
+								<!--&lt;!&ndash;sdfsdf&ndash;&gt;-->
+								<!--&lt;!&ndash;</div>&ndash;&gt;-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<% } %>-->
+				<!--</script>-->
+
+			<!--</div>-->
+
+			<!--<ul class="pagination" style="float: right;">-->
+
+			<!--</ul>-->
+		<!--</div>-->
+	</div>
+	</div>
+	<div class="footer">
+		<div class="container">
+			<ul>
+				<li class="footer-tit">联系与反馈</li>
+				<li><a href="#">联系我们</a></li>
+				<li><a href="#">意见反馈</a></li>
+			</ul>
+			<ul>
+				<li class="footer-tit">资源共享</li>
+				<li><a href="#">学校支持</a></li>
+				<li><a href="#">文章干货</a></li>
+				<li><a href="#">相关下载</a></li>
+			</ul>
+			<ul>
+				<li class="footer-tit">关注我们</li>
+				<li><a href="#">微信公众号</a></li>
+				<li><a href="#">QQ群</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function(){
+			var courseId= window.location.href.split('=')[1];
+			console.log(courseId);
+			courseOverview(courseId);
+//			var courseid=getCookie('courseid');
+//			var title=getCookie('corsetitle');
+//			var desc=getCookie('desc');
+//			var overview=getCookie('overview');
+//			var classify=getCookie('classify');
+//			var classtime=getCookie('classtime');
+//			var score=getCookie('score');
+//			var createTime=getCookie('createTime');
+//			var createBy=getCookie('createBy');
+//			var pic=getCookie('pic');
+//			var view=getCookie('view');
+//			var focus=getCookie('focus');
+//
+//			$('#title').html(title);
+//			$('#courseTitle').html(title);
+//			$('#classTime').html(classTime);
+//			$('#score').html(score);
+//			$('#desc').html(desc);
+
+
+
+//			var courseid=getCookie('courseid');
+//			var courseid=courseid;//课程id
+//			alert(courseid)
+//			var page=1;//第几页
+			courseDetail(courseId,1);
+		});
+		function setP(pages,current){
+			$(".pagination").createPage({
+				pageCount:pages,
+				current:current,
+				backFn:function(p){
+					// console.log(p);
+					//alert(p)
+					var classify="0";
+					courseList(classify,p);
+				}
+			});
+		}
+//		function details(chapterId){
+//
+////			alert($(chapter).data("chaptertitle"))
+//			var chapterid=$(chapter).data("chapterid");//课程id
+//			var chaptertitle=$(chapter).data("chaptertitle");
+//			var chapterdes=$(chapter).data("chapterdes");
+//			var chaptertype=$(chapter).data("chaptertype");
+//			var resourceurl=$(chapter).data("resourceurl");
+//			setCookie('resourceurl',resourceurl);
+//			setCookie('chaptertype',chaptertype);
+//			setCookie('chapterid',chapterid);
+//			setCookie('chaptertitle',chaptertitle);
+//			setCookie('chapterdes',chapterdes);
+////			alert(2)
+////			alert(getCookie('courseid'))
+////			window.open("CodeMirror/index2.html");
+//		}
+	</script>
+	<!-- <script type="text/javascript" src="js/main.js"></script> -->
+</body>
+</html>

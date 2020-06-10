@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="编程云">
+    <meta name="description" content="编程云">
+    <meta name="robots" content="all">
+    <meta name="copyright" content="">
+    <meta name="author" content="编程云">
+    <title>实验云</title>
+    <link rel=stylesheet href="css/codemirror.min.css">
+    <link rel="stylesheet" href="CodeMirror/css/style.css" type="text/css">
+    <link href="CodeMirror/addon/hint/show-hint.css" rel="stylesheet">
+    <link href="CodeMirror/css/bootstrap.min.css" rel="stylesheet">
+    <link rel=stylesheet href="css/head.css">
+    <link rel="stylesheet" type="text/css" href="CodeMirror/css/mycourse.css">
+    <link rel=stylesheet href="CodeMirror/theme/seti.css">
+    <!--<link href="css/video-js.css" rel="stylesheet" type="text/css">-->
+    <link href="css/code.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="CodeMirror/js/jquery.min.js"></script>
+    <script src="CodeMirror/js/bootstrap.min.js"></script>
+    <script src="js/artTemplate.js"></script>
+    <script src="js/template-native.js"></script>
+    <script type="text/javascript" src="layer/layer.js"></script>
+    <script src="CodeMirror/js/Drag.js"></script>
+    <script type="text/javascript" src="js/HOST.js"></script>
+    <script src="js/main.js"></script>
+    <!--<script register-percent="100" src="js/video.js"></script>-->
+
+    <style type="text/css">
+        html,body{
+            height: 100%;;
+            width: 100%;
+        }
+        .CodeMirror div.CodeMirror-cursor{
+            border-left: solid thin #f8f8f0;
+        }
+        .CodeMirror{
+            font-size: 16px;
+            height: 100%;
+        }
+        .code-box{
+            position: absolute;
+            top: 30px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        #result{
+            padding: 10px;
+            font-size:16px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 30px;
+            bottom: 0;
+        }
+        #testBtn{
+            display: none;
+        }
+        .code-btn,.code-btn:focus,.code-btn:active{
+            color: white;
+            border: 0;
+            background: #3594ff;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+            outline: none;
+        }
+    </style>
+</head>
+<body style="padding: 0;">
+    <div id="code_area" class="code" style="width: 60%;height: 100%;">
+        <div>
+            <ul class="nav nav-tabs" id="tab_nav" style="border-right: 1px solid #ccc">
+
+            </ul>
+            <div class="codePlay">
+                <a href="javascript:;" id="testBtn" title="测试" data-target="#testModal" onclick="codeTest()" style="background-color: #428bca;"><span class="glyphicon glyphicon-flag"></span></a>
+                <a href="javascript:;" title="放大" style="background-color: #aa88b0;" onclick="fullUp()"><span id="butten" class="glyphicon glyphicon-fullscreen"></span></a>
+                <a href="javascript:;" title="重置代码" style="background-color: #d95350" onclick="resetCode()"><span class="glyphicon glyphicon-refresh"></span></a>
+                <a href="javascript:;" id="runBtn" title="运行" style="background-color: #1ea362;" onclick="runCode()" data-target="#codeRunModal"><span class="glyphicon glyphicon-play"></span></a>
+                <a href="javascript:;" onclick="helps()" title="求助" data-target="#myModal" style="background-color: #f0a745;"><span class="glyphicon glyphicon-question-sign"></span></a>
+            </div>
+        </div>
+        <div class="code-box">
+            <textarea class="showcode" id="code" name="code"></textarea>
+        </div>
+        <!--//输入改为弹出-->
+        <!--<textarea class="code-in" placeholder="请在此输入程序运行中所有需要的数据。" id="inputText"-->
+                  <!--onfocus="this.placeholder=''" onblur="this.placeholder='请在此输入程序运行中所有需要的数据。'"></textarea>-->
+    </div>
+    <div class="result" id="b" data-a="1" style="height: 100%;width: 40%;background-color: white;position: relative;">
+        <p class="resultTag">运行结果</p>
+        <p id="judge-result" class="hide">PD</p>
+        <div class="showresult" id="result" name="result">
+            <div id="judge-log" class="markdown" ></div>
+            <iframe id="result_iframe" frameborder="0" width="100%" height="100%"></iframe>
+        </div>
+    </div>
+    <div style="clear: both"></div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title" id="myModalLabel">求助</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="searchTag" class="col-xs-2 control-label">类型</label>
+                            <div class="col-xs-3">
+                                <select class="form-control" id="searchTag">
+                                </select>
+                            </div>
+                            <script id="classifyTag" type="text/html">
+                                <% for (var i = 0; i < value.length; i ++) { %>
+                                <option value=<%= value[i].value %> ><%=value[i].label%></option>
+                                <% } %>
+                            </script>
+                        </div>
+                        <div class="form-group">
+                            <label for="bonus" class="col-xs-2 control-label">奖金</label>
+                            <div class="col-xs-2">
+                                <input type="number" min="0" class="form-control" id="bonus" value="0" placeholder="奖金">
+                            </div>
+                            <div class="col-xs-8">
+                                <span class="form-control-static">您当前有<span id="m_ask_mycoin">0</span></span>个code币，
+                                <button type="button" id="m_ask_alipay" class="btn btn-link">兑换code币</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="desc" class="col-xs-2 control-label">标题</label>
+                            <div class="col-xs-10">
+                                <input type="text" class="form-control" id="tit">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="desc" class="col-xs-2 control-label">描述</label>
+                            <div class="col-xs-10">
+                                <textarea rows="3"  class="form-control" id="desc" placeholder="描述你的问题" style="resize: none;overflow-x:hidden"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="m_input_code" class="col-xs-2 control-label">代码</label>
+                            <div class="col-xs-10">
+                                <textarea readonly="readonly" class="form-control" id="m_input_code" placeholder="" style="height:200px;resize: none"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                    <button type="button" onclick="applyQue()" class="code-btn">提问</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="testModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title" id="testModalLabel">运行测试</h5>
+                </div>
+                <div class="modal-body">
+                    <textarea rows="6" class="form-control" id="sampleInput" placeholder="请输入测试数据"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="sampleIn()" class="code-btn">填入样例</button>
+                    <button type="button" onclick="testRun()" class="code-btn" style="background: #1ea362;">运行</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="codeRunModal" tabindex="-1" role="dialog" aria-labelledby="codeRunModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h5 class="modal-title" id="codeRunModalLabel">运行</h5>
+                </div>
+                <div class="modal-body">
+                    <textarea rows="6" class="form-control" id="subInput" placeholder="请输入运行数据"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="runCodeWithInput()" class="code-btn" style="background: #1ea362;">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--<script type="text/javascript" src="js/code.js"></script>-->
+<script type="text/javascript" src="js/codeEdit.js"></script>
+<script type="text/javascript">
+    $.getScript('js/highlight.min.js', function() {
+        $('code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
+    });
+    function changeUp(){
+        $("#butten").removeClass("glyphicon-fullscreen");
+        $("#butten").addClass("glyphicon-resize-small");
+    }
+    function changeDown(){
+        $("#butten").addClass("glyphicon-fullscreen");
+        $("#butten").removeClass("glyphicon-resize-small");
+    }
+    function fullUp(){
+        window.parent.Show();
+    }
+    function helps(){
+        $("#myModal").modal('show');
+        getDict();
+        $("#m_input_code").val(editor.getValue());
+    }
+    function applyQue(){
+//        console.log(codeId);
+        var chapterId= window.location.href.split('=')[1];
+        var data={
+            user:{
+                token:JSON.parse(getCookie('loginResult')).token
+            },
+            busQuestion:{
+                type:$("#searchTag").val(),
+                bonus:$("#bonus").val(),
+                title:$("#tit").val(),
+                description:$("#desc").val(),
+                code:encode64(encodeURIComponent($("#m_input_code").val())),
+                chapter:chapterId,
+                questionType:1,
+                codeId:codeId
+            }
+        };
+        console.log(data);
+        request('business.busQuestion.putQuestion',data,function callback(result) {
+//            layer.msg(result.msg, {shade:false,time: 1000, icon:5});
+            if(result.code == 0){
+                layer.msg("求助成功!", {shade:false,time: 1500, icon:6});
+                $('#myModal').modal('hide')
+            }else{
+                console.log(result.msg);
+            }
+        })
+    }
+</script>
+</body>
+
+</html>

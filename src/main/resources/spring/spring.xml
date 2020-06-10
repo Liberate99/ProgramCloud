@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+	   http://www.springframework.org/schema/jms
+	   http://www.springframework.org/schema/jms/spring-jms.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 引入属性文件 -->
+    <context:property-placeholder location="classpath:config.properties"/>
+
+    <!-- Service包(自动注入) -->
+    <context:component-scan base-package="com.yunjuanyunshu"/>
+    <!--<context:component-scan base-package="com.yunjuanyunshu"/>-->
+
+
+    <import resource="classpath:spring/spring-mybatis.xml"/>
+    <!-- 缓存配置 -->
+
+
+    <!-- Message Service -->
+    <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <constructor-arg index="0" value="${jms.broker.url}" />
+    </bean>
+    <bean id="connectionFactory"
+          class="org.springframework.jms.connection.CachingConnectionFactory">
+        <constructor-arg ref="amqConnectionFactory" />
+    </bean>
+    <bean id="defaultDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0" value="ojSubmissionTaskQueue" />
+    </bean>
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory" />
+        <property name="defaultDestination" ref="defaultDestination" />
+    </bean>
+    <bean class="org.springframework.jms.listener.SimpleMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory" />
+        <property name="destinationName" value="ojJudgeResultQueue" />
+        <property name="messageListener" ref="messageReceiver" />
+    </bean>
+    <bean id="messageSender" class="com.yunjuanyunshu.modules.messenger.MessageSender"></bean>
+    <bean id="messageReceiver" class="com.yunjuanyunshu.modules.messenger.MessageReceiver"></bean>
+</beans>

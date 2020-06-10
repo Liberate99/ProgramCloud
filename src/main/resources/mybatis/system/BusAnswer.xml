@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.BusAnswerDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.BusAnswer">
+		<id column="id" property="id" />
+		<result column="reason" property="reason" />
+		<result column="code" property="code" />
+		<result column="create_by" property="createBy" />
+		<result column="create_date" property="createDate" />
+		<result column="question_id" property="questionId" />
+		<result column="support_num" property="supportNum" />
+		<result column="accepted" property="accepted"/>
+		<result column="recommended" property="recommended"/>
+		<result column="referrer" property="referrer"/>
+	</resultMap>
+
+</mapper>

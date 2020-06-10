@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/video-js.css" rel="stylesheet" type="text/css">
+    <script register-percent="100"  src="js/video.js"></script>
+    <script type="text/javascript" src="layer/layer.js"></script>
+    <style>
+        body{background-color: #191919}
+        .m{ width: 640px; height: 264px; margin-left: auto; margin-right: auto; margin-top: 100px; }
+    </style>
+</head>
+
+<body>
+<div class="m">
+    <video id="my-video" class="video-js" data-setup='{"playbackRates": [1, 1.5, 2] }'></video>
+    <script type="text/javascript">
+        videojs("my-video", {
+            "controls": true,
+            "autoplay": false,
+            "preload": "auto" ,
+            "poster": "oceans.png",
+            "width": 600,
+            "height": 264,
+            sources: [
+                { src: 'http://cpr.imayuan.com/userfiles/05bd847ae1b04e5384850ef5874130a6/res/05bd847ae1b04e5384850ef5874130a6_35753261-70dd-4a4c-9d2c-34bcee32db10.mp4', type: 'video/mp4'}
+            ],
+
+        });
+        videojs('my-video').watermark({
+            file: 'your-logo.png',
+            clickable: true,
+            url: "https://www.google.com.br/?gws_rd=cr&ei=r6lbWYO9KMfqmAHy6Ir4Dw",
+
+        });
+        videojs('my-video').videoJsResolutionSwitcher();
+    </script>
+</div>
+
+</body>
+</html>

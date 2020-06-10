@@ -1,0 +1,160 @@
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">班级名称</label>
+            <input type="hidden" id="createBy" name="createBy"  class="layui-input">
+            <input type="hidden" id="updateBy" name="updateBy"  class="layui-input">
+            <div class="layui-input-inline">
+                <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开设课程</label>
+            <div class="layui-input-inline">
+                <!--<input type="hidden" id="menu" name="classify" placeholder="请选择" autocomplete="off" class="layui-input">-->
+                <select name="courseId" lay-filter="kecheng" id="dict" lay-verify="required">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学年</label>
+            <div class="layui-input-inline">
+                <!--<input type="text" name="schoolYear" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">-->
+                <select name="schoolYear" lay-filter="xuenian" id="dict1" lay-verify="required">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学期</label>
+            <div class="layui-input-inline">
+                <!--<input type="text" name="semester" required lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">-->
+                <select name="semester" lay-filter="xueqi" id="dict2" lay-verify="required">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux"> </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邀请码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="invitationCode" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required" disabled>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开课时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="beginDate" id="test1" placeholder="yyyy-MM-dd HH:mm:ss" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">结课时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="finishDate" id="test2" placeholder="yyyy-MM-dd HH:mm:ss" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+
+<script src="../js/jquery-1.10.0.js"></script>
+<script src="../js/template-native.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $("#createBy").val(JSON.parse(getCookie('user')).id);
+        $("#updateBy").val(JSON.parse(getCookie('user')).id);
+        var form = layui.form();
+        var data={
+            user:{
+                id:getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+            }
+        };
+        var url=HOST+"business.busCourse.getAllCourse.hsr";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            headers: {
+                token: JSON.parse(getCookie('user')).token
+            },
+            data: JSON.stringify(data),
+            dataType: "json",
+            success: function(result){
+                for (var i= 0;i < result.value.length;i++){
+                    $("#dict").append("<option value='"+result.value[i].id+"'>"+result.value[i].title+"</option>");
+                }
+                form.render('select','kecheng');
+            },
+            error:function(xhr){
+                alert("错误提示： " + xhr.status + " " + xhr.statusText);
+            }
+        });
+
+        var url1 = HOST+"system.dict.get.hsr";
+        //年级选择
+        var datax = {
+            dict:{
+                type:'school_year'
+            }
+        };
+        $.ajax({
+            url: url1,
+            type: 'POST',
+            headers: {
+                token: JSON.parse(getCookie('user')).token
+            },
+            data: JSON.stringify(datax),
+            dataType: "json",
+            success: function(result){
+                for (var i= 0;i < result.value.length;i++){
+                    $("#dict1").append("<option value='"+result.value[i].value+"'>"+result.value[i].label+"</option>");
+                }
+                form.render('select','xuenian');
+            },
+            error:function(xhr){
+                alert("错误提示： " + xhr.status + " " + xhr.statusText);
+            }
+        });
+        //学期选择
+        var dataq = {
+            dict:{
+                type:'semester'
+            }
+        };
+        $.ajax({
+            url: url1,
+            type: 'POST',
+            headers: {
+                token: JSON.parse(getCookie('user')).token
+            },
+            data: JSON.stringify(dataq),
+            dataType: "json",
+            success: function(result){
+                for (var i= 0;i < result.value.length;i++){
+                    $("#dict2").append("<option value='"+result.value[i].value+"'>"+result.value[i].label+"</option>");
+                }
+                form.render('select','xueqi');
+            },
+            error:function(xhr){
+                alert("错误提示： " + xhr.status + " " + xhr.statusText);
+            }
+        });
+
+    });
+
+
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //时间选择器
+        laydate.render({
+            elem: '#test1'
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#test2'
+            ,type: 'datetime'
+        });
+    });
+</script>

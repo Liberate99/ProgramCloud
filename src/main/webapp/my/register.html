@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!--响应式布局，宽度等于设备宽度-->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <title>实验云</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/head.css">
+    <link rel="stylesheet" type="text/css" href="css/register.css">
+    <!--<link rel="stylesheet" type="text/css" href="css/loginPage.css">-->
+    <!-- <link rel="stylesheet" type="text/css" href="css/mycourse.css"> -->
+    <script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="menu">
+    <div class="container con_header">
+        <nav class="navbar" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#cloud-navbar-collapse">
+                        <span class="sr-only">切换导航</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div style="width: 40px; height: 40px;">
+                        <a class="navbar-brand" href="index.html">
+                            <img src="img/logo.png" style="width: 40px; height: 40px;">
+                        </a>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="cloud-navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <!--<li class="hov"><a href="#">品牌故事</a></li>-->
+                        <li class="hov"><a href="courseLibrary.html">课程库</a></li>
+                        <!--<li class="hov"><a href="#">关于我们</a></li>-->
+                        <!--<li class="hov"><a href="#">编程介绍</a></li>-->
+                        <!-- <div class="mobile-show">
+                            <li><a href="personalCenter.html">个人信息</a></li>
+                            <li><a href="#">退出登录</a></li>
+                        </div>
+                        <li class="dropdown head-box">
+                            <a href="#" class="head-pic" data-toggle="dropdown">
+                                <img src="img/head_pic.png">
+                                <span>编程云</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="personalCenter.html">个人信息</a></li>
+                                <li><a href="#">退出登录</a></li>
+                            </ul>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    <div class="container" style="background-color: rgba(255,255,255,0);">
+        <div class="registerBox">
+            <form id="registerForm" action="" method="post">
+                <div class="row">
+                    <label class="col-md-2 col-md-offset-2 labelUse col-xs-4">用户类型</label>
+                    <p class="col-md-4 col-xs-8 col-sm-6">
+                        <select class="form-control" id="identityRole">
+                            <option value="">--请选择用户类型--</option>
+                            <option value="0">学生</option>
+                            <option value="1">教师</option>
+                        </select>
+                        <span class="errorMg"></span>
+                    </p>
+                </div>
+                <div class="row">
+                    <label class="col-md-2 col-md-offset-2 labelUse col-xs-4" for="userName">用户名</label>
+                    <p class="col-md-4 col-xs-8 col-sm-6">
+                        <input class="form-control" type="text" name="userName" value="" style="max-width: 100%;"  onchange="checkUser(1)" id="userName"/>
+                        <span class="errorMg"></span>
+                    </p>
+                </div>
+                <div class="row">
+                    <label class="col-md-2 col-md-offset-2 labelUse col-xs-4" for="userPhone">手机号</label>
+                    <p class="col-md-4 col-xs-8 col-sm-6">
+                        <input class="form-control" type="text" name="userPhone" id="userPhone" style="width: 100%" value=""/>
+                        <span class="errorMg"></span>
+                    </p>
+                </div>
+                <div class="row">
+                    <label class="col-md-2 col-md-offset-2 labelUse col-xs-4" for="userPassword">设置密码</label>
+                    <p class="col-md-4 col-xs-8 col-sm-6">
+                        <input class="form-control" type="password" name="userPassword" id="userPassword" value=""/>
+                        <span class="errorMg"></span>
+                    </p>
+                </div>
+                <div class="row">
+                    <label class="col-md-2 col-md-offset-2 labelUse col-xs-4" for="userPasswordRe">确认密码</label>
+                    <p class="col-md-4 col-xs-8 col-sm-6">
+                        <input class="form-control" type="password" name="userPasswordRe" id="userPasswordRe" value=""/>
+                        <span class="errorMg"></span>
+                    </p>
+                </div>
+                <div class="row">
+                    <label class="col-md-2 col-md-offset-2 labelUse col-xs-4" for="userIdentify">验证码</label>
+                    <p class="col-md-4 col-xs-8">
+
+                        <input class="form-control" type="text" name="userIdentify" id="userIdentify" value="" style="width: 90px;float: left;margin-right: 4px;"/>
+                        <img id="codpic" src="">
+                        <a href="#" class="changeV" onclick="changePic()">看不清，换一张</a>
+
+                        <span class="errorMg"></span>
+                    </p>
+                </div>
+                <div class="row">
+                    <p class="col-md-4 col-md-offset-4 col-xs-8 col-xs-offset-4">
+                        <input onclick="boxS()" type="checkbox" name="agreement" value="" id="agreement"/>&nbsp;我已阅读并接受<a href="#">版权声明</a>和<a href="#">隐私保护</a>条款
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-4 col-xs-8 col-xs-offset-4">
+                        <input type="button" id="reg" disabled="disabled" value="注册" onclick="regCheck()" class="registerBtn">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="container">
+        <ul>
+            <li class="footer-tit">联系与反馈</li>
+            <li><a href="#">联系我们</a></li>
+            <li><a href="#">意见反馈</a></li>
+        </ul>
+        <ul>
+            <li class="footer-tit">资源共享</li>
+            <li><a href="#">学校支持</a></li>
+            <li><a href="#">文章干货</a></li>
+            <li><a href="#">相关下载</a></li>
+        </ul>
+        <ul>
+            <li class="footer-tit">关注我们</li>
+            <li><a href="#">微信公众号</a></li>
+            <li><a href="#">QQ群</a></li>
+        </ul>
+    </div>
+</div>
+<!--<div class="alertBg">-->
+    <!--<div class="alertBox">-->
+        <!--<img src="img/success.png"/>-->
+        <!--<p>注册成功，页面将于3秒后为您跳转</p>-->
+    <!--</div>-->
+<!--</div>-->
+
+<script type="text/javascript" src="js/jquery-1.10.0.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/HOST.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript">
+    function boxS(){
+        if(document.getElementById("agreement").checked){
+            $("#reg").removeAttr("disabled");
+        }
+        else {
+            $("#reg").attr("disabled","disabled");
+        }
+    }
+</script>
+<script type="text/javascript" src="layer/layer.js"></script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="编程云">
+    <meta name="description" content="编程云">
+    <meta name="robots" content="all">
+    <meta name="copyright" content="">
+    <meta name="author" content="编程云">
+    <title>实验云</title>
+    <!--<link rel=stylesheet href="css/codemirror.min.css">-->
+    <link rel="stylesheet" href="CodeMirror/css/style.css" type="text/css">
+    <!--<link href="CodeMirror/addon/hint/show-hint.css" rel="stylesheet">-->
+    <link href="CodeMirror/css/bootstrap.min.css" rel="stylesheet">
+    <link rel=stylesheet href="css/head.css">
+    <link rel="stylesheet" type="text/css" href="CodeMirror/css/mycourse.css">
+    <!--<link rel=stylesheet href="CodeMirror/theme/eclipse.css">-->
+    <!--<link href="css/video-js.css" rel="stylesheet" type="text/css">-->
+    <link href="css/code.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="CodeMirror/js/jquery.min.js"></script>
+    <script src="CodeMirror/js/bootstrap.min.js"></script>
+    <script src="js/artTemplate.js"></script>
+    <script src="js/template-native.js"></script>
+    <script type="text/javascript" src="layer/layer.js"></script>
+    <script type="text/javascript" src="js/HOST.js"></script>
+    <script src="js/main.js"></script>
+    <!--<script register-percent="100" src="js/video.js"></script>-->
+    <style type="text/css">
+        .dragbox{position: absolute;top:52px;bottom:46px;right: 0;left: 0;}
+        #goBack{position: absolute;bottom: 0;}
+    </style>
+    <script type="text/javascript">
+        //    alert(document.documentElement.clientHeight);
+        window.onload = function () {
+//            document.getElementById("case1").style.height = document.documentElement.clientHeight - 98 + "px";
+//            document.getElementById("codeFrame").style.height = document.documentElement.clientHeight - 98 + "px";
+//            document.getElementById("exampleMain").style.height = parseInt((document.documentElement.clientHeight - 98)* 0.45) - 33 + "px";
+            document.getElementById("exampleMain").style.height = 1000+"px";
+            //document.getElementById("caseContent").style.height = parseInt((document.documentElement.clientHeight - 98)* 0.55) - 30 + "px";
+        }
+    </script>
+</head>
+<body style="padding: 0" leftmargin=0 topmargin=0>
+<!--<body style="padding: 0" leftmargin=0 topmargin=0 oncontextmenu='return false' ondragstart='return false' onselectstart ='return false'-->
+      <!--onselect='document.selection.empty()' oncopy='document.selection.empty()' onbeforecopy='return false'-->
+      <!--onmouseup='document.selection.empty()'>-->
+<div class="menu">
+    <div class="container con_header" style="">
+
+        <nav class="navbar" role="navigation">
+
+            <div class="container-fluid" style="display: flex; flex-direction: row;">
+
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#cloud-navbar-collapse">
+                        <span class="sr-only">切换导航</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div style="width: 40px; height: 40px;">
+                        <a class="navbar-brand" href="index.html">
+                            <img src="img/logo.png" style="width: 40px; height: 40px;">
+                        </a>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="cloud-navbar-collapse">
+                    <ul class="nav navbar-nav" style="height: 52px; width: 190px;">
+                        <!--<li class="hov"><a href="#">品牌故事</a></li>-->
+                        <li class="hov">
+                            <a href="courseLibrary.html">课程库</a>
+                        </li>
+                    </ul>
+                    <button onclick="hideScr()" style="width: 150px; height: 50px;background-color: transparent;border: transparent;">
+                        <span id="change-shiyan" class="glyphicon glyphicon-align-justify" style="display: inline-block;flex-direction: row;height: 20px; line-height: 15px; color: white; margin-top: 0;font-size: 110%;font-weight: bolder;font-weight: normal;"></span>
+                    </button>
+                    <div style="float: right; margin-right: 40px; margin-top: 13px;">
+                        <button onclick="show_courseContent()" style="border-color: transparent;background-color: transparent;color: white; font-size: 110%;font-weight: normal;">回看知识点</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<div class="dragbox">
+    <!--<div id="show-button" onclick="hideScr()" style="width: 40px;height: 80px;background-color:lightgrey;position: fixed;top: 52px; z-index: 99; display: none;">-->
+        <!--<div style="width: 40px;height: 90px; margin: 0 auto; display: flex; flex-direction: column;">-->
+            <!--<span class="glyphicon glyphicon-chevron-right" style="color: darkred; width: 15px; height: 15px; margin: 0 auto; margin-top: 10px;"></span>-->
+            <!--<span style="color: darkred; margin: 0 auto; display: flex; margin-top: 10px;">实</span>-->
+            <!--<span style="color: darkred; margin: 0 auto; display: flex;">验</span>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div class="result lef" id="a" style="display: none;height: 100%;">
+        <div class="showresult show1" id="case1" style="border: 0;border-right: 1px solid #ccc;height: 100%;">
+            <!--<div id="caseContent">课程内容</div>-->
+            <!--<div id="caseTop">-->
+                <!--<div class="courseList">-->
+                    <!--<a href="javascript:;" class="menuList">-->
+                        <!--<span id="courseTit"  onclick="showMenu()">课程目录</span>-->
+                        <!--<span class="caret"></span>-->
+                        <!--&lt;!&ndash;<span class="glyphicon glyphicon-chevron-right" id="bigger-butt" onclick="fullScr()" style="float: right;margin-top: 7px;margin-right: 5px"></span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<span class="glyphicon glyphicon-chevron-left" id="hide-butt" onclick="hideScr()" style="float: right;margin-top: 7px;margin-right: 5px"></span>&ndash;&gt;-->
+                    <!--</a>-->
+                    <!--&lt;!&ndash;<a href="javascript:;" title="放大" style="background-color: blue;float: right" onclick=""><span class="glyphicon glyphicon-fullscreen"></span></a>&ndash;&gt;-->
+                    <!--<div class="hornBox">-->
+                        <!--<div class="horn"></div>-->
+                    <!--</div>-->
+                    <!--<div id="courseMenu">-->
+                        <!--<div class="panel-group" id="menuMain">-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div id="caseContent">课程内容</div>-->
+            <!--</div>-->
+            <div id="caseExample" style="height: 100%;">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" id="example"
+                            data-toggle="dropdown">
+                        <span id="exampleTitle">实验</span>
+                        <span class="caret"></span>
+                        <span class="glyphicon glyphicon-chevron-right" id="bigger-butt" onclick="fullScr()" style="float: right;margin-top: 7px;margin-right: 5px"></span>
+                        <span class="glyphicon glyphicon-chevron-left" id="hide-butt" onclick="hideScr()" style="float: right;margin-top: 7px;margin-right: 5px"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="example" id="exampleBox">
+                        <script id="exampleList" type="text/html">
+                            <% for (var k = 0; k < value.length; k ++) { %>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;" id="<%=value[k].id%>" onclick="getExampleCodewithoutIframeLoad(id)"><%=value[k].name%></a>
+                                </li>
+                            <% } %>
+                        </script>
+                    </ul>
+                </div>
+                <div id="exampleMain" style="height: 1000px;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <iframe width="70%" height="100%" id="codeFrame" name="codeFrame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" style="border:0"></iframe>
+
+    <div id="sliderMenuBox">
+        <div id="sliderControl">
+            <img class="menuIcon" src="img/menuIcon.png" alt=""/><span>章节</span>
+        </div>
+        <div id="sliderMenu">
+            <div class="panel-group" id="sliderMenuMain">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div style="clear: both"></div>
+<div id="goBack">
+    <button class="btn btn-danger back" onclick="goBack()">返回</button>
+    <button class="btn btn-default back" id="nextCourse" style="margin-left: 3px;float: right;margin-right: 10px;">下一节</button>
+    <button class="btn btn-default back" id="lastCourse" style="margin-left: 3px;float: right;margin-right: 3px;">上一节</button>
+</div>
+<script id="content" type="text/html">
+    <% var i=0 %>
+    <% for (var key in value) { %>
+    <div class="panel panel-default">
+        <a  data-toggle="collapse" data-parent="#menuMain" href=#collapse<%= i+1 %> aria-expanded="true" aria-controls="collapseOne">
+            <div class="panel-heading" role="tab" id="headingOne" style="background-color: #f2f2f2">
+                <h4 class="panel-title">
+                    <%=i+1%>&nbsp;<%=value[key][0].title%>
+                </h4>
+            </div>
+        </a>
+
+        <div id=collapse<%= i+1 %> class="panel-collapse collapse">
+            <% for (var j = 1; j < value[key].length; j ++) { %>
+            <div class="panel-body" style="padding:0">
+                <a href="codeFrame.html?chapterId=<%= value[key][j].id %>&courseId=<%= value[key][j].courseId%>" data-id="<%= value[key][j].id %>" target="_self" class="menuLink">
+                    <%=i+1%>-<%=j%>&nbsp;&nbsp;<%=value[key][j].title%>
+                </a>
+                <!--</li>-->
+                <!--</ul>-->
+            </div>
+            <% } %>
+        </div>
+    </div>
+    <% i++  %>
+    <% } %>
+</script>
+<script type="text/javascript" src="js/code.js">
+
+</script>
+
+<script type="text/javascript">
+
+    var a = 1;//0：隐藏信息； 1：信息半屏； 2：信息全屏
+
+    $(document).ready(function () {
+        //todo 隐藏实验信息
+        //console.log($("#a").offsetWidth);
+        //console.log($("#codeFrame").getAttribute("style"));
+        console.log(document.getElementById("codeFrame").offsetWidth);
+        console.log(document.getElementById("a").offsetWidth);
+        var windowWidth = $(window).width();
+        if(windowWidth < 2000){
+            hideScr();
+        }
+    });
+
+    function Show(){
+        $("#a").toggle();
+        if($("#a").css("display")=="none"){
+            codeFrame.window.changeUp();
+            $("#codeFrame").width("100%");
+        }else {
+            codeFrame.window.changeDown();
+            $("#codeFrame").width("70%");
+        }
+
+    }
+    function show_courseContent() {
+        console.log("show_courseContent");
+        console.log(courseId);
+        console.log(chapterId);
+        url = "courseContent.html?chapterId="+chapterId+"&courseId="+courseId;//此处拼接内容
+        window.location.href = url;
+    }
+    // 全屏实验边栏
+    function fullScr(){
+        var dk = $(window.parent.document).find("#codeFrame").attr("src");
+        $("#codeFrame").toggle();
+        if(a=1){
+            $("#bigger-butt").removeClass("glyphicon-chevron-right");
+//            $("#butt").addClass("glyphicon-resize-small");
+            console.log("全屏放大信息");
+            $("#a").width("100%");
+            a=2;
+        }else{
+//            $("#butt").addClass("glyphicon-fullscreen");
+//            $("#butt").removeClass("glyphicon-resize-small");
+            console.log("缩小信息");
+            if(dk.indexOf('frame.html')>0){  //scratch页面a窗口（任务描述）大小为20%
+                $("#codeFrame").show();
+                $("#a").width("20%");
+            }else{
+                $("#codeFrame").show();
+                $("#a").width("30%");
+            }
+            a=1;
+        }
+    }
+    // 隐藏"实验"边栏
+    function hideScr(){
+        var dk = $(window.parent.document).find("#codeFrame").attr("src");
+//        $("#codeFrame").toggle();
+        if(a==1){
+            $("#change-shiyan").removeClass("glyphicon-th-list");
+            $("#change-shiyan").addClass("glyphicon-th-list")
+//            $("#change-shiyan").text(" 显示");
+            //$("#butt").removeClass("glyphicon-chevron-left");
+            console.log("收起");
+            //$("#butt").addClass("glyphicon-resize-small");
+            $("#a").width("0%");
+            $("#codeFrame").width("100%");
+//            $("#show-button").show();
+            a=0;
+        }else if(a=0){
+            //$("#butt").addClass("glyphicon-chevron-left");
+            //$("#butt").removeClass("glyphicon-resize-small");
+            $("#change-shiyan").removeClass("glyphicon-th-list");
+            $("#change-shiyan").addClass("glyphicon-th-list");
+//            $("#change-shiyan").text(" 收起");
+            if(dk.indexOf('frame.html')>0){  //scratch页面a窗口（任务描述）大小为20%
+                $("#a").width("20%");
+                $("#codeFrame").width("80%");
+            }else{
+                console.log("放出");
+                $("#a").width("30%");
+                $("#codeFrame").width("70%");
+            }
+//            $("#show-button").hide();
+            a=1;
+        }else {//a=2 全屏
+            $("#change-shiyan").removeClass("glyphicon-th-list");
+            $("#change-shiyan").addClass("glyphicon-th-list");
+            $("#bigger-butt").addClass("glyphicon-chevron-right")
+//            $("#change-shiyan").text(" 收起");
+            if(dk.indexOf('frame.html')>0){  //scratch页面a窗口（任务描述）大小为20%
+                $("#a").width("20%");
+                $("#codeFrame").show();
+                $("#codeFrame").width("80%");
+            }else{
+                console.log("放出");
+                $("#a").width("30%");
+                $("#codeFrame").show();
+                $("#codeFrame").width("70%");
+            }
+//            $("#show-button").hide();
+            a=1;
+        }
+    }
+
+
+</script>
+</body>
+
+</html>

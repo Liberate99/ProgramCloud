@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.VwCourseRecordNameDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.VwCourseRecordName">
+		<result column="id" property="id" />
+		<result column="course_id" property="courseId" />
+		<result column="course_name" property="courseName" />
+		<result column="class_id" property="classId" />
+		<result column="class_name" property="className" />
+		<result column="user_id" property="userId" />
+		<result column="user_name" property="userName" />
+		<result column="lastest" property="lastest" />
+		<result column="chapter_name" property="chapterName" />
+		<result column="completion" property="completion" />
+	</resultMap>
+
+</mapper>

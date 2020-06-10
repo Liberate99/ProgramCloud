@@ -1,0 +1,489 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="编程云">
+    <meta name="description" content="编程云">
+    <meta name="robots" content="all">
+    <meta name="copyright" content="">
+    <meta name="author" content="编程云">
+    <title>实验云</title>
+    <link rel=stylesheet href="css/codemirror.min.css">
+    <link rel="stylesheet" href="CodeMirror/css/style.css" type="text/css">
+    <link href="CodeMirror/addon/hint/show-hint.css" rel="stylesheet">
+    <link href="CodeMirror/css/bootstrap.min.css" rel="stylesheet">
+    <link rel=stylesheet href="css/head.css">
+    <link rel="stylesheet" type="text/css" href="CodeMirror/css/mycourse.css">
+    <link rel=stylesheet href="CodeMirror/theme/eclipse.css">
+    <link href="css/video-js.css" rel="stylesheet" type="text/css">
+    <link href="css/code.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="CodeMirror/js/jquery.min.js"></script>
+    <script src="CodeMirror/js/bootstrap.min.js"></script>
+    <script src="js/artTemplate.js"></script>
+    <script src="js/template-native.js"></script>
+    <script type="text/javascript" src="layer/layer.js"></script>
+    <script src="CodeMirror/js/Drag.js"></script>
+    <script type="text/javascript" src="js/HOST.js"></script>
+    <script src="js/main.js"></script>
+    <script register-percent="100" src="js/video.js"></script>
+
+    <script type="text/javascript">
+        //    alert(document.documentElement.clientHeight);
+        window.onload = function () {
+            document.getElementById("case1").style.height = document.documentElement.clientHeight - 98 + "px";
+            document.getElementById("doc").style.height = document.documentElement.clientHeight - 98 + "px";
+            document.getElementById("vid").style.height = document.documentElement.clientHeight - 98 + "px";
+            document.getElementById("result").style.height = document.documentElement.clientHeight - 98 + "px";
+            document.getElementById("c").style.height = document.documentElement.clientHeight - 98 + "px";
+            document.getElementById("c1").style.height = document.documentElement.clientHeight - 98 + "px";
+            document.getElementById("exampleMain").style.height = parseInt((document.documentElement.clientHeight - 98)* 0.45) - 33 + "px";
+            document.getElementById("caseContent").style.height = parseInt((document.documentElement.clientHeight - 98)* 0.55) - 30 + "px";
+        }
+    </script>
+</head>
+<body style="padding: 0">
+<div class="menu">
+    <div class="container con_header">
+        <nav class="navbar" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#cloud-navbar-collapse">
+                        <span class="sr-only">切换导航</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" style="height: 45px" href="index.html">
+                        <img src="img/logo.png" style="width: 50px;">
+                        <!--<span class="glyphicon glyphicon-cloud"></span>-->
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="cloud-navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <!--<li class="active dropdown" style="text-align: center">-->
+                            <!--<a href="#" class="head-pic" data-toggle="dropdown" id="title"-->
+                               <!--style="font-size: 16px;padding: 17px 0px;"><span id="courseTit">课程标题</span><span class="caret"></span></a>-->
+                            <!--<ul class="dropdown-menu" id="list">-->
+
+                            <!--</ul>-->
+                        <!--</li>-->
+                        <!--<li class="courseList" style="text-align: center">-->
+                            <!--<a href="#" class="head-pic" id="title"-->
+                               <!--style="font-size: 16px;padding: 17px 0px;">-->
+                                <!--<span id="courseTit">课程标题</span>-->
+                                <!--<span class="caret"></span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+
+
+                        <li class="dropdown head-box">
+                            <a href="#" class="head-pic" data-toggle="dropdown">
+                                <img src="img/head_pic.png">
+                                <span>实验云</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="../personalCenter.html">个人信息</a></li>
+                                <li><a href="#">退出登录</a></li>
+                            </ul>
+                        </li>
+                        <li class="head-box" style="margin-top: auto;margin-right: 100px;">
+                            <button type="button" class="btn btn-reset" id="reset" onclick="resetCode()">重置代码</button>
+                            <button type="button" class="btn btn-run" id="run" onclick="runCode()">运行</button>
+                            <button type="button" class="dropdown btn btn-input" id="input" data-toggle="dropdown">输入</button>
+                            <textarea class="dropdown-menu" placeholder="请输入变量，一次性输入程序运行中所有需要的数据。" rows="8" cols="45" style="resize: none;" onclick="" id="inputText"></textarea>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<!--<script id="content" type="text/html">-->
+    <!--<% for (var i = 0; i < value.length; i ++) { %>-->
+    <!--<li><a href="#" data-chapterid=<%= value[i].id %> data-resourceurl=<%= value[i].resourceUrl %> data-chaptertype=<%=-->
+        <!--value[i].type %> data-chaptertitle=<%=-->
+        <!--value[i].title %> data-chapterdes=<%= value[i].des %> onclick="chooseChapter('<%= value[i].id %> ')"> <%=value[i].title %></a></li>-->
+    <!--<% } %>-->
+<!--</script>-->
+
+
+<!--<div class="tool">-->
+<!--&lt;!&ndash;<button type="button" class="btn btn-copy" id="copycode" onclick="selectCode()">复制</button>&ndash;&gt;-->
+<!--<button type="button" class="btn btn-run" id="runcode" onclick="runCode()">运行</button>-->
+<!--</div>-->
+<div class="dragbox">
+    <div class="result lef" id="a">
+        <div class="showresult show1" id="case1" style="border: 0;border-right: 1px solid #ccc">
+            <!--<div id="caseContent">课程内容</div>-->
+            <div id="caseTop">
+                <div class="courseList">
+                    <a href="#" class="menuList" onclick="showMenu()">
+                        <span id="courseTit">课程目录</span>
+                        <span class="caret"></span>
+                    </a>
+                    <div id="courseMenu">
+                        <div class="panel-group" id="menuMain">
+                            <script id="content" type="text/html">
+                                <% for (var i = 0; i < value.length; i ++) { %>
+                                <div class="panel panel-default">
+                                    <a  data-toggle="collapse" data-parent="#menuMain" href=#collapse<%= i+1 %> aria-expanded="true" aria-controls="collapseOne">
+                                        <div class="panel-heading" role="tab" id="headingOne" style="background-color: #f2f2f2">
+                                            <h4 class="panel-title">
+                                                <%=i+1%>&nbsp;<%=value[i].title%>
+                                            </h4>
+                                        </div>
+                                    </a>
+
+                                    <div id=collapse<%= i+1 %> class="panel-collapse collapse">
+                                        <% for (var j = 0; j < value[i].children.length; j ++) { %>
+                                        <div class="panel-body" style="padding:0">
+                                            <!--<ul class="list-group" style="margin-bottom: 0">-->
+                                                <!--<li class="list-group-item" data-chapterid=<%= value[i].children[j].id %> data-resourceurl=<%= value[i].children[j].resourceUrl %> data-chaptertype=<%=value[i].children[j].type %> data-chaptertitle=<%= value[i].children[j].title %>>-->
+                                                    <a href="code.html?chapterId=<%= value[i].children[j].id %>" target="_blank" class="menuLink">
+                                                        <% if(value[i].children[j].hasFinished==1) { %>
+                                                        <%=i+1%>-<%=j+1%>&nbsp;&nbsp;<%=value[i].children[j].title%>
+                                                        <% }else{ %>
+                                                        <%=i+1%>-<%=j+1%>&nbsp;&nbsp;<%=value[i].children[j].title%>
+                                                        <% } %>
+
+                                                    </a>
+                                                <!--</li>-->
+                                            <!--</ul>-->
+                                        </div>
+
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="caseContent">课程内容</div>
+            </div>
+            <div id="caseExample">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" id="example"
+                            data-toggle="dropdown">
+                        <span>演示-Hello World的注释</span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="example">
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#">Java</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#">数据挖掘</a>
+                        </li>
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" href="#">数据通信/网络</a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="exampleMain">
+                    <p><code>&lt;header&gt;</code> 作为内联元素被包围。</p>
+                    <p>如果需要把代码显示为一个独立的块元素，请使用 &lt;pre&gt; 标签：</p>
+<pre>
+&lt;article&gt;
+	&lt;h1&gt;Article Heading&lt;/h1&gt;
+&lt;/article&gt;
+</pre>
+                    <p><code>&lt;header&gt;</code> 作为内联元素被包围。</p>
+                    <p>如果需要把代码显示为一个独立的块元素，请使用 &lt;pre&gt; 标签：</p>
+<pre>
+&lt;article&gt;
+	&lt;h1&gt;Article Heading&lt;/h1&gt;
+&lt;/article&gt;
+</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <label class="drag" id="c">
+    </label>
+
+    <div id="doc" style="display: none">
+        <iframe src="http://www.w3school.com.cn/i/eg_landscape.jpg" width="70%" style="border: 0;"></iframe>
+    </div>
+    <div id="vid" style="width: 70%; float:left;display: none">
+        <video id="my-video" class="col-center-block video-js" data-setup='{"playbackRates": [1, 1.5, 2] }'></video>
+    </div>
+
+
+    <div id="code_area" class="code">
+        <ul class="nav nav-tabs" id="tab_nav">
+            <!--<li role="presentation" ><a href="#">Home</a></li>-->
+            <!--<li role="presentation" class="active"><a href="#">Profile</a></li>-->
+            <!--<li role="presentation"><a href="#">Messages</a></li>-->
+        </ul>
+        <textarea class="showcode" id="code" name="code">
+        </textarea>
+    </div>
+
+    <label class="drag" id="c1">
+    </label>
+    <div class="result" id="b" data-a="1">
+        <div class="showresult" id="result" name="result">
+            <iframe id="result_iframe" frameborder="0" width="100%" height="100%"></iframe>
+        </div>
+    </div>
+</div>
+<div style="clear: both"></div>
+<div id="goBack">
+    <button class="btn btn-danger back" onclick="history.go(-1)">返回</button>
+</div>
+<!--<script type="text/javascript" src="js/code.js"></script>-->
+<script type="text/javascript">
+
+    var language = "";//语言 execjava execCplus execPy
+    var chapterId = "";//章节id
+    var courseId = "";//课程id
+    var codeId = "";
+    var videoUrl = "";//视频url
+
+    var types ="";//类型: 0 写代码 1 播放视频 2 图片预览
+
+    var lan_types ="";//语言类型 0 java 1 c++ 2 python
+    var al_name ="";//给codemirror选择语言类型用的
+    var editor=null;
+    var resetContent="";
+    var content="";//编辑器里面的内容
+    var inputvalue="";//输入框里的值
+    $(document).ready(function () {
+         chapterId=window.location.href.split('=')[1];
+        //alert(JSON.parse(getCookie('loginResult')).token);
+        getChapter(chapterId);
+        setLastestChapter(chapterId);
+
+        //判断是视频任务还是code任务
+        switch (types) {
+            case '0':
+                //普通代码
+                getCode(chapterId);
+                break;
+            case '1':
+                //视频播放
+                var h = document.documentElement.clientHeight - 88;
+                var w = document.documentElement.clientWidth * 0.7;
+                console.log(w + ":" + h);
+                vod(w, h);
+                break;
+            case '2':
+                //图片预览 ？？ scratch
+                dod();
+                break;
+            case '3':
+                console.log("test for 3 before");
+                //硬件实习
+                getCode(chapterId);
+                console.log("test for 3");
+                break;
+            case '4':
+                console.log("test for 4");
+                break;
+            default:
+                alert("nothing to do!!!")
+                break;
+        }
+        $.getScript('CodeMirror/lib/codemirror.js', function() {
+            $.when(
+                    $.getScript('CodeMirror/mode/clike/clike.js'),
+                    $.getScript('CodeMirror/mode/python/python.js'),
+                    $.getScript('CodeMirror/mode/javascript/javascript.js'),
+                    $.getScript('CodeMirror/mode/css/css.js'),
+                    $.getScript('CodeMirror/mode/htmlmixed/htmlmixed.js'),
+                    $.getScript('CodeMirror/mode/xml/xml.js'),
+                    $.getScript('CodeMirror/addon/hint/show-hint.js'),
+//                    $.getScript('CodeMirror/addon/hint/anyword-hint.js'),
+                    $.Deferred(function(deferred) {
+                        $(deferred.resolve);
+                    })
+            ).done(function() {
+                switch (lan_types) {
+                    case '0':
+                        al_name = "text/x-java";
+                        $('#tab_nav').append('<li role="presentation" class="active"><a href="#">HelloWorld.java</a></li>');
+                        break;
+                    case '1':
+                        al_name = "text/x-c++src";
+                        $('#tab_nav').append('<li role="presentation" class="active"><a href="#">hello.cpp</a></li>');
+                        break;
+                    case '2':
+                        al_name = "text/x-python";
+                        $('#tab_nav').append('<li role="presentation" class="active"><a href="#">hello.py</a></li>');
+                        break;
+                    case '4':
+                        al_name = "htmlmixed";
+                        $('#tab_nav').append('<li role="presentation" class="active"><a href="#">index.html</a></li>');
+                        break;
+                    default:
+                        al_name = "text/x-java";
+                        break;
+                }
+                editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+                    mode: al_name,
+                    tabMode: 'indent',
+                    extraKeys: {"Ctrl-M": "autocomplete"},//输入s然后ctrl就可以弹出选择项
+                    theme: 'eclipse',
+                    indentUnit: 4,
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    matchBrackets: true
+                });
+                document.getElementsByClassName('CodeMirror')[0].style.height = document.documentElement.clientHeight - 140 + "px";
+                editor.setValue(content);
+
+            });
+        });
+
+
+    });
+    var iflag=0;
+    function showMenu() {
+        if(iflag == 0){
+            $("#courseMenu").css("display","block");
+            iflag = 1;
+        }else{
+            $("#courseMenu").css("display","none");
+            iflag = 0;
+        }
+    }
+function getChapter(chapterId) {
+    var data={
+        buschapter:{
+            id:chapterId
+        }
+
+    };
+    request('business.busChapter.get',data,function callback(result) {
+        console.log("chapterinfo:"+JSON.stringify(result));
+        if(result.code == 0){
+            courseId =result.value.courseId;
+            videoUrl = result.value.resourceUrl;
+            $('#courseTit').html(result.value.title);
+//            $('#case1').html(result.value.des);
+            $('#caseContent').html(result.value.des);
+            courseDetail(result.value.courseId, 2);
+             types = result.value.type;
+
+            console.log(result.msg);
+        }else{
+            console.log(result.msg);
+        }
+    },false)
+
+}
+
+    function resetCode(){
+        editor.setValue(resetContent);
+    }
+
+    function runCode() {
+//    $("#a").toggle(500);
+//    $("#b").toggle(500);
+//    document.getElementById("run").style.display = "none";
+//    document.getElementById("back").style.display = "block";
+        inputvalue = $("#inputText").val();
+//        alert(inputvalue);
+        code = editor.getValue();
+
+        submitCode(code, inputvalue, language);
+        historyCourse();
+
+//    var data = "code="+encodeURIComponent(code);
+
+    }
+    function back() {
+        document.getElementById("back").style.display = "none";
+        document.getElementById("run").style.display = "block";
+        $("#a").toggle(500);
+        $("#b").toggle(500);
+    }
+    function selectCode() {
+        var obj = getElementsClass("CodeMirror-code");
+        selectText(obj[0]);
+        alert(obj[0]);
+
+    }
+
+    function chooseChapter(chapterId) {
+        window.location.href="code.html?chapterId="+chapterId;
+    }
+
+    //  function switchView() {
+    //      $("#a").toggle(500);
+    //      $("#b").toggle(500);
+    //  }
+    //
+    function cod() {
+        document.getElementById("vid").style.display = "none";
+        document.getElementById("doc").style.display = "none";
+        document.getElementById("code_area").style.display = "none";
+        document.getElementById("b").style.display = "none";
+    }
+    function vod(width, height) {
+        var myPlayer =
+                videojs("my-video", {
+                    "controls": true,
+                    "autoplay": false,
+                    "preload": "auto",
+                    "poster": "oceans.png",
+                    "width": width,
+                    "height": height,
+                    sources: [
+                        {src: HOST + videoUrl, type: 'video/mp4'}
+                    ],
+
+                });
+//        myPlayer.watermark({
+//            file: HOST+'/my/img/logo.png',
+//            clickable: true,
+//            url: "http://www.yunjuanyunshu.com",
+//
+//        });
+        myPlayer.videoJsResolutionSwitcher();
+        myPlayer.on("ended", function () {
+            console.log("end", this.currentTime());
+            var bcR = {
+                buschapterrecord: {
+                    userId: getCookie('loginResult') === "" ? "" : JSON.parse(getCookie('loginResult')).id,
+                    chapterId: getCookie('chapterid')
+                }
+            };
+            request('business.busChapterRecord.finishBusCha', bcR, function callback(result) {
+
+            });
+        });
+        document.getElementById("vid").style.display = "block";
+        document.getElementById("doc").style.display = "none";
+        document.getElementById("code_area").style.display = "none";
+        document.getElementById("b").style.display = "none";
+        document.getElementById("c").style.display = "none";
+        document.getElementById("c1").style.display = "none";
+    }
+
+    function dod() {
+        document.getElementById("doc").style.display = "block";
+        document.getElementById("vid").style.display = "none";
+        document.getElementById("code_area").style.display = "none";
+        document.getElementById("b").style.display = "none";
+        document.getElementById("c").style.display = "none";
+        document.getElementById("c1").style.display = "none";
+
+    }
+</script>
+<script type="text/javascript">
+    $.getScript('js/highlight.min.js', function() {
+        $('code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.VojLanguagesDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.VojLanguages">
+		<id column="language_id" property="languageId" />
+		<result column="language_slug" property="languageSlug" />
+		<result column="language_name" property="languageName" />
+		<result column="language_compile_command" property="languageCompileCommand" />
+		<result column="language_run_command" property="languageRunCommand" />
+	</resultMap>
+
+</mapper>

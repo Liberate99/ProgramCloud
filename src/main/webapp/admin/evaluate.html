@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+    <link rel="stylesheet" href="plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="css/global.css" media="all">
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/table.css"/>
+    <style>
+        .text_overflow_1 {
+            width: 200px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    </style>
+
+
+</head>
+
+<body>
+<div class="admin-main">
+
+    <blockquote class="layui-elem-quote">
+        <a href="class.html" class="layui-btn layui-btn-sm">
+            <i class="layui-icon"></i> 返回
+        </a>
+        <a href="#" class="layui-btn layui-btn-sm">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i> 导出信息
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-sm" id="search">
+            <i class="layui-icon">&#xe615;</i> 搜索
+        </a>
+    </blockquote>
+
+
+    <fieldset class="layui-elem-field">
+        <legend>学生学习情况</legend>
+        <div class="layui-field-box layui-form">
+            <div id="main" style="width: 600px;height:400px;"></div>
+        </div>
+    </fieldset>
+    <!--<div class="admin-table-page">-->
+        <!--<div id="paged" class="page">-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+<!--模板-->
+<script type="text/html" id="tpl">
+    {{# layui.each(d.value.records, function(index, item){ }}
+    <tr>
+        <td><input name="id" type="checkbox" lay-skin="primary"></td>
+        <td style="max-width: 100px">{{ item.userName }}</td>
+        <td>{{ item.chapterName }}</td>
+        <td>{{ item.completion }}</td>
+        <td>
+            <a href="javascript:;" data-id="{{ item.id }}" data-opt="del"
+               class="layui-btn layui-btn-danger layui-btn-xs">退出班级</a>
+        </td>
+    </tr>
+    {{# });
+    }}
+</script>
+<script type="text/javascript" src="../my/js/HOST.js"></script>
+<script type="text/javascript" src="plugins/layui/layui.js"></script>
+<script type="text/javascript" src="js/Global.js"></script>
+<script src="https://cdn.bootcss.com/echarts/3.8.5/echarts.simple.min.js"></script>
+<!--<script src="js/evaluate.js"></script>-->
+<script>
+    function setCookie(c_name, value, expiredays) {
+        var exdate = new Date()
+        exdate.setDate(exdate.getDate() + expiredays)
+        document.cookie = c_name + "=" + escape(value) +
+            ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString())
+    }
+
+    layui.config({
+        base: 'js/'
+    }).extend({
+        busajax: 'busajax'
+    });
+
+    layui.use(['paging', 'form', 'busajax'], function () {
+        var $ = layui.jquery,
+            bajax = layui.busajax,
+            paging = layui.paging(),
+            layerTips = parent.layer === undefined ? layui.layer : parent.layer, //获取父窗口的layer对象
+            layer = layui.layer, //获取当前窗口的layer对象
+            form = layui.form();
+        //busajax.test();
+        //busajax('system.user.insertOrUpdate',"asdas",b);
+        var datas = {
+            page: {
+                current: "1"
+            },
+            busClass: {
+                id: getCookie('classId')
+            }
+        };
+//         paging.init({
+//             openWait: true,
+//             url: HOST + 'business.vwCourseRecordName.getCourseRecordName.hsr', //地址
+//             elem: '#content', //内容容器
+//             params: datas,
+//             type: 'POST',
+//             tempElem: '#tpl', //模块容器
+//             pageConfig: { //分页参数配置
+//                 elem: '#paged', //分页容器
+//                 pageSize: 10 //分页大小
+//             },
+//             success: function () { //渲染成功的回调
+// //                alert('渲染成功');
+//             },
+//             fail: function (msg) { //获取数据失败的回调
+// //                alert('获取数据失败')
+//             },
+//             complate: function () { //完成的回调
+// //                alert('处理完成');
+//                 //重新渲染复选框
+//                 form.render('checkbox');
+//                 form.on('checkbox(allselector)', function (data) {
+//                     var elem = data.elem;
+//
+//                     $('#content').children('tr').each(function () {
+//                         var $that = $(this);
+//                         //全选或反选
+//                         $that.children('td').eq(0).children('input[type=checkbox]')[0].checked = elem.checked;
+//                         form.render('checkbox');
+//                     });
+//                 });
+//
+//                 //绑定所有编辑按钮事件
+//                 $('#content').children('tr').each(function () {
+//                     var $that = $(this);
+//
+//                     $that.children('td:last-child').children('a[data-opt=del]').on('click', function () {
+//                         var _this = $(this);
+//                         layer.confirm('您确定要让该学生退出班级吗?', {
+//                             btn: ['确定', '取消'], //按钮
+//                             shade: false //不显示遮罩
+//                         }, function (index) {
+//                             // 提交表单的代码，需要你自己写，然后用 layer.close 关闭就可以了，取消可以省略
+//                             var data = {
+//                                 busCourseRecord: {
+//                                     id: _this.data('id')
+//                                 }
+//                             };
+//                             bajax.busajax('business.busClass.quitClass', data, null);
+//                             layer.close(index);
+//                         });
+//
+// //                        console.log(JSON.stringify(course));
+//
+// //                        layer.msg($(this).data('id'));
+//                     });
+//
+//                 });
+//
+//             },
+//         });
+
+        $('#search').on('click', function () {
+            parent.layer.alert('你点击了搜索按钮')
+        });
+
+            var myChart = echarts.init(document.getElementById('main'));
+
+// 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: '班级各章节通过和不通过次数分布',
+                    subtext: '纯属虚构'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['通过', '不通过']
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '通过',
+                        type: 'bar',
+                        data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name: '不通过',
+                        type: 'bar',
+                        data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+                        markPoint: {
+                            data: [
+                                {name: '年最高', value: 182.2, xAxis: 7, yAxis: 183},
+                                {name: '年最低', value: 2.3, xAxis: 11, yAxis: 3}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    }
+                ]
+            };
+
+
+// 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+    });
+</script>
+
+</body>
+
+</html>

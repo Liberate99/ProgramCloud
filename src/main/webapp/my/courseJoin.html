@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<!--响应式布局，宽度等于设备宽度-->
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+	<title>实验云</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/head.css">
+	<link rel="stylesheet" type="text/css" href="css/mycourse.css">
+	<!--<script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>-->
+
+
+	<script type="text/javascript" src="js/jquery-1.10.0.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="layer/layer.js"></script>
+	<script type="text/javascript" src="js/HOST.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+	<div class="menu">
+		<div class="container con_header">
+			<nav class="navbar" role="navigation">
+			    <div class="container-fluid">
+				    <div class="navbar-header">
+				        <button type="button" class="navbar-toggle" data-toggle="collapse"
+				                data-target="#cloud-navbar-collapse">
+				            <span class="sr-only">切换导航</span>
+				            <span class="icon-bar"></span>
+				            <span class="icon-bar"></span>
+				            <span class="icon-bar"></span>
+				        </button>
+				        <div style="width: 40px; height: 40px;">
+                            <a class="navbar-brand" href="index.html">
+                                <img src="img/logo.png" style="width: 40px; height: 40px;">
+                            </a>
+                        </div>
+				    </div>
+				    <div class="collapse navbar-collapse" id="cloud-navbar-collapse">
+				        <ul class="nav navbar-nav">
+				            <li class="active hov"><a href="courseLibrary.html">课程库</a></li>
+				            <li class="hov"><a href="scrachPro.html">Scratch作品展</a></li>
+				            <li class="hov"><a href="personalMain.html">个人总览</a></li>
+				            <li class="hov"><a href="myCourse.html">我的课程</a></li>
+				            <div class="mobile-show isDisplayMb">
+				            	<li><a href="personalCenter.html">个人信息</a></li>
+	            				<li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+				            </div>
+				            <li class="dropdown head-box isDisplay">
+				            	<a href="#" class="head-pic" data-toggle="dropdown">
+				            		<img id="userImg" src="img/head_pic.png">
+				            		<span id="userName">编程云</span>
+				            	</a>
+				            	<ul class="dropdown-menu">
+				            		<li><a href="personalCenter.html">个人信息</a></li>
+				            		<li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+				            	</ul>
+				            </li>
+				        </ul>
+				    </div>
+			    </div>
+			</nav>
+		</div>
+	</div>
+	<div class="main">
+		<div class="container">
+			<div class="row">
+				<p class="main-tit col-md-12 col-xs-12" id="title">课程库--C++基础课程（一）</p>
+			</div>
+			<div class="row">
+				<img src="img/course02.png" class="col-md-3 col-sm-5 col-xs-12">
+				<div class="col-md-9 col-sm-7 col-xs-12">
+					<p class="courseTit" id="courseTitle">C++基础课程（一）</p>
+					<p class="classHour"><span id="classTime">20</span>课时<span style="margin-left:20px;" id="score">10</span>学分</p>
+					<p class="courseDetail" id="desc">C语言是一门通用计算机编程语言，应用广泛。C语言的设计目标是提供一种能以简易的方式编译、处理低级存储器、产生少量的机器码以及不需要任何运行环境支持便能运行的编程语言。</p>
+					<a href="javascript:;" class="continueL" onclick="join()">去学习</a>
+				</div>
+			</div>
+		</div>
+		<div class="container courseView">
+			<div class="row">
+				<p class="main-tit col-md-12 col-xs-12">课程概览</p>
+			</div>
+			<div class="row" id="overview">
+				<p class="col-md-12 col-xs-12">系统概述：</p>
+				<p class="col-md-1 col-xs-1 text-c">1</p>
+				<p class="col-md-11 col-xs-11">用html5+bootstrap3设计天气预报录入页面和结果显示页面。</p>
+				<p class="col-md-1 col-xs-1 text-c">2</p>
+				<p class="col-md-11 col-xs-11">在已有spring mvc基础框架的情况下，增加freemarker视图支持。</p>
+				<p class="col-md-1 col-xs-1 text-c">3</p>
+				<p class="col-md-11 col-xs-11">将视图里的form表单提交到控制器，再显示到结果页面</p>
+			</div>
+			<!--<div class="row">-->
+				<!--<p class="col-md-12 col-xs-12">预计目标：</p>-->
+				<!--<p class="col-md-1 col-xs-1 text-c">1</p>-->
+				<!--<p class="col-md-11 col-xs-11">用html5+bootstrap3设计天气预报录入页面和结果显示页面。</p>-->
+				<!--<p class="col-md-1 col-xs-1 text-c">2</p>-->
+				<!--<p class="col-md-11 col-xs-11">在已有spring mvc基础框架的情况下，增加freemarker视图支持。</p>-->
+				<!--<p class="col-md-1 col-xs-1 text-c">3</p>-->
+				<!--<p class="col-md-11 col-xs-11">将视图里的form表单提交到控制器，再显示到结果页面</p>-->
+			<!--</div>-->
+			<!--<div class="row">-->
+				<!--<p class="col-md-12 col-xs-12">知识预备：</p>-->
+				<!--<p class="col-md-1 col-xs-1 text-c">1</p>-->
+				<!--<p class="col-md-11 col-xs-11">html5</p>-->
+				<!--<p class="col-md-1 col-xs-1 text-c">2</p>-->
+				<!--<p class="col-md-11 col-xs-11">bootstrap3</p>-->
+				<!--<p class="col-md-1 col-xs-1 text-c">3</p>-->
+				<!--<p class="col-md-11 col-xs-11">java语法</p>-->
+			<!--</div>-->
+		</div>
+	</div>
+	<div class="footer">
+		<div class="container">
+			<ul>
+				<li class="footer-tit">联系与反馈</li>
+				<li><a href="#">联系我们</a></li>
+				<li><a href="#">意见反馈</a></li>
+			</ul>
+			<ul>
+				<li class="footer-tit">资源共享</li>
+				<li><a href="#">学校支持</a></li>
+				<li><a href="#">文章干货</a></li>
+				<li><a href="#">相关下载</a></li>
+			</ul>
+			<ul>
+				<li class="footer-tit">关注我们</li>
+				<li><a href="#">微信公众号</a></li>
+				<li><a href="#">QQ群</a></li>
+			</ul>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function(){
+			var courseId= window.location.href.split('=')[1];
+			console.log(courseId);
+			courseOverview(courseId);
+		});
+//		function join(courseid){
+//			var courseid=courseid;//课程id
+//			alert(courseid)
+//			var page=1;//第几页
+//			courseDetail(courseid,page);
+//		}
+		// ***************用户加入(关注)课程****************
+		function join(){
+			var courseId=window.location.href.split('=')[1];
+			//alert(JSON.parse(getCookie('loginResult')).token);
+			var data={
+				buscourse:{
+					id:courseId
+				},
+				user:{
+					token:JSON.parse(getCookie('loginResult')).token
+				}
+			};
+			request('business.busCourse.focusCourse',data,function callback(result) {
+				//console.log(JSON.stringify(result));
+				if(result.code == 0){
+					console.log(result.msg);
+					window.location.href = "courseDetail.html?courseId="+courseId;
+				}else{
+					console.log(result.msg);
+					window.location.href = "courseDetail.html?courseId="+courseId;
+				}
+			})
+		}
+	</script>
+	<!-- <script type="text/javascript" src="js/main.js"></script> -->
+</body>
+</html>

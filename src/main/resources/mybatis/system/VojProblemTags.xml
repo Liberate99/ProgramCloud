@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.VojProblemTagsDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.VojProblemTags">
+		<id column="problem_tag_id" property="problemTagId" />
+		<result column="problem_tag_slug" property="problemTagSlug" />
+		<result column="problem_tag_name" property="problemTagName" />
+	</resultMap>
+
+	<resultMap id="ProblemTagRelationshipResultMap"
+			   type="com.yunjuanyunshu.modules.entity.VojProblemTagRelationships">
+		<id property="problemId" column="problem_id" />
+		<id property="problemTagId" column="problem_tag_id" />
+		<result property="problemTagSlug" column="problem_tag_slug" />
+		<result property="problemTagName" column="problem_tag_name" />
+	</resultMap>
+
+	<select id="getProblemTagsOfProblems"
+			parameterType="map"
+			resultMap="ProblemTagRelationshipResultMap"
+			useCache="true">
+		SELECT *
+		FROM voj_problem_tag_relationships
+		NATURAL JOIN voj_problem_tags
+		WHERE problem_id &gt;= #{problemIdLowerBound}
+		AND problem_id &lt;= #{problemIdUpperBound}
+	</select>
+
+	<insert id="createProblemTag"
+			parameterType="com.yunjuanyunshu.modules.entity.VojProblemTags"
+			flushCache="true"
+			keyProperty="problemTagId"
+			keyColumn="problem_tag_id"
+			useGeneratedKeys="true">
+	INSERT INTO voj_problem_tags (problem_tag_slug, problem_tag_name)
+	VALUES (#{problemTagSlug}, #{problemTagName})
+	</insert>
+	<insert id="createProblemTagRelationship"
+			parameterType="map"
+			flushCache="true">
+		INSERT INTO voj_problem_tag_relationships (problem_id, problem_tag_id)
+		VALUES (#{problemId}, #{problemTag.problemTagId})
+	</insert>
+	<select id="getProblemTagsUsingProblemId"
+			parameterType="long"
+			resultMap="BaseResultMap"
+			useCache="true">
+		SELECT *
+		FROM voj_problem_tags
+		NATURAL JOIN voj_problem_tag_relationships
+		WHERE problem_id = #{problemId}
+	</select>
+</mapper>

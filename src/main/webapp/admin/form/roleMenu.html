@@ -1,0 +1,19 @@
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" disabled placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色授权</label>
+            <div class="layui-input-inline">
+                <ul id="menu"></ul>
+                <!--<select name="id"></select>-->
+                <!--<input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">-->
+            </div>
+        </div>
+        <button lay-filter="menu" lay-submit style="display: none;"></button>
+    </form>
+</div>

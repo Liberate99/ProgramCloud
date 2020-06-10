@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)https://scratch.mit.edu/projects/editor/?tip_bar=home -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="language" content="zh-cn" />
+
+    <!--<script type="text/javascript" async="" src="${ctxStatic}/my/scratch/share_files/ga.js"></script>-->
+    <script type="text/javascript" async="" src="/my/scratch/ga.js"></script>
+
+    <link http-equiv="x-dns-prefetch-control" content="on" />
+    <link rel="shortcut icon" href="https://www.yunjuanyunshu.com/my/static/my/images/1.ico" type="image/vnd.microsoft.icon" />
+    <meta name="description" content="码猿编程教育" />
+    <meta name="keywords" content="Scratch教程,Scratch中文教程,视频教程,Scratch游戏制作,Scratch在线学习" />
+    <title>码猿 | 专注少儿编程教育</title>
+
+    <!--<link href="${ctxStatic}/my/scratch/share_files/main.css" rel="stylesheet" type="text/css">-->
+    <link href="/my/scratch/main.css" rel="stylesheet" type="text/css">
+
+    <!--<link rel="stylesheet" href="${ctxStatic}/my/scratch/share_files/handheld.css" media="handheld, only screen and (max-device-width:480px)">-->
+    <link rel="stylesheet" href="/my/scratch/handheld.css" media="handheld, only screen and (max-device-width:480px)">
+
+    <!--<link href="${ctxStatic}/my/scratch/share_files/project_base.css" rel="stylesheet" type="text/css">-->
+    <link href="/my/scratch/project_base.css" rel="stylesheet" type="text/css">
+
+    <!--<link href="${ctxStatic}/my/scratch/share_files/jquery-ui.css" rel="stylesheet">-->
+    <link href="/my/scratch/jquery-ui.css" rel="stylesheet">
+
+    <!--<script type="text/javascript" src="${ctxStatic}/my/scratch/share_files/swfobject.js"></script>-->
+    <script type="text/javascript" src="/my/scratch/swfobject.js"></script>
+
+    <!--<script type="text/javascript" src="${ctxStatic}/my/scratch/share_files/jquery.min.js"></script>-->
+    <script type="text/javascript" src="/my/scratch/jquery.min.js"></script>
+
+
+    <!--<script type="text/javascript" src="${ctxStatic}/my/scratch/share_files/underscore-min.js"></script>-->
+    <script type="text/javascript" src="/my/scratch/underscore-min.js"></script>
+
+    <script>
+        window.console || (window.console = {log: $.noop, error: $.noop, debug: $.noop}); // ensure console fails gracefully when missing
+        // define _gaq here to log errors with GA. ga.js script gets loaded furthe down
+        var sessionCookieName = 'scratchsessionsid';
+        var _gaq = window._gaq || [];
+        _gaq.push(['_setAccount', 'UA-30688952-1']);
+        _gaq.push(['_setSampleRate', '10']);
+        _gaq.push(['_trackPageview']);
+    </script>
+    <script type="text/javascript">
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function setCookie(name, value, days) {
+            var expires;
+
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toGMTString();
+            } else {
+                expires = "";
+            }
+            document.cookie = escape(name) + "=" + escape(value) + expires + "; path=/";
+        }
+    </script>
+
+    <script>
+        var Scratch = Scratch || {};
+        Scratch.INIT_DATA = Scratch.INIT_DATA || {};
+        Scratch.INIT_DATA.ADMIN = true;
+        Scratch.INIT_DATA.LOGGED_IN_USER = {
+            options: {
+                permissions: []
+            }
+        };
+        Scratch.INIT_DATA.comment_posting = true;
+        Scratch.INIT_DATA.BROWSERS_SUPPORTED = {
+            chrome: 35,
+            firefox: 31,
+            msie: 8,
+            safari: 7
+        };
+        Scratch.INIT_DATA.TEMPLATE_CUES = {
+            unsupported_browser: true,
+            welcome: true,
+            confirmed_email: false
+        };
+        Scratch.INIT_DATA.PROJECT = {
+            model: {
+                id: null,
+                creator: null,
+                title: 'Untitled',
+                isPrivate: true
+            },
+            is_new: true
+        }
+        Scratch.INIT_DATA.HAS_NEVER_REMIXED = false;
+        Scratch.INIT_DATA.TIPS = {
+            HELP_URLS: {
+                'en': "//cdn.scratch.mit.edu/scratchr2/static/__49ee7a6516fe1e4a1a5cfa66dadb516e__/help/en/",
+
+                'uk': "//cdn.scratch.mit.edu/scratchr2/static/__49ee7a6516fe1e4a1a5cfa66dadb516e__/help/uk/",
+
+                'zh-cn': "//cdn.scratch.mit.edu/scratchr2/static/__49ee7a6516fe1e4a1a5cfa66dadb516e__/help/zh-cn/",
+
+                'zh-tw': "//cdn.scratch.mit.edu/scratchr2/static/__49ee7a6516fe1e4a1a5cfa66dadb516e__/help/zh-tw/",
+
+            },
+
+            CURRENT_LANGUAGE: "zh-cn",
+        };
+        Scratch.INIT_DATA.ADMIN_PANEL = {
+            'adminURL': null,
+        };
+        Scratch.INIT_DATA.COI = {
+            TARGET_DOMAIN: "http://cdn.scratch.mit.edu"
+        };
+        Scratch.INIT_DATA.IS_IP_BANNED = false;
+        Scratch.INIT_DATA.GLOBAL_URLS = {
+           'media_url': '//uploads.scratch.mit.edu/',
+           'static_url': '//cdn.scratch.mit.edu/scratchr2/static/__49ee7a6516fe1e4a1a5cfa66dadb516e__/',
+           'static_path': '/scratchr2/static/__49ee7a6516fe1e4a1a5cfa66dadb516e__/'
+        }
+
+        Scratch.INIT_DATA.IS_SOCIAL = false;
+
+        Scratch.ALERT_MSGS = {
+            'error': 'Oops! Something went wrong',
+            'inappropriate-generic': 'Hmm...the bad word detector thinks there is a problem with your text. Please change it and remember to <a target="_blank" href="/community_guidelines/">be respectful</a>.',
+            'image-invalid': 'Upload a valid image. The file you uploaded was either not an image or a corrupted image.',
+            'thumbnail-missing': 'Missing file',
+            'thumbnail-upload-bad': 'Bad upload',
+            'thumbnail-too-large': 'Maximum file size is 1 MB.',
+
+            'inappropriate-comment': 'Hmm...the bad word detector thinks there is a problem with your comment. Please change it and remember to <a target="_blank" href="/community_guidelines/">be respectful</a>.',
+            'comment-has-chat-site': 'Uh oh! This comment contains a link to a website with unmoderated chat. For safety reasons, please do not link to these sites!',
+
+            'empty-comment': "You can't post an empty comment!",
+            'delete_comment': '<div title="Delete Comment?"><p>Are you sure you want to delete this comment? If the comment is mean or disrespectful, please click report instead, to let the Scratch Team know about it.</p></div>',
+            'report_comment': '<div title="Report Comment?"></p>Are you sure you want to report this comment?</p></div>',
+            'report_comment_educator': '<div title="Delete Comment?"></p>Are you sure you want to delete this comment?</p></div>',
+            'followed': 'You are now following ',
+            'unfollowed': 'You are no longer following ',
+            'comment-spam': "Hmm, seems like you've posted the same comment a bunch of times. Please don't spam.",
+            'comment-flood': "Woah, seems like you're commenting really quickly. Please wait longer between posts.",
+            'comment-muted': "Hmm, the filterbot is pretty sure your recent comments weren't ok for Scratch, so your account has been muted for the rest of the day. :/",
+            'comment-unconstructive': "Hmm, the filterbot thinks your comment may be mean or disrespectful. Remember, most projects on Scratch are made by people who are just learning how to program. Read the <a href='/community_guidelines'>community guidelines</a>, and be nice.",
+            'comment-disallowed': "Hmm, it looks like comments have been turned off for this page. :/",
+            'project-complaint-length': "That's too short. Please describe in detail what's inappropriate or disrespectful about the project.",
+            'project-complaint-buglength': "That's too short! Please describe in detail what you expected the project to do, and how exactly it is broken. Thanks!",
+            'editable-text-too-long': "That's too long! Please find a way to shorten your text."
+
+            , "notes-changed": "变更已储存",
+            "added-to-studio": "加入到创作坊",
+            "tags-changed": "变更已储存",
+            "tags-limited": "最多可用 3 个标签。",
+            "tags-edit-error": "修改标签时发生错误，请重新整理页面以检视更新。",
+            "inappropriate-tag": "恩…你的标签好像使用了不当的字眼，请修改它，同时记得<a target=\"_blank\" href=\"/community_guidelines/\">尊重</a>是美德。",
+            "project-complaint-type": "请从下拉列表选择检举此项目的原因。"
+        }
+    </script>
+    <meta property="og:type" content="website">
+
+    <!--<script type="text/javascript" charset="UTF-8" src="imayuan.com:8888/my/scratch/share_files/KvKtP-yiJsSZbJXdfVHeSsMeKEV53heTLdXa_o8nawM.js"></script>-->
+    <script type="text/javascript" charset="UTF-8" src="/my/scratch/KvKtP-yiJsSZbJXdfVHeSsMeKEV53heTLdXa_o8nawM.js"></script>
+
+    <style type="text/css">
+        .recaptchatable td img {
+            display: block
+        }
+        #recaptcha_area, #recaptcha_table {
+            width: 318px !important
+        }
+
+        .recaptchatable, #recaptcha_area tr, #recaptcha_area td, #recaptcha_area th {
+            margin: 0 !important;
+            border: 0 !important;
+            padding: 0 !important;
+            border-collapse: collapse !important;
+            vertical-align: middle !important
+        }
+
+        .recaptchatable * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-family: helvetica, sans-serif;
+            font-size: 8pt;
+            color: black;
+            position: static;
+            top: auto;
+            left: auto;
+            right: auto;
+            bottom: auto
+        }
+
+        .recaptchatable #recaptcha_image {
+            position: relative;
+            margin: auto
+        }
+
+        .recaptchatable #recaptcha_image #recaptcha_challenge_image {
+            display: block
+        }
+
+        .recaptchatable #recaptcha_image #recaptcha_ad_image {
+            display: block;
+            position: absolute;
+            top: 0
+        }
+
+        .recaptchatable img {
+            border: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important
+        }
+
+        .recaptchatable a, .recaptchatable a:hover {
+            cursor: pointer;
+            outline: none;
+            border: 0 !important;
+            padding: 0 !important;
+            text-decoration: none;
+            color: blue;
+            background: none !important;
+            font-weight: normal
+        }
+
+        .recaptcha_input_area {
+            position: relative !important;
+            width: 153px !important;
+            height: 45px !important;
+            margin-left: 7px !important;
+            margin-right: 7px !important;
+            background: none !important
+        }
+
+        .recaptchatable label.recaptcha_input_area_text {
+            margin: 0 !important;
+            padding: 0 !important;
+            position: static !important;
+            top: auto !important;
+            left: auto !important;
+            right: auto !important;
+            bottom: auto !important;
+            background: none !important;
+            height: auto !important;
+            width: auto !important
+        }
+
+        .recaptcha_theme_red label.recaptcha_input_area_text, .recaptcha_theme_white label.recaptcha_input_area_text {
+            color: black !important
+        }
+
+        .recaptcha_theme_blackglass label.recaptcha_input_area_text {
+            color: white !important
+        }
+
+        .recaptchatable #recaptcha_response_field {
+            width: 153px !important;
+            position: relative !important;
+            bottom: 7px !important;
+            padding: 0 !important;
+            margin: 15px 0 0 0 !important;
+            font-size: 10pt
+        }
+
+        .recaptcha_theme_blackglass #recaptcha_response_field, .recaptcha_theme_white #recaptcha_response_field {
+            border: 1px solid gray
+        }
+
+        .recaptcha_theme_red #recaptcha_response_field {
+            border: 1px solid #cca940
+        }
+
+        .recaptcha_audio_cant_hear_link {
+            font-size: 7pt;
+            color: black
+        }
+
+        .recaptchatable {
+            line-height: 1 !important
+        }
+
+        #recaptcha_instructions_error {
+            color: red !important
+        }
+
+        .recaptcha_only_if_privacy {
+            float: right;
+            text-align: right
+        }
+
+        #recaptcha-ad-choices {
+            position: absolute;
+            height: 15px;
+            top: 0;
+            right: 0
+        }
+
+        #recaptcha-ad-choices img {
+            height: 15px
+        }
+
+        .recaptcha-ad-choices-collapsed {
+            width: 30px;
+            height: 15px;
+            display: block
+        }
+
+        .recaptcha-ad-choices-expanded {
+            width: 75px;
+            height: 15px;
+            display: none
+        }
+
+        #recaptcha-ad-choices:hover .recaptcha-ad-choices-collapsed {
+            display: none
+        }
+
+        #recaptcha-ad-choices:hover .recaptcha-ad-choices-expanded {
+            display: block
+        }
+
+        .recaptcha_is_showing_audio .recaptcha_only_if_image, .recaptcha_isnot_showing_audio .recaptcha_only_if_audio, .recaptcha_had_incorrect_sol .recaptcha_only_if_no_incorrect_sol, .recaptcha_nothad_incorrect_sol .recaptcha_only_if_incorrect_sol {
+            display: none !important
+        }
+    </style>
+</head>
+
+<body class="editor">
+
+<!--[if lte IE 8]>
+<div class="unsupported-browser banner" data-cue="unsupported_browser">
+    <div class="container">
+        <span>Scratch supports Internet Explorer 9+. We suggest you upgrade to <a href="/info/faq/#requirements">a supported browser</a>, <a
+                href="/scratch2download/">download the offline editor</a>, or <a
+                href="http://wiki.scratch.mit.edu/wiki/List_of_Bug_Workarounds">read about common workarounds</a>.</span>
+    </div>
+</div>
+<![endif]-->
+<div id="pagewrapper" style="opacity: 1;">
+
+    <div class="container" id="content">
+        <div id="alert-view"></div>
+        <div class="showcase" id="project" data-project-id="">
+            <div class="box">
+                <div class="box-head">
+                </div>
+                <div class="box-content">
+                    <div class="stage">
+                        <div id="player" class="player">
+
+                            <!-- Start template projects/editor.html project-swf -->
+                            <div class="scratch-wrapper">
+<!--                            <a href="${ctx}"><img alt="码猿" src="http://onkdbetsb.bkt.clouddn.com/my.png" width="80px" height="25px" style="position:absolute;background:#9C9EA2;"></a>-->                                <span style="position:absolute;display:block;background:#9C9EA2;width:200px;right:0px;height:24px;padding-top:4px;text-align: center">
+                                    <a href="${ctx}login" target="_blank" style="color:#ffffff;font-size: 15px;">登录/注册</a>
+                                </span>
+                            </div>
+
+                            <!-- Start template project/includes/flash_player_object.html -->
+                            <!--<div class="flash">-->
+                                <!--<div id="PlayerOnly">-->
+                                    <!--<p style="margin: auto; padding: 2px; WIDTH: 270px;  BACKGROUND-COLOR: #FFFFCC; text-align: center; font-size: 9pt; height: 90px;  left:60px;">-->
+                                        <!--<br />-->
+                                        <!--Scris Robot 对你说：加载 Scratch文件 中……<br />-->
+                                        <!--<br />-->
+                                        <!--如果 Scratch文件（或者Sb2文件） 很久未能加载,<br />-->
+                                        <!--<br />-->
+                                        <!--请确认是否已安装<a href=" ">Flash插件</a >或版本是否太低！-->
+                                    <!--</p >-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <div id="scratch-loader" style="display: none;"></div>
+                            <object type="application/x-shockwave-flash" width="100%"
+                                    height="100%" id="scratch" style="visibility: visible;">
+                            </object>
+
+                            <script type="text/javascript">
+                                window.SWFready = $.Deferred(); // Deferred makes sure we don't call ASSetEditMode before SWF is ready.
+                                function JSeditorReady() {
+                                    try {
+                                        SWFready.resolve();
+                                        return true;
+                                    } catch (error) {
+                                        console.error(error.message, "\n", error.stack);
+                                        throw error;
+                                    }
+                                }
+
+                                function handleEmbedStatus(e) {
+                                    $('#scratch-loader').hide();
+                                    if (!e.success) {
+                                        $('#scratch').css('marginTop', '10');
+                                        $('#scratch IMG.proj_thumb').css('width', '179px');
+                                        $('#scratch DIV.scratch_unsupported').show();
+                                        $('#scratch DIV.scratch_loading').hide();
+                                    } else {
+                                        $('#scratch').css('visibility', 'visible');
+                                    }
+                                }
+
+                                // The flashvars tell flash about the project data (and autostart=true)
+                                var flashvars = {
+                                    autostart: 'false',
+                                    cloudToken: 'abc',
+                                    languageChanged:'true',
+                                    cdnToken: '',
+                                    urlOverrides: {
+                                        sitePrefix: window.location.protocol + '//' + window.location.host + '/',
+                                        siteCdnPrefix: "http://cdn.scratch.mit.edu/",
+//                                        assetPrefix: "http://assets.scratch.mit.edu/",
+//                                        assetCdnPrefix: "http://cdn.assets.scratch.mit.edu/",
+//                                        projectPrefix: "http://projects.scratch.mit.edu/",
+//                                        projectCdnPrefix: "http://cdn.projects.scratch.mit.edu/",
+//                                        internalAPI: "internalapi/",
+//                                        siteAPI: "/",
+                                        staticFiles: "scratch/static/"
+                                    },
+                                    inIE: (navigator.userAgent.indexOf('MSIE') > -1)
+                                };
+
+                                $.each(flashvars, function (prop, val) {
+                                    if ($.isPlainObject(val))
+                                        flashvars[prop] = encodeURIComponent(JSON.stringify(val));
+                                });
+
+                                $.each(Scratch.INIT_DATA.PROJECT.model, function (i, val) {
+                                    if (val != null)
+                                        flashvars['project_' + i] = encodeURIComponent(val);
+                                });
+
+                                if (Scratch.INIT_DATA.PROJECT.is_new)
+                                    flashvars.project_isNew = true;
+
+                                var params = {
+                                    allowscriptaccess: 'always',
+                                    allowfullscreen: 'true',
+                                    wmode: 'direct',
+                                    menu: 'false'
+                                };
+
+                                // url format flashvars for createSWF call (see
+                                // https://github.com/LLK/scratchr2/blob/f42c289a5fa890d9c5562cc1fa54b0aea3dfa45e/static/js/swfobject.js#L673-L682)
+                                for (var i in flashvars) {
+                                    if (typeof params.flashvars !== 'undefined') {
+                                        params.flashvars += '&' + i + '=' + flashvars[i];
+                                    } else {
+                                        params.flashvars = i + '=' + flashvars[i];
+                                    }
+                                }
+
+                                var swfFile = (swfobject.hasFlashPlayerVersion('11.7.0') ? 'Scratch.swf' : 'ScratchFor10.2.swf');
+
+                                var swfAtt = {
+                                    // data: "//cdn.scratch.mit.edu/scratchr2/static/__49ee7a6516fe1e4a1a5cfa66dadb516e__/" + swfFile,
+                                    data: "/my/scratch/" + swfFile,
+                                    width: "100%",
+                                    height: "100%"
+                                };
+
+                                swfobject.addDomLoadEvent(function () {
+                                    // check if mobile/tablet browser user bowser
+                                    if (bowser.mobile || (bowser.tablet && typeof bowser.msie === 'undefined')) {
+                                        // if on mobile, show error screen
+                                        handleEmbedStatus({success: false});
+                                    } else {
+                                        // if not on ie, let browser try to handle flash loading
+                                        var swf = swfobject.createSWF(swfAtt, params, "scratch");
+                                        handleEmbedStatus({success: true, ref: swf});
+                                    }
+                                    document.getElementById('scratch').style.visibility = 'visible';
+                                });
+
+                                //                                //Dynamically add iframe for registration window
+                                //                                $.when(window.SWFready).done(function () {
+                                //                                    $('<iframe id="registration-iframe" class="iframeshim" style="background:#fff;z-index:-1;" frameborder="0" scrolling="no">').insertBefore('#registration')
+                                //                                });
+
+                                // enables the SWF to log errors
+                                function JSthrowError(e) {
+                                    if (window.onerror) window.onerror(e, 'swf', 0);
+                                    else console.error(e);
+                                }
+                            </script>
+                            <!-- End template project/includes/flash_player_object.html -->
+
+
+                            <!-- End template projects/editor.html project-swf -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<script type="text/javascript" src="${ctxStatic}/my/scratch/share_files/jquery-ui.min.js"></script>-->
+    <script type="text/javascript" src="/my/scratch/jquery-ui.min.js"></script>
+
+    <!--<script type="text/javascript" src="${ctxStatic}/my/scratch/share_files/main.js" charset="utf-8"></script>-->
+    <script type="text/javascript" src="/my/scratch/main.js"></script>
+
+    <!--<script type="text/javascript" src="${ctxStatic}/my/scratch/share_files/base.js" charset="utf-8"></script>-->
+    <script type="text/javascript" src="/my/scratch/base.js"></script>
+
+    <!--<script type="text/javascript" src="${ctxStatic}/my/scratch/share_files/lazyload.js" charset="utf-8"></script>-->
+    <script type="text/javascript" src="/my/scratch/lazyload.js"></script>
+
+    <!-- load javascript translation catalog, and javascript fuzzy date library -->
+    <!--<script type="text/javascript" src="${ctxStatic}/my/scratch/share_files/global.js"></script>-->
+    <script type="text/javascript" src="/my/scratch/global.js"></script>
+    <script>
+        Scratch.NotificationPollTime = 300000;
+    </script>
+    <!--<script type="text/javascript" src="${ctxStatic}/my/scratch/share_files/project_base.js" charset="utf-8"></script>-->
+    <script type="text/javascript" src="/my/scratch/project_base.js"></script>
+    <script>
+        $(document).on("accountnavready", function (e) {
+            $('#topnav .messages').notificationsAlert();
+        });
+    </script>
+    <!-- Site Version: 2.2.20_2017_05_02_17_04 -->
+
+    <!--<script type="text/javascript">-->
+        <!--var fwidth = 483; // flash view width-->
+        <!--var fheight = 387;  // flash view height-->
+        <!--var swfFile = (swfobject.hasFlashPlayerVersion('11.7.0') ? 'Scratch.swf' : 'ScratchFor10.2.swf');-->
+        <!--installPlayer('${ctxStatic}/my/'+swfFile, 'PlayerOnly');-->
+        <!--function installPlayer(swfName, swfID) {-->
+            <!--var flashvars = {-->
+                <!--project: '${work.filepath}',-->
+                <!--autostart: 'false'-->
+            <!--};-->
+            <!--var params = {-->
+                <!--wmode: 'transparent',-->
+                <!--menu: 'false',-->
+                <!--allowFullScreen: 'true',-->
+                <!--allowScriptAccess: 'always'-->
+            <!--};-->
+            <!--var attributes = {};-->
+            <!--swfobject.embedSWF(swfName, swfID, fwidth, fheight, '10.0', false, flashvars, params, attributes);-->
+        <!--}-->
+    <!--</script>-->
+
+</div>
+<div style="display: none;"></div>
+</body>
+</html>

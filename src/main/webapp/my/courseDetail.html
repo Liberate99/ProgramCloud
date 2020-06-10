@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<!--响应式布局，宽度等于设备宽度-->
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+	<title>实验云</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/head.css">
+	<link rel="stylesheet" type="text/css" href="css/mycourse.css">
+	<link rel="stylesheet" type="text/css" href="css/page.css">
+	<link rel="stylesheet" type="text/css" href="css/courseDetail.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+	
+	<script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<script type="text/javascript" src="js/jquery-1.10.0.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/jquery.page.js"></script>
+	<script type="text/javascript" src="js/artTemplate.js"></script>
+	<script type="text/javascript" src="js/template-native.js"></script>
+	<script type="text/javascript" src="layer/layer.js"></script>
+	<script type="text/javascript" src="js/HOST.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	<!--<script src="js/bootstrap.min.js" charset="utf-8"></script>-->
+	<!--[if lt IE 9]>
+    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+	<!--[endif]-->
+	<style>
+		.breadcrumb>li{line-height: 30px;}
+	</style>
+	
+</head>
+<body>
+	<div class="menu">
+		<div class="container con_header">
+			<nav class="navbar" role="navigation">
+			    <div class="container-fluid">
+				    <div class="navbar-header">
+				        <button type="button" class="navbar-toggle" data-toggle="collapse"
+				                data-target="#cloud-navbar-collapse">
+				            <span class="sr-only">切换导航</span>
+				            <span class="icon-bar"></span>
+				            <span class="icon-bar"></span>
+				            <span class="icon-bar"></span>
+				        </button>
+				        <a class="navbar-brand" href="index.html">
+							<img src="img/logo.png" style="width: 50px;">
+							<!--<span class="glyphicon glyphicon-cloud"></span>-->
+						</a>
+				    </div>
+				    <div class="collapse navbar-collapse" id="cloud-navbar-collapse">
+				        <ul class="nav navbar-nav">
+				            <li class="active"><a href="courseLibrary.html">课程库</a></li>
+				            <li><a href="scrachPro.html">Scratch作品展</a></li>
+							<li><a href="scratch/ide.html">Scratch 3.0 在线编程</a></li>
+				            <li><a href="personalMain.html">个人总览</a></li>
+				            <li><a href="myCourse.html">我的课程</a></li>
+							<li class="hov"><a href="virtualLab.html">虚拟实验室</a></li>
+							<div class="mobile-show">
+				            	<li><a href="personalCenter.html">个人信息</a></li>
+	            				<li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+				            </div>
+				            <li class="dropdown head-box">
+				            	<a href="#" class="head-pic" data-toggle="dropdown">
+				            		<img id="userImg" src="img/head_pic.png">
+				            		<span id="userName">编程云</span>
+				            	</a>
+				            	<ul class="dropdown-menu">
+				            		<li><a href="personalCenter.html">个人信息</a></li>
+				            		<li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+				            	</ul>
+				            </li>
+				        </ul>
+				    </div>
+			    </div>
+			</nav>
+		</div>
+	</div>
+	<div class="main">
+		<div class="container">
+			<div class="row col-md-8 col-sm-8 col-xs-12 coursePd">
+				<h2 class="main-tit" id="title"></h2>
+				<img src="img/hdu.jpg" class="img-responsive float-l" style="width:70%;max-width: 140px;margin:17px;">
+				<!--<img id="coursePic" src="img/course02.png" class="col-md-3 col-sm-5 col-xs-12">-->
+					<!--<p class="courseTit" id="courseTitle">C++基础课程（一）</p>-->
+					<!--<p class="classHour">-->
+						<!--<span id="classTime" class="ib-selfstudy-bfont">20</span><span>课时</span>|-->
+						<!--<span id="score" class="ib-selfstudy-bfont">10</span><span>学分</span>|-->
+						<!--<span id="knowledge" class="ib-selfstudy-bfont">10</span><span>章节</span>|-->
+						<!--<span id="knowledgesize" class="ib-selfstudy-bfont">10</span><span>知识点</span>|-->
+						<!--<span id="questionsize" class="ib-selfstudy-bfont">10</span><span>实验代码</span>-->
+					<!--</p>-->
+					<p class="classHour" style="clear: left;margin-bottom: 0">
+						<button type="button" class="btn btn-primary">
+							<span id="classTime"></span>课时
+						</button>
+						<button type="button" class="btn btn-warning">
+							<span id="score"></span>学分
+						</button>
+						<button type="button" class="btn btn-success">
+							<span id="parentCount"></span>单元
+						</button>
+						<button type="button" class="btn btn-info">
+							<span id="childCount"></span>知识点
+						</button>
+						<button type="button" class="btn btn-danger">
+							<span id="codeCount"></span>案例代码
+						</button>
+						<!-- 按钮触发模态框 -->
+						<a href="#" class="continueL" id="begin">继续学习</a>
+						<a href="javascript:;" class="continueL" data-target="#myModal1" id="joinClass" onclick="checkInf()">加入班级</a>
+					</p>
+					<!--<p class="courseDetail" id="desc">C语言是一门通用计算机编程语言，应用广泛。C语言的设计目标是提供一种能以简易的方式编译、处理低级存储器、产生少量的机器码以及不需要任何运行环境支持便能运行的编程语言。</p>-->
+					<div class="row" style="margin-right: 0;margin-left: 0">
+						<div class="progress" style="width: 100%;float: left;margin-top: 30px;">
+							<div id="progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;width: 0%;">
+
+							</div>
+							<!--<span style="float: right">学习进度&nbsp;</span>-->
+						</div>
+					</div>
+				<span id="p_tag"></span>
+				<!-- 模态框（Modal） -->
+				<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModal1Label" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+									&times;
+								</button>
+								<h4 class="modal-title" id="myModal1Label">
+									选班加入
+								</h4>
+							</div>
+							<div class="modal-body">
+								<form class="form-horizontal">
+									<div class="form-group">
+										<label class="col-sm-3 control-label">选择班级</label>
+										<div class="col-sm-9">
+											<select class="form-control" id="classes">
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label  class="col-sm-3 control-label">邀请码</label>
+										<div class="col-sm-9">
+											<input type="text" class="form-control" id="invitationCode"
+												   placeholder="请输入邀请码">
+										</div>
+									</div>
+
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+								</button>
+								<button type="button" class="btn btn-primary" id="submit">
+									提交
+								</button><span id="tip"> </span>
+							</div>
+						</div><!-- /.modal-content -->
+					</div><!-- /.modal -->
+				</div>
+			</div>
+			<div class="row col-md-4 col-sm-4 col-xs-12" style="padding-left: 30px;">
+				<img id="coursePic" src="#" style="width: 100%">
+			</div>
+		</div>
+
+		<div class="container" style="padding: 20px 0;min-height: 400px;">
+			<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 coursePd">
+				<div class="main-tit">
+					<ul class="nav nav-tabs" style="color: #000">
+						<li role="presentation" id="descs" class="active"><a href="javascript:;" onclick="descs()" class="courseTabLink">教学大纲</a></li>
+						<li role="presentation" id="classs"><a href="javascript:;" onclick="defa()" class="courseTabLink">课件列表</a></li>
+						<li role="presentation" id="train"><a href="javascript:;" onclick="train()" class="courseTabLink">实验列表</a></li>
+						<li role="presentation" id="askq"><a href="javascript:;" onclick="newq()" class="courseTabLink">问答</a></li>
+					</ul>
+					<!--<span onclick="defa()" style="cursor: pointer;">章节</span>-->
+					<!--<span style="margin-left: 20px;cursor: pointer;" onclick="newq()">问答</span>-->
+				</div>
+
+				<div class="row" id="overview">
+					<!--<p class="courseDetail" id="desc">C语言是一门通用计算机编程语言，应用广泛。C语言的设计目标是提供一种能以简易的方式编译、处理低级存储器、产生少量的机器码以及不需要任何运行环境支持便能运行的编程语言。</p>-->
+				</div>
+
+				<!--课件列表-->
+				<div class="row" id="show" style="display: none;">
+				</div>
+
+				<!--实验列表-->
+				<div class="row" id="training" style="display: none;">
+				</div>
+
+				<!--课件-->
+				<div class="panel-group" id="accordion">
+					<script id="content" type="text/html">
+						<% var i=0 %>
+						<% for (var key in value) { %>
+						<div class="panel panel-default">
+							<a  data-toggle="collapse" data-parent="#accordion" href=#collapse<%= i+1 %> aria-expanded="true" aria-controls="collapseOne">
+								<div class="panel-heading" role="tab" id="headingOne">
+									<h4 class="panel-title">
+										<span class="badge"><%=value[key][0].score %>/<%=value[key].length-1%></span>
+										第<%=i+1%>单元&nbsp;<%=value[key][0].title%>
+									</h4>
+								</div>
+							</a>
+							<div id=collapse<%= i+1 %> class="panel-collapse collapse">
+								<% for (var j = 1; j < value[key].length; j ++) { %>
+								<div class="panel-body" style="padding:10px 20px 5px 20px">
+									<ul class="list-group">
+										<li class="list-group-item" data-chapterid=<%= value[key][j].id %> data-resourceurl=<%= value[key][j].resourceUrl %> data-chaptertype=<%=value[key][j].type %> data-chaptertitle=<%= value[key][j].title %> >
+<!--======-->
+											<a href="courseContent.html?chapterId=<%= value[key][j].id %>&courseId=<%= courseid %>" target="_blank">
+												<span class="badge"><%=value[key][j].score %>/<%=value[key][j].classtime%></span>
+												<%=i+1%>-<%=j%>&nbsp;&nbsp;<%=value[key][j].title%>
+											</a>
+											<!--<a href="courseContent.html?chapterId=<%= value[key][j].id %>&courseId=<%= courseid %>" target="_blank">-->
+												<!--<span class="badge">courseContent</span>-->
+											<!--</a>-->
+											<%if (value[key][j].type==0){%>
+											<a id="text_button" style="float:right; margin-right: 20px;">
+												<i class="fas fa-file-alt" style="color: purple;"></i>
+											</a>
+											<%}if (value[key][j].type==1){%>
+											<a id="video_button" class="{{value[key][j]?0:'button-is-hide'}}" style="float:right; margin-right: 20px;">
+												<i class="fab fa-youtube" style="color: lightseagreen;"></i>
+											</a>
+											<%}if (value[key][j].type==2){%>
+											<a id="ppt_button" style="float:right; margin-right: 20px;">
+												<i class="fas fa-chalkboard" style="color: orangered;"></i>
+											</a>
+											<%}if (value[key][j].type==3){%>
+											<a id="code_button" style="float:right; margin-right: 20px;">
+												<i class="fas fa-cogs" style="color: darkblue;"></i>
+											</a>
+											<%}if (value[key][j].type==5){%>
+											<a id="code_button" style="float:right; margin-right: 20px;">
+												<i class="fas fa-file-powerpoint" style="color: orangered;"></i>
+											</a>
+											<%}%>
+										</li>
+									</ul>
+								</div>
+								<% } %>
+							</div>
+						</div>
+						<% i++  %>
+						<% } %>
+					</script>
+				</div>
+
+				<!--实验-->
+				<div class="panel-group" id="accordion_train">
+					<script id="train_content" type="text/html">
+						<% var i=0 %>
+						<% for (var key in value) { %>
+						<div class="panel panel-default">
+							<a  data-toggle="collapse" data-parent="#accordion_train" href=#train_collapse<%= i+1 %> aria-expanded="true" aria-controls="collapseOne">
+								<div class="panel-heading" role="tab" id="train_headingOne">
+									<h4 class="panel-title">
+										<!--<span class="badge"><%=value[key][0].score %>/<%=value[key].length-1%></span>-->
+										第<%=i+1%>单元&nbsp;<%=value[key][0].title%>
+									</h4>
+								</div>
+							</a>
+							<div id=train_collapse<%= i+1 %> class="panel-collapse collapse">
+								<% for (var j = 1; j < value[key].length; j ++) { %>
+								<div class="panel-body" style="padding:10px 20px 5px 20px">
+									<ul class="list-group">
+										<li class="list-group-item" data-chapterid=<%= value[key][j].id %> data-resourceurl=<%= value[key][j].resourceUrl %> data-chaptertype=<%=value[key][j].type %> data-chaptertitle=<%= value[key][j].title %> >
+											<a href="codeFrame.html?chapterId=<%= value[key][j].id %>&courseId=<%= courseid %>" target="_blank">
+												<!--<span class="badge"><%=value[key][j].score %>/<%=value[key][j].classtime%></span>-->
+												<%=i+1%>-<%=j%>&nbsp;&nbsp;<%=value[key][j].title%>
+											</a>
+										</li>
+									</ul>
+								</div>
+								<% } %>
+							</div>
+						</div>
+						<% i++  %>
+						<% } %>
+					</script>
+				</div>
+
+				<div id="question" style="display: none">
+					<div style="margin: 20px 0;">
+						<div class="float-l">
+							<div class="input-group" style="width: 200px;float: left">
+								<input type="text" id="searchKey" class="form-control input-sm search-area" placeholder="问题检索"/>
+								<a href="javascript:;" onclick="searchQuest()" class="input-group-addon search"><img src="img/search.png" class="search-icon"></a>
+							</div>
+							<a href="#" class="ask-link btn-success" data-toggle="modal" data-target="#askLink">提问</a>
+							<!--<button type="button" class="btn btn-sm btn-primary">搜索</button>-->
+						</div>
+						<p class="float-r question-sort">
+							<a href="javascript:" onclick="time()">按更新时间</a><a href="javascript:" class="glyphicon glyphicon-menu-up" onclick="asc()"></a><a href="javascript:" class="glyphicon glyphicon-menu-down" onclick="dec()"></a>
+							<a href="javascript:" onclick="bonus()">按奖励金数</a><a href="javascript:" class="glyphicon glyphicon-menu-up" onclick="asc1()" ></a><a href="javascript:" class="glyphicon glyphicon-menu-down" onclick="dec1()"></a>
+						</p>
+						<div class="clear"></div>
+					</div>
+					<ul id="questList" class="replyList">
+
+					</ul>
+					<ul class="pagination" style="float:right;padding: 15px 0;"></ul>
+				</div>
+
+				<div class="modal fade" id="askLink" tabindex="-1" role="dialog" aria-labelledby="askLinkLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+									&times;
+								</button>
+								<h4 class="modal-title">
+									提问
+								</h4>
+							</div>
+							<div class="modal-body">
+								<form class="form-horizontal">
+									<div class="form-group">
+										<label for="tit" class="col-xs-2 control-label">标题</label>
+										<div class="col-xs-10">
+											<input type="text" class="form-control" id="tit">
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="describe" class="col-xs-2 control-label">描述</label>
+										<div class="col-xs-10">
+											<textarea type="text" rows="7"  class="form-control" id="describe" placeholder="描述你的问题" style="resize: none;overflow-x:hidden"></textarea>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="describe" class="col-xs-2 control-label">父章节</label>
+										<div class="col-xs-10">
+											<select class="form-control" id="parentCap" onchange="changeCap()">
+												<option value="">请选择</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="describe" class="col-xs-2 control-label">子章节</label>
+										<div class="col-xs-10">
+											<select class="form-control" id="childCap">
+												<option value="">请选择</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="bonus" class="col-xs-2 control-label">奖励金</label>
+										<div class="col-xs-2">
+											<input type="number" min="0" value="0" class="form-control" id="bonus" placeholder="奖金">
+										</div>
+										<div class="col-xs-8" style="line-height: 34px;">
+											<span class="form-control-static">您当前有<span id="m_ask_mycoin">0</span></span>个code币，
+											<a href="#" id="m_ask_alipay">兑换code币</a>
+										</div>
+									</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+								</button>
+								<button type="button" class="btn btn-primary" id="submitQue">
+									提交
+								</button>
+							</div>
+						</div><!-- /.modal-content -->
+					</div><!-- /.modal -->
+				</div>
+
+				<script id="answers" type="text/html">
+					<% for (var i = 0; i < value.length; i ++) { %>
+					<li class="item">
+						<img src="<%= value[i].photo %>">
+						<p style="margin-bottom: 10px;">
+							<a href="javascript:;" class="blue" target="_blank" data-id="<%= value[i].createBy %>"><%= value[i].createByName %></a>
+							<span style="float: right"><%= value[i].updateDate %></span>
+							<span style="float: right;">更新于&nbsp;</span>
+						</p>
+						<% if(value[i].questionType == '1') {%>
+						<a class="question-link" target="_blank" href="answer02.html?questionId=<%= value[i].id %>">
+							<%= value[i].title %>
+							<% if(value[i].recommended == '1') {%>
+							<span class="tag">[推荐问题]</span>
+							<% } %>
+							<% if(value[i].status == '0') {%>
+							<span class="tag">[已解决]</span>
+							<% } %>
+						</a>
+						<% }else{ %>
+						<a class="question-link" target="_blank" href="questionDetail.html?questionId=<%= value[i].id %>">
+							<%= value[i].title %>
+							<% if(value[i].recommended == '1') {%>
+							<span class="tag">[推荐问题]</span>
+							<% } %>
+							<% if(value[i].status == '0') {%>
+							<span class="tag">[已解决]</span>
+							<% } %>
+						</a>
+						<% } %>
+						<div class="clear"></div>
+						<p style="margin-bottom: 5px;font-size: 12px;">
+							<span>发布于 <%= value[i].createDate %></span>
+							<span style="float: right;"><%= value[i].bonus %> 奖励金</span>
+							<% if(value[i].questionType == '1') {%>
+							<a href="answer02.html?questionId=<%= value[i].id %>" class="answerLink"><%= value[i].answer %> 回复</a>
+							<% }else{ %>
+							<a href="questionDetail.html?questionId=<%= value[i].id %>" class="answerLink"><%= value[i].answer %> 回复</a>
+							<% } %>
+						</p>
+					</li>
+					<% } %>
+				</script>
+
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding-left: 30px;">
+				<div>
+					<button class="btn  btn-lg" data-toggle="modal" data-target="#teamyModal">
+					<img id="userImgs" src="#">
+					<ul>
+						<li style="list-style-type:none">
+							<span id="userNames"></span>
+						</li>
+						<li style="list-style-type:none;margin-top: 10px">
+							<span id="role" style=""></span>
+							<p id="teacherID" style="display: none"></p>
+						</li>
+					</ul>
+					</button>
+					<div class="modal fade" id="teamyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header" style="overflow: hidden;">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+										&times;
+									</button>
+									<h4 class="modal-title" id="myModalLabel">
+										<strong id="tead">老师</strong>
+									</h4>
+								</div>
+								<div class="modal-body">
+									<img id="teaimg" src="#">
+									<ul style="padding: 0">
+										<li><strong class="teacher-info">老师姓名：</strong><p id="teaname" ></p></li>
+										<li><strong class="teacher-info">老师职称：</strong><p id="teajob" ></p></li>
+										<li><strong class="teacher-info">老师专业：</strong><p id="teamajor" ></p></li>
+										<li><strong class="teacher-info">老师所属学校：</strong><p id="teaschool" ></p></li>
+										<li><strong class="teacher-info">老师所属学院：</strong><p id="teadepart" ></p></li>
+										<li><strong class="teacher-info">老师简介：</strong><p id="teadec" ></p></li>
+									</ul>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+									</button>
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div class="panel panel-info" style="margin-top: 20px">
+						<div class="panel-heading">课程简介</div>
+						<div class="panel-body" style="padding: 10px" id="desc">
+							1、html、css基础知识<br/>
+							2、JS基础知识<br/>
+							3、会用NodeJS<br/>
+							4、需要学过火拼俄罗斯方块的基础版和单机版两个课程。<br/>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel1">回复</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal">
+						<div class="form-group">
+							<label for="m_input_desc" class="col-xs-2 control-label">内容</label>
+							<div class="col-xs-10">
+								<textarea type="text" class="form-control" id="m_input_desc" placeholder="内容"></textarea>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-xs-3 col-xs-offset-2">
+								<button type="button" id="m_btn_send" class="btn btn-success">提交</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer">
+		<div class="container">
+			<ul>
+				<li class="footer-tit">联系与反馈</li>
+				<li><a href="#">联系我们</a></li>
+				<li><a href="#">意见反馈</a></li>
+			</ul>
+			<ul>
+				<li class="footer-tit">资源共享</li>
+				<li><a href="#">学校支持</a></li>
+				<li><a href="#">文章干货</a></li>
+				<li><a href="#">相关下载</a></li>
+			</ul>
+			<ul>
+				<li class="footer-tit">关注我们</li>
+				<li><a href="#">微信公众号</a></li>
+				<li><a href="#">QQ群</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<script>
+			var courseId= window.location.href.split('=')[1];
+//			console.log(courseId);
+			//var teacheruserid=$(#teaid).val();
+            hasClass(courseId);
+            // 获取班级信息
+            isJoinClass(courseId);
+            getLastestChapter(courseId);
+            getFinishProgress(courseId);
+			courseOverview(courseId);
+            var teacheruseid=$('#teacherID').text();
+            getteacher(teacheruseid);
+            courseDetail(courseId,1);
+			exerciseDetial(courseId,1);
+			// 获取院校信息
+			getCollege();
+			getClass();
+			//展示班级
+            $('#myModal1').on('show.bs.modal', function () {
+                getClassesByCourse(courseId);
+            });
+
+			//弹窗打开时获取用户的积分
+			$('#askLink').on('show.bs.modal',function () {
+				var integral = getUserIntegral();
+				if(integral){
+					$("#m_ask_mycoin").text(integral);
+					$("#bonus").attr("max",integral);
+				}
+			});
+
+
+        var page=1;
+        var orderBy="update_date";
+        var isasc=false;
+        //courseId,page,orderBy,true
+        answer(courseId,page,orderBy,isasc,true);
+
+		//问题检索
+		function searchQuest() {
+			answer(courseId,page,orderBy,isasc,true);
+		}
+
+		//填充子章节
+		function changeCap() {
+			var parentId = $("#parentCap").val();
+			$("#childCap").empty();
+			$("#childCap").append('<option value="">请选择</option>');
+			var data={
+				busCourse:{
+					id:courseId
+				},
+				user:{
+					token:JSON.parse(getCookie('loginResult')).token
+				}
+			};
+			request('business.busChapter.getTreeChapterListToFront',data,function callback(result){
+				if(result.code == 0 && result.value){
+					for(var key in result.value){
+						if(key == parentId){
+							if(result.value[key].length>1){
+								for(var i=1;i<result.value[key].length;i++){
+									$("#childCap").append('<option value="'+result.value[key][i].id+'">'+result.value[key][i].title+'</option>');
+								}
+							}else if(result.value[key].length == 1){
+								$("#childCap").append('<option value="'+result.value[key][0].id+'">'+result.value[key][0].title+'</option>');
+							}
+							break;
+						}
+					}
+				}
+			});
+		}
+
+		//提交问题
+		$("#submitQue").on('click',function () {
+			var title = $("#tit").val();
+			var describe = $("#describe").val();
+			var chapter = $("#childCap").val();
+			var bonus = $("#bonus").val();
+			var data = {
+				user:{
+					token:JSON.parse(getCookie('loginResult')).token
+				},
+				busQuestion:{
+					questionType:0,
+					bonus:bonus,
+					title:title,
+					description:describe,
+					chapter:chapter
+				}
+			};
+			request('business.busQuestion.putQuestion',data,function callback(result){
+				if(result.code == 0){
+					layer.msg(result.msg, {time:3000,icon:6});
+					//若提问成功且设置了奖励金则扣除对应用户积分,后台操作
+//					if(bonus){
+//						changeIntegral("",bonus,0,1);
+//					}
+				}else {
+					layer.msg(result.msg, {time:3000,icon:5});
+				}
+				$('#askLink').modal('hide');
+				//问题提交后刷新列表
+				answer(courseId,page,orderBy,isasc,true);
+			})
+		});
+
+		//初始化分页组件
+        function setPage(courseId,pages,current){
+            console.log("页面初始化，当前页码"+current);
+
+            $(".pagination").createPage({
+                pageCount:pages,
+                current:current,
+                backFn:function(p){
+                    // console.log(p);
+//					var classify="0";
+                    console.log("页码跳转到："+p);
+                    answer(courseId,p,orderBy,isasc,false);
+                    if(pages ==0){
+                        $(".pagination").css("display","none");
+                    }else{
+                        $(".pagination").css("display","block");
+                    }
+                }
+            });
+        }
+		function  time() {
+            page=1;
+            orderBy="update_date";
+            isasc="true";
+            answer(courseId,page,orderBy,isasc,true);
+        }
+        function  bonus() {
+			page=1;
+			orderBy="bonus";
+            isasc="true";
+			answer(courseId,page,orderBy,isasc,true);
+		}
+		function  asc() {
+                page=1;
+                orderBy="update_date";
+                isasc="true";
+                answer(courseId,page,orderBy,isasc,true);
+		}
+		function  dec() {
+                page=1;
+                orderBy="update_date";
+                isasc="false";
+                answer(courseId,page,orderBy,isasc,true);
+		}
+		function  asc1() {
+                page=1;
+                orderBy="bonus";
+                isasc="true";
+                answer(courseId,page,orderBy,isasc,true);
+		}
+		function  dec1() {
+                page=1;
+                orderBy="bonus";
+                isasc="false";
+                answer(courseId,page,orderBy,isasc,true);
+		}
+
+            $('#submit').click(function(){
+                joinClass(window.location.href.split('=')[1]);
+            });
+
+		function setP(pages,current){
+			$(".pagination").createPage({
+				pageCount:pages,
+				current:current,
+				backFn:function(p){
+					// console.log(p);
+					//alert(p)
+					var classify="0";
+					courseList(classify,p);
+				}
+			});
+		}
+		function descs(){
+			$('#descs').addClass("active");
+			$('#classs').removeClass("active");
+			$('#train').removeClass('active');
+			$('#askq').removeClass("active");
+			$('#question').hide("fast");
+			$('#show').hide("fast");
+			$('#training').hide("fast");
+			$('#overview').show("fast");
+		}
+		function defa(){
+			$('#descs').removeClass("active");
+			$('#train').removeClass('active');
+			$('#classs').addClass("active");
+			$('#askq').removeClass("active");
+			$('#question').hide("fast");
+			$('#show').show("fast");
+			$('#training').hide("fast");
+			$('#overview').hide("fast");
+		}
+		function newq(){
+			$('#descs').removeClass("active");
+			$('#classs').removeClass("active");
+			$('#train').removeClass('active');
+			$('#askq').addClass("active");
+			$('#show').hide("fast");
+			$('#training').hide("fast");
+			$('#question').show("fast");
+			$('#overview').hide("fast");
+		}
+		function train(){
+			$('#train').addClass("active");
+			$('#descs').removeClass("active");
+			$('#classs').removeClass("active");
+			$('#askq').removeClass("active");
+			$('#show').hide("fast");
+			$('#question').hide("fast");
+			$('#overview').hide("fast");
+			$('#training').show("fast");
+		}
+	</script>
+</body>
+</html>

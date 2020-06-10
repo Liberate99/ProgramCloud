@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <!--响应式布局，宽度等于设备宽度-->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <title>实验云</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/head.css">
+    <link rel="stylesheet" type="text/css" href="css/page.css">
+    <link rel="stylesheet" type="text/css" href="css/mycourse.css">
+</head>
+<body>
+<div class="menu">
+    <div class="container con_header">
+        <nav class="navbar" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#cloud-navbar-collapse">
+                        <span class="sr-only">切换导航</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div style="width: 40px; height: 40px;">
+                        <a class="navbar-brand" href="index.html">
+                            <img src="img/logo.png" style="width: 40px; height: 40px;">
+                        </a>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="cloud-navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="hov"><a href="courseLibrary.html">课程库</a></li>
+                        <li class="active hov"><a href="scrachPro.html">Scratch作品展</a></li>
+                        <li class="hov"><a href="scratch/ide.html">Scratch 3.0 在线编程</a></li>
+                        <li class="hov"><a href="personalMain.html">个人总览</a></li>
+                        <li class="hov"><a href="myCourse.html">我的课程</a></li>
+                        <li class="hov"><a href="virtualLab.html">虚拟实验室</a></li>
+                        <div class="mobile-show">
+                            <li><a href="personalCenter.html">个人信息</a></li>
+                            <li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+                        </div>
+                        <li class="dropdown head-box">
+                            <a href="#" class="head-pic" data-toggle="dropdown">
+                                <img id="userImg" src="img/head_pic.png">
+                                <span id="userName"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="personalCenter.html">个人信息</a></li>
+                                <li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <a href="javascript:;" onclick="" class="courseKind courseKindAct">全部作品</a>
+            <!--<a href="javascript:;" onclick="" class="courseKind">个人作品</a>-->
+        </div>
+        <div id="pro_list" class="row">
+            <!--作品列表-->
+        </div>
+        <script id="content" type="text/html">
+            <% if(value){ %>
+            <% for (var i = 0; i < value.length; i ++) { %>
+            <a href="#" onclick="showPro('<%=value[i].id%>')">
+                <div class="col-md-3 col-xs-6 courseBox">
+                    <div class="courseMain">
+                        <img src="<%='http://owkomi1zd.bkt.clouddn.com/'+value[i].cover%>" class="courseImg"/>
+                        <div class="zhezhao">
+                            <!--<p class="courseName">value[i].</p>-->
+                            <p class="courseLong"><span><%=value[i].name%></span></p>
+                            <div class="checkD">查看详情</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <% } %>
+            <% } %>
+        </script>
+        <ul class="pagination" style="float: right;">
+            <!--<li><a href="#">&laquo;</a></li>-->
+            <!--<li class="active"><a href="#">1</a></li>-->
+            <!--<li><a href="#">2</a></li>-->
+            <!--<li><a href="#">3</a></li>-->
+            <!--<li><a href="#">4</a></li>-->
+            <!--<li><a href="#">5</a></li>-->
+            <!--<li><a href="#">&raquo;</a></li>-->
+        </ul>
+
+    </div>
+</div>
+<div class="footer">
+    <div class="container">
+        <ul>
+            <li class="footer-tit">联系与反馈</li>
+            <li><a href="#">联系我们</a></li>
+            <li><a href="#">意见反馈</a></li>
+        </ul>
+        <ul>
+            <li class="footer-tit">资源共享</li>
+            <li><a href="#">学校支持</a></li>
+            <li><a href="#">文章干货</a></li>
+            <li><a href="#">相关下载</a></li>
+        </ul>
+        <ul>
+            <li class="footer-tit">关注我们</li>
+            <li><a href="#">微信公众号</a></li>
+            <li><a href="#">QQ群</a></li>
+        </ul>
+    </div>
+</div>
+<div class="worksBox">
+    <div class="works">
+        <div class="worksTit">
+            <!--<p>星球大战</p>-->
+            <a href="#" onclick="hiddenPro()"><img src="img/close.png"></a>
+            <div class="clear"></div>
+        </div>
+        <div class="worksMain">
+            <div class="worksView">
+                <div id="show"></div>
+            </div>
+            <div class="author">
+                <img class="author_pic" src="img/head_pic.png">
+                <p class="author_name">XXX昵称</p>
+                <!--<p class="author_msg">xxx个人留言</p>-->
+                <p class="author_pro">作品介绍</p>
+                <p class="author_proMain">作品介绍作品介绍作品介绍作品介绍作品介绍作品介绍作品介绍作品介绍作品介绍</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <!--<div class="worksMsg">-->
+        <!--<p class="userMsg">用户评论</p>-->
+        <!--<textarea class="comment"></textarea>-->
+        <!--<a href="#" class="submitMsg">发送评论</a>-->
+        <!--<div class="clear"></div>-->
+        <!--<div class="message">-->
+        <!--<p class="msgMain">-->
+        <!--用户XXXXX : XXXXXXXXXXXXX!!!!!-->
+        <!--</p>-->
+        <!--<p class="msgTime">-->
+        <!--一分钟前-->
+        <!--</p>-->
+        <!--<div class="clear"></div>-->
+        <!--</div>-->
+        <!--<div class="message">-->
+        <!--<p class="msgMain">-->
+        <!--用户XXXXX : XXXXXXXXXXXXX!!!!!-->
+        <!--</p>-->
+        <!--<p class="msgTime">-->
+        <!--一分钟前-->
+        <!--</p>-->
+        <!--<div class="clear"></div>-->
+        <!--</div>-->
+        <!--<div class="message">-->
+        <!--<p class="msgMain">-->
+        <!--用户XXXXX : XXXXXXXXXXXXX!!!!!-->
+        <!--</p>-->
+        <!--<p class="msgTime">-->
+        <!--一分钟前-->
+        <!--</p>-->
+        <!--<div class="clear"></div>-->
+        <!--</div>-->
+        <!--</div>-->
+    </div>
+</div>
+<!--<div class="uploadBox">-->
+    <!--<div class="uploadBox_l">-->
+        <!--<div class="pro_pic">-->
+            <!--<img src="" id="pro_pic"/>-->
+            <!--<input hidden id="pro" value="">-->
+        <!--</div>-->
+        <!--<a href="#" class="submitMsg submitFile" style="float: left;margin-right: 5px;">-->
+            <!--<input type="file" name="" id="pro_pic_btn" class="uploadFile">-->
+            <!--<p id="overview" style="margin-bottom: 0px">上传封面</p></a>-->
+        <!--<p class="pro_prompt">图片大小请在500kb以内<br/>格式限jpg,png等</p>-->
+        <!--<input hidden id="overview_pic" value="">-->
+        <!--<div class="clear"></div>-->
+    <!--</div>-->
+    <!--<div class="uploadBox_r">-->
+        <!--<a href="#" class="submitMsg submitFile" style="float: left;margin-top: 0;">-->
+            <!--<input type="file" name="" data-url="" id="uploadFile" class="uploadFile">-->
+            <!--<p id="file_name" style="margin-bottom: 0px">上传文件</p>-->
+        <!--</a>-->
+        <!--<input type="text" readonly disabled id="fileSrc">-->
+        <!--<p style="margin-top: 15px;margin-bottom: 4px;">作品名称</p>-->
+        <!--<textarea id="desc" class="comment pro_text"></textarea>-->
+        <!--<div style="margin-top: 15px;">-->
+            <!--<a href="#" class="submitMsg" onclick="finishiUpload()">完成上传</a>-->
+            <!--<a href="#" class="del_pro" onclick="delUpload()">取消</a>-->
+            <!--<div class="clear"></div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.10.0.js"></script>
+<script type="text/javascript" src="js/jquery.page.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script src="js/upload/jquery.ui.widget.js"></script>
+<script src="js/upload/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="js/upload/jquery.fileupload.js"></script>
+<script type="text/javascript" src="js/artTemplate.js"></script>
+<script type="text/javascript" src="js/template-native.js"></script>
+<script type="text/javascript" src="layer/layer.js"></script>
+<script type="text/javascript" src="js/HOST.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<!--<script type="text/javascript" src="js/swfobject.js"></script>-->
+<script>
+    //Cookie存储   onLoad="checkCookie()"
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return ""
+    }
+
+    $(document).ready(function () {
+        proList();
+        var token = getCookie('loginResult') === "" ? "" : JSON.parse(getCookie('loginResult')).token;
+        $('#uploadFile').attr("data-url", '/servlet/fileUploadServlet?token=' + token);
+        $('#pro_pic_btn').attr("data-url", '/servlet/fileUploadServlet?token=' + token);
+        console.log(token);
+//        $('#uploadFile').fileupload({
+//            dataType: 'json',
+//            done: function (e, data) {
+//                if (data.result.code == 0) {
+//                    console.log(data);
+//                    console.log(data.result);
+////                layer.close(index);
+//                    $("#overview_pic").val(data.result.value[0].url);
+//                    $("#fileSrc").val(data.result.value[0].pre);
+//                    $('#file_name').text(
+//                        '上传完成'
+//                    );
+//                }
+//            },
+//            progressall: function (e, data) {//设置上传进度事件的回调函数
+//                var progress = parseInt(data.loaded / data.total * 100, 10);
+////                $('#file_name').attr("disabled",true);
+//                $('#file_name').text(
+//                    '正在上传...%' + progress
+//                );
+//            }
+//        });
+//        $('#pro_pic_btn').fileupload({
+//            dataType: 'json',
+//            done: function (e, data) {
+//                if (data.result.code == 0) {
+//                    console.log(data);
+//                    console.log(data.result);
+////                layer.close(index);
+//                    $("#pro").val(data.result.value[0].url);
+//                    $("#pro_pic").attr("src", data.result.value[0].url);
+//                    $('#overview').text(
+//                        '上传完成'
+//                    );
+//                }
+//            },
+//            progressall: function (e, data) {//设置上传进度事件的回调函数
+//                var progress = parseInt(data.loaded / data.total * 100, 10);
+////                $('#file_name').attr("disabled",true);
+//                $('#overview').text(
+//                    '正在上传...%' + progress
+//                );
+//            }
+//        });
+
+        courseImgs();   //统一图片展示大小
+    });
+
+//    function finishiUpload() {
+//        var data = {
+//            busproduct: {
+//                userId: getCookie('loginResult') === "" ? "" : JSON.parse(getCookie('loginResult')).id,
+//                product: $('#overview_pic').val(),
+//                pic: $('#pro').val(),
+//                desc: $('#desc').val()
+//            }
+//        }
+//        request('business.busProduct.insertOrUpdate', data, function callback(result) {
+//            console.log(JSON.stringify(result));
+//            if (result.code == 0) {
+//                $(".uploadBox").eq(0).css("display", "none");
+//                window.location.reload();
+//            }
+//        });
+//
+//    }
+
+    //作品展示
+    function showPro(id) {
+        window.location.href=HOST+"my/show/show.html?projectId="+id;
+    }
+
+    function hiddenPro() {
+        $(".worksBox").eq(0).css("display", "none");
+    }
+
+//    function uploadPro() {
+//        $(".uploadBox").eq(0).css("display", "block");
+//    }
+//
+//    function delUpload() {
+//        $(".uploadBox").eq(0).css("display", "none");
+//    }
+
+    //    $("#pro_pic_btn").change(function () {
+    //        var objUrl = getObjectURL(this.files[0]);
+    //        if(objUrl){
+    //            $("#pro_pic").attr("src",objUrl);
+    //        }
+    //    });
+    $(window).resize(function () {
+        courseImgs();   //统一图片展示大小
+    });
+
+    function setP(pages, current) {
+        $(".pagination").createPage({
+            pageCount: pages,
+            current: current,
+            backFn: function (p) {
+                // console.log(p);
+                //alert(p)
+                var classify = "0";
+                courseList(classify, p);
+            }
+        });
+    }
+
+    function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) {
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) {
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) {
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+//    var fwidth = 590;	// flash view width
+//    var fheight = 453; 	// flash view height
+//    function installPlayer(product, swfName, swfID) {
+//        var flashvars = {
+//            project: product,
+//            autostart: 'false'
+//        };
+//        var params = {
+//            wmode: 'transparent',
+//            menu: 'false',
+//            allowFullScreen: 'true',
+//            allowScriptAccess: 'always'
+//        };
+//        var attributes = {};
+//        swfobject.embedSWF(swfName, swfID, fwidth, fheight, '10.0', false, flashvars, params, attributes);
+//    }
+</script>
+</body>
+</html>

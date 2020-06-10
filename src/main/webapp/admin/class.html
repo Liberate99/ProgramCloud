@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+    <link rel="stylesheet" href="plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="css/global.css" media="all">
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/table.css"/>
+    <style>
+        .text_overflow_1{
+            width:200px;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            -o-text-overflow:ellipsis;
+            overflow:hidden;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="admin-main">
+
+    <blockquote class="layui-elem-quote">
+        <a href="javascript:;" class="layui-btn layui-btn-sm" id="add">
+            <i class="layui-icon">&#xe608;</i> 添加班级
+        </a>
+        <!--<a href="#" class="layui-btn layui-btn-sm" id="import">-->
+        <!--<i class="layui-icon">&#xe608;</i> 导入信息-->
+        <!--</a>-->
+        <!--<a href="#" class="layui-btn layui-btn-sm">-->
+        <!--<i class="fa fa-shopping-cart" aria-hidden="true"></i> 导出信息-->
+        <!--</a>-->
+        <!--<a href="#" class="layui-btn layui-btn-sm" id="getSelected">-->
+        <!--<i class="fa fa-shopping-cart" aria-hidden="true"></i> 获取全选信息-->
+        <!--</a>-->
+        <!--<a href="javascript:;" class="layui-btn layui-btn-sm" id="search">-->
+        <!--<i class="layui-icon">&#xe615;</i> 搜索-->
+        <!--</a>-->
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>班级列表</legend>
+        <div class="layui-field-box layui-form">
+            <table class="layui-table admin-table">
+                <thead>
+                <tr>
+                    <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+                    <th>班级名称</th>
+                    <th>开设课程</th>
+                    <th>学年</th>
+                    <th>学期</th>
+                    <th>邀请码</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="content">
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+    <div class="admin-table-page">
+        <div id="paged" class="page">
+        </div>
+    </div>
+</div>
+<!--模板-->
+<script type="text/html" id="tpl">
+    {{# layui.each(d.value.records, function(index, item){ }}
+    <tr>
+        <td><input name="id" type="checkbox" lay-skin="primary"></td>
+        <td style="max-width: 100px">{{ item.name }}</td>
+        <td>{{ item.courseName }}</td>
+        <td>{{ item.schoolYearName }}</td>
+        <td>{{ item.semesterName }}</td>
+        <td>{{ item.invitationCode }}</td>
+        <td>
+            <!--<a href="javascript:;" data-id="{{ item.id }}" data-opt="preview" class="layui-btn layui-btn-normal layui-btn-xs">预览</a>-->
+            <a href="javascript:;" data-id="{{ item.id }}" data-opt="edit" class="layui-btn layui-btn-xs">编辑</a>
+            <a href="javascript:;" data-id="{{ item.id }}" data-opt="del"
+               class="layui-btn layui-btn-danger layui-btn-xs">关闭班级</a>
+            <a href="javascript:;" data-url="chapterNew.html" data-opt="insert" target="_blank" data-id="{{ item.id }}" data-type="{{ item.classify }}" class="layui-btn layui-btn-normal layui-btn-xs">学生管理</a>
+            <a href="javascript:;" data-opt="evaluate" target="_blank" data-id="{{ item.id }}"  class="layui-btn layui-btn-normal layui-btn-xs">学习统计</a>
+        </td>
+    </tr>
+    {{# });
+    }}
+</script>
+<script type="text/javascript" src="../my/js/HOST.js"></script>
+<script type="text/javascript" src="plugins/layui/layui.js"></script>
+<script type="text/javascript" src="js/Global.js"></script>
+<script>
+    function setCookie(c_name,value,expiredays) {
+        var exdate=new Date()
+        exdate.setDate(exdate.getDate()+expiredays)
+        document.cookie=c_name+ "=" +escape(value)+
+            ((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+    }
+    layui.config({
+        base: 'js/'
+    }).extend({
+        busajax: 'busajax'
+    });
+
+    layui.use(['paging', 'form', 'busajax'], function () {
+        var $ = layui.jquery,
+            bajax = layui.busajax,
+            paging = layui.paging(),
+            layerTips = parent.layer === undefined ? layui.layer : parent.layer, //获取父窗口的layer对象
+            layer = layui.layer, //获取当前窗口的layer对象
+            form = layui.form();
+        var datas = {
+            page: {
+                current: "1"
+            },
+            user:{
+                id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+            }
+        };
+        paging.init({
+            openWait: true,
+            url: HOST+'business.busClass.getClassesWithName.hsr', //地址
+            elem: '#content', //内容容器
+            params: datas,
+            type: 'POST',
+            tempElem: '#tpl', //模块容器
+            pageConfig: { //分页参数配置
+                elem: '#paged', //分页容器
+                pageSize: 10 //分页大小
+            },
+            success: function () { //渲染成功的回调
+//                alert('渲染成功');
+            },
+            fail: function (msg) { //获取数据失败的回调
+//                alert('获取数据失败')
+            },
+            complate: function () { //完成的回调
+//                alert('处理完成');
+                //重新渲染复选框
+                form.render('checkbox');
+                form.on('checkbox(allselector)', function (data) {
+                    var elem = data.elem;
+
+                    $('#content').children('tr').each(function () {
+                        var $that = $(this);
+                        //全选或反选
+                        $that.children('td').eq(0).children('input[type=checkbox]')[0].checked = elem.checked;
+                        form.render('checkbox');
+                    });
+                });
+
+                //绑定所有编辑按钮事件
+                $('#content').children('tr').each(function () {
+                    var $that = $(this);
+
+                    $that.children('td:last-child').children('a[data-opt=edit]').on('click', function () {
+//                        layer.msg($(this).data('id'));
+                        console.log($(this).data('id'));
+                        //todo 编辑班级信息
+                        edit($(this).data('id'));
+                    });
+                    $that.children('td:last-child').children('a[data-opt=insert]').on('click', function () {
+                        console.log($(this).data('id'));
+                        setCookie('classId',$(this).data('id'));
+//                        alert(getCookie('courseType'))
+                        window.location.href = 'stuManager.html';
+//                        parent.tab.tabAdd({
+//                            href:'stuManager.html',
+//                            title:'学生管理'
+//                        });
+                    });
+                    $that.children('td:last-child').children('a[data-opt=evaluate]').on('click', function () {
+                        console.log($(this).data('id'));
+                        setCookie('classId',$(this).data('id'));
+//                        alert(getCookie('courseType'))
+                        window.location.href = 'evaluate.html';
+//                        parent.tab.tabAdd({
+//                            href:'stuManager.html',
+//                            title:'学生管理'
+//                        });
+                    });
+                    $that.children('td:last-child').children('a[data-opt=del]').on('click', function () {
+                        var _this = $(this);
+                        layer.confirm('您确定要关闭该班级吗?关闭班级会清除所有班级学生!', {
+                            btn: ['确定','取消'], //按钮
+                            shade: false //不显示遮罩
+                        }, function(index){
+                            // 提交表单的代码，需要你自己写，然后用 layer.close 关闭就可以了，取消可以省略
+                            var classes = {
+                                busClass: {
+                                    id: _this.data('id')
+                                }
+                            };
+                            //todo 对应的课程与班级用户的那张表要修改
+                            bajax.busajax('business.busClass.deleteClass', classes, null);
+                            layer.close(index);
+                        });
+
+//                        console.log(JSON.stringify(course));
+
+//                        layer.msg($(this).data('id'));
+                    });
+
+                });
+
+            },
+        });
+
+        var addBoxIndex = -1,userInfoIndex = -1;
+        $('#add').on('click', function () {
+            var user = JSON.parse(getCookie("user"));
+            if(!user.name && user.identityRole == "1"){
+                //如果个人信息未完善则要求先完善个人信息
+                layer.msg("请先完善个人信息", {time:3000});
+                var later = setTimeout(openUserInfo,1000);
+                return false;
+            }
+            if (addBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('form/classAdd.html', null, function (form) {
+                addBoxIndex = layer.open({
+                    type: 1,
+                    title: '添加班级',
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    offset: ['100px', '30%'],
+                    area: ['600px', '400px'],
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=edit]').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        //弹出窗口成功后渲染表单
+                        var form = layui.form();
+                        var classId = {
+                            user:{
+                                id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+                            }
+                        }
+                        bajax.busajax('business.busClass.getClassUUId', classId, index, function (result) {
+                            $('form.layui-form').find('input[name=invitationCode]').val(result.value);
+                        },false);
+                        form.render();
+                        form.on('submit(edit)', function (data) {
+
+                            data.field.name=encode64(encodeURIComponent(data.field.name));
+                            var busClasses = {
+                                busClass: data.field
+                            };
+//                            console.log(JSON.stringify(course)) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                            //这里可以写ajax方法提交表单
+                            bajax.busajax('business.busClass.insertOrUpdateClass', busClasses, index, function (result) {
+//                                alert(result)
+                            })
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                        //console.log(layero, index);
+                    },
+                    end: function () {
+                        addBoxIndex = -1;
+                    }
+                });
+            });
+        });
+
+        function openUserInfo() {
+            $.get('form/userInfo.html',null,function(form){
+                userInfoIndex = layer.open({
+                    type: 1,
+                    title: '用户信息',
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    offset: ['100px', '30%'],
+                    area: ['600px', '400px'],
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=edit]').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        //弹出窗口成功后渲染表单
+                        var userData = {
+                            user:{
+                                id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+                            }
+                        };
+//									console.log(JSON.parse(getCookie('user')));
+                        var form = layui.form();
+                        bajax.busajax('system.user.get', userData, index, function (result) {
+                            $('form.layui-form').find('input[name=loginName]').val(result.value.loginName);
+                            $('form.layui-form').find('input[name=name]').val(result.value.name);
+                            $('form.layui-form').find('input[name=email]').val(result.value.email);
+                            $('form.layui-form').find('input[name=phone]').val(result.value.phone);
+                            $('form.layui-form').find('input[name=id]').val(result.value.id);
+//                                        console.log(result);
+                        },false);
+
+                        form.render();
+                        form.on('submit(edit)', function (data) {
+                            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+                            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+                            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                            var usr = {
+                                user: data.field
+                            };
+
+                            //这里可以写ajax方法提交表单
+                            bajax.busajax('system.user.insertOrUpdate', usr, index, function (result) {
+
+                            });
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                        //console.log(layero, index);
+                    },
+                    end: function () {
+                        userInfoIndex = -1;
+                    }
+                });
+            });
+        }
+
+//        $('#import').on('click', function () {
+//            var that = this;
+//            var index = layer.tips('只想提示地精准些', that, {tips: [1, 'white']});
+//            $('#layui-layer' + index).children('div.layui-layer-content').css('color', '#000000');
+//        });
+        var editBoxIndex = -1;
+        function edit(id) {
+            if (editBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('form/classEdit.html', null, function (form) {
+                editBoxIndex = layer.open({
+                    type: 1,
+                    title: '编辑班级',
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    offset: ['100px', '30%'],
+                    area: ['600px', '400px'],
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=edit]').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        var classEdit = {
+                            busClass: {
+                                id:id
+                            }
+                        };
+                        var form = layui.form();
+                        //这里可以写ajax方法获取表单
+                        bajax.busajax('business.busClass.get', classEdit, index, function (result) {
+                            $('form.layui-form').find('input[name=name]').val(result.value.name);
+                            $('form.layui-form').find('select[name=courseId]').attr('select-data',result.value.courseId);
+                            $('form.layui-form').find('select[name=schoolYear]').attr('select-data',result.value.schoolYear);
+                            $('form.layui-form').find('select[name=semester]').attr('select-data',result.value.semester);
+                            $('form.layui-form').find('input[name=invitationCode]').val(result.value.invitationCode);
+                            $('form.layui-form').find('input[name=beginDate]').val(result.value.beginDate);
+                            $('form.layui-form').find('input[name=finishDate]').val(result.value.finishDate);
+                            $('form.layui-form').find('input[name=id]').val(result.value.id);
+                        },false);
+                        //弹出窗口成功后渲染表单
+                        form.render();
+                        form.on('submit(edit)', function (data) {
+//                            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+//                            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+//                            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                            data.field.name=encode64(encodeURIComponent(data.field.name));
+                            var classes = {
+                                busClass: data.field
+                            };
+//                            console.log(JSON.stringify(course)) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                            //这里可以写ajax方法提交表单
+                            bajax.busajax('business.busClass.insertOrUpdateClass', classes, index, function (result) {
+
+                            });
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                        //console.log(layero, index);
+                    },
+                    end: function () {
+                        editBoxIndex = -1;
+                    }
+                });
+            });
+
+        }
+
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,492 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Table</title>
+		<link rel="stylesheet" href="plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="css/global.css" media="all">
+		<link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/table.css" />
+
+		<style>
+			.layui-tree-skin-primary .layui-form-checkbox{
+				margin-top: 0px;
+				margin-right: 3px;
+			}
+			.layui-tree-skin-primary .layui-form-checkbox i{
+				padding-left: 0px;
+			}
+			.layui-tree-skin-primary .layui-tree-spread{
+				margin-right: 4px;
+			}
+		</style>
+		<script type="text/javascript" src="../my/js/HOST.js"></script>
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				<a href="javascript:;" class="layui-btn layui-btn-sm" id="add">
+					<i class="layui-icon">&#xe608;</i> 添加信息
+				</a>
+				<a href="#" class="layui-btn layui-btn-sm" id="import">
+					<i class="layui-icon">&#xe608;</i> 导入信息
+				</a>
+				<a href="#" class="layui-btn layui-btn-sm">
+					<i class="fa fa-shopping-cart" aria-hidden="true"></i> 导出信息
+				</a>
+				<!--<a href="#" class="layui-btn layui-btn-sm" id="getSelected">-->
+					<!--<i class="fa fa-shopping-cart" aria-hidden="true"></i> 获取全选信息-->
+				<!--</a>-->
+				<a href="javascript:;" class="layui-btn layui-btn-sm" id="search">
+					<i class="layui-icon">&#xe615;</i> 搜索
+				</a>
+			</blockquote>
+			<fieldset class="layui-elem-field">
+				<legend>数据列表</legend>
+				<div class="layui-field-box layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+							<tr>
+								<th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+								<th>名称</th>
+								<th>英文名称</th>
+								<th>角色类型</th>
+								<th>创建日期</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody id="content">
+						</tbody>
+					</table>
+				</div>
+			</fieldset>
+			<div class="admin-table-page">
+				<div id="paged" class="page">
+				</div>
+			</div>
+		</div>
+		<!--模板-->
+		<script type="text/html" id="tpl">
+			{{# layui.each(d.value.records, function(index, item){ }}
+			<tr>
+				<td><input   name="id" type="checkbox" lay-skin="primary"></td>
+				<td>{{ item.name ? item.name: "" }}</td>
+				<td>{{ item.enname ? item.enname : "" }}</td>
+				<td>{{ item.roleType ? item.roleType : "" }}</td>
+				<td>{{ item.createDate ? new Date(parseInt(item.createDate) ).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ") : ""}}</td>
+				<td>
+					<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-xs">预览</a>
+					<a href="javascript:;" data-id="{{ item.id }}" data-opt="edit" class="layui-btn layui-btn-xs">编辑</a>
+					<a href="javascript:;" data-id="{{ item.id }}" data-opt="menu" data-name="{{ item.name }}" class="layui-btn layui-btn-warm layui-btn-xs">角色授权</a>
+					<a href="#" data-id="{{ item.id }}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
+				</td>
+			</tr>
+			{{# }); }}
+		</script>
+		<script type="text/javascript" src="plugins/layui/layui.js"></script>
+		<script type="text/javascript" src="js/Global.js"></script>
+		<script>
+			layui.config({
+				base: 'js/'
+			}).extend({
+				busajax: 'busajax'
+			});
+
+			layui.use(['paging', 'form', 'busajax','tree','layer'], function() {
+				var $ = layui.jquery,
+						bajax = layui.busajax,
+					paging = layui.paging(),
+					layerTips = parent.layer === undefined ? layui.layer : parent.layer, //获取父窗口的layer对象
+					layer = layui.layer, //获取当前窗口的layer对象
+					form = layui.form(),
+						loading;
+				var datas={
+					page:{
+						current:"1"
+					}
+				};
+                paging.init({
+                    openWait: true,
+                    url: HOST+'system.role.getRoleByPage.hsr', //地址
+					elem: '#content', //内容容器
+					params:datas,
+					type: 'POST',
+					tempElem: '#tpl', //模块容器
+					pageConfig: { //分页参数配置
+						elem: '#paged', //分页容器
+						pageSize: 10 //分页大小
+					},
+					success: function() { //渲染成功的回调
+						//alert('渲染成功');
+					},
+					fail: function(msg) { //获取数据失败的回调
+						//alert('获取数据失败')
+					},
+					complate: function() { //完成的回调
+						//alert('处理完成');
+						//重新渲染复选框
+						form.render('checkbox');
+						form.on('checkbox(allselector)', function(data) {
+							var elem = data.elem;
+
+							$('#content').children('tr').each(function() {
+								var $that = $(this);
+								//全选或反选
+								$that.children('td').eq(0).children('input[type=checkbox]')[0].checked = elem.checked;
+								form.render('checkbox');
+							});
+						});
+
+						//绑定所有编辑按钮事件						
+						$('#content').children('tr').each(function() {
+							var $that = $(this);
+							$that.children('td:last-child').children('a[data-opt=edit]').on('click', function() {
+//								layer.msg($(this).data('name'));
+								loading = layer.load(2);
+								edit($(this).data('id'));
+							});
+							$that.children('td:last-child').children('a[data-opt=menu]').on('click', function() {
+//								layer.msg($(this).data('name'));
+								loading = layer.load(2);
+								menu($(this).data('id'),$(this).data('name'));
+							});
+							$that.children('td:last-child').children('a[data-opt=del]').on('click', function () {
+
+//                        layer.msg($(this).data('name'));
+                                var _this = $(this);
+                                layer.confirm('您确定要删除吗?', {
+                                    btn: ['确定','取消'], //按钮
+                                    shade: false //不显示遮罩
+                                }, function(index){
+                                    // 提交表单的代码，需要你自己写，然后用 layer.close 关闭就可以了，取消可以省略
+                                    var role = {
+                                        role: {
+                                            id: _this.data('id')
+                                        }
+                                    };
+//                                    console.log(JSON.stringify(role));
+                                    bajax.busajax('system.role.delete', role, null);
+                                    layer.close(index);
+                                });
+							});
+
+						});
+
+					}
+				});
+				//获取所有选择的列
+				$('#getSelected').on('click', function() {
+					var names = '';
+					$('#content').children('tr').each(function() {
+						var $that = $(this);
+						var $cbx = $that.children('td').eq(0).children('input[type=checkbox]')[0].checked;
+						if($cbx) {
+							var n = $that.children('td:last-child').children('a[data-opt=edit]').data('name');
+							names += n + ',';
+						}
+					});
+					layer.msg('你选择的名称有：' + names);
+				});
+
+				$('#search').on('click', function() {
+					parent.layer.alert('你点击了搜索按钮')
+				});
+
+				var addBoxIndex = -1;
+				$('#add').on('click', function() {
+					loading = layer.load(2);
+					if(addBoxIndex !== -1)
+						return;
+					//本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+					$.get('form/roleAdd.html', null, function(form) {
+						addBoxIndex = layer.open({
+							type: 1,
+							title: '添加表单',
+							content: form,
+							btn: ['保存', '取消'],
+							shade: false,
+							offset: ['100px', '30%'],
+							area: ['600px', '400px'],
+							maxmin: true,
+							yes: function(index) {
+								//触发表单的提交事件
+								$('form.layui-form').find('button[lay-filter=edit]').click();
+							},
+							full: function(elem) {
+								var win = window.top === window.self ? window : parent.window;
+								$(win).on('resize', function() {
+									var $this = $(this);
+									elem.width($this.width()).height($this.height()).css({
+										top: 0,
+										left: 0
+									});
+									elem.children('div.layui-layer-content').height($this.height() - 95);
+								});
+							},
+							success: function(layero, index) {
+								//弹出窗口成功后渲染表单
+								layer.close(loading);
+								var form = layui.form();
+								form.render();
+								form.on('submit(edit)', function(data) {
+									console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+									console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+									console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+									//调用父窗口的layer对象
+//									layerTips.open({
+//										title: '这里面是表单的信息',
+//										type: 1,
+//										content: JSON.stringify(data.field),
+//										area: ['500px', '300px'],
+//										btn: ['关闭并刷新', '关闭'],
+//										yes: function(index, layero) {
+//											layerTips.msg('你点击了关闭并刷新');
+//											layerTips.close(index);
+//											location.reload(); //刷新
+//										}
+//
+//									});
+									var role = {
+										role: data.field
+									};
+									bajax.busajax('system.role.insertOrUpdate', role, index, function (result) {
+
+									});
+									//这里可以写ajax方法提交表单
+									return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。									
+								});
+								//console.log(layero, index);
+							},
+							end: function() {
+								addBoxIndex = -1;
+							}
+						});
+					});
+				});
+
+//				$('#import').on('click', function() {
+//					var that = this;
+//					var index = layer.tips('只想提示地精准些', that, { tips: [1, 'white'] });
+//					$('#layui-layer' + index).children('div.layui-layer-content').css('color', '#000000');
+//				});
+				var editBoxIndex = -1;
+				function edit(id) {
+					if (editBoxIndex !== -1)
+						return;
+					//本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+					$.get('form/roleEdit.html', null, function (form) {
+						editBoxIndex = layer.open({
+							type: 1,
+							title: '编辑用户',
+							content: form,
+							btn: ['保存', '取消'],
+							shade: false,
+							offset: ['100px', '30%'],
+							area: ['600px', '400px'],
+							zIndex: 19950924,
+							maxmin: true,
+							yes: function (index) {
+								//触发表单的提交事件
+								$('form.layui-form').find('button[lay-filter=edit]').click();
+							},
+							full: function (elem) {
+								var win = window.top === window.self ? window : parent.window;
+								$(win).on('resize', function () {
+									var $this = $(this);
+									elem.width($this.width()).height($this.height()).css({
+										top: 0,
+										left: 0
+									});
+									elem.children('div.layui-layer-content').height($this.height() - 95);
+								});
+							},
+							success: function (layero, index) {
+								layer.close(loading);
+								var roleEdit = {
+									role: {
+										id:id
+									}
+
+								};
+								var form = layui.form();
+								//这里可以写ajax方法获取表单
+								bajax.busajax('system.role.get', roleEdit, index, function (result) {
+									$('form.layui-form').find('input[name=name]').val(result.value.name);
+									$('form.layui-form').find('input[name=enname]').val(result.value.enname);
+									$('form.layui-form').find('input[name=roleType]').val(result.value.roleType);
+									$('form.layui-form').find('input[name=id]').val(result.value.id);
+									console.log(JSON.stringify(result));
+								},false);
+								//弹出窗口成功后渲染表单
+								form.render();
+								form.on('submit(edit)', function (data) {
+									console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+									console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+									console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+									loading = layer.load(2);
+									var role = {
+										role: data.field
+									};
+									console.log(JSON.stringify(role)) //当前容器的全部表单字段，名值对形式：{name: value}
+
+									//这里可以写ajax方法提交表单
+									bajax.busajax('system.role.insertOrUpdate', role, index, function (result) {
+										layer.close(loading);
+									});
+									return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+								});
+								//console.log(layero, index);
+							},
+							end: function () {
+								editBoxIndex = -1;
+							}
+						});
+					});
+
+				}
+				var editBoxIndex = -1;
+				function menu(id,name) {
+					if (editBoxIndex !== -1)
+						return;
+					//本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+					$.get('form/roleMenu.html', null, function (form) {
+						editBoxIndex = layer.open({
+							type: 1,
+							title: '角色授权',
+							content: form,
+							btn: ['保存', '取消'],
+							shade: false,
+							offset: ['100px', '30%'],
+							area: ['600px', '400px'],
+							zIndex: 19950924,
+							maxmin: true,
+							yes: function (index) {
+								//触发表单的提交事件
+								$('form.layui-form').find('button[lay-filter=menu]').click();
+							},
+							full: function (elem) {
+								var win = window.top === window.self ? window : parent.window;
+								$(win).on('resize', function () {
+									var $this = $(this);
+									elem.width($this.width()).height($this.height()).css({
+										top: 0,
+										left: 0
+									});
+									elem.children('div.layui-layer-content').height($this.height() - 95);
+								});
+							},
+							success: function (layero, index) {
+								layer.close(loading);
+								var datas={
+									role:{
+										id:id
+									}
+								};
+								var form = layui.form();
+								//这里可以写ajax方法获取表单
+								$('form.layui-form').find('input[name=name]').val(name);
+								bajax.busajax('system.apiTree.getMenuListToRole',datas,index,function (result) {
+									layui.tree({
+										elem: '#menu' //指定元素
+										,check: 'checkbox'
+										,skin: 'primary'
+										,checkboxName: 'menu'
+										,click: function (item) {
+											console.log(item);
+										}
+										,data: {//为元素添加额外数据，即在元素上添加data-xxx="yyy"，可选
+											hasChild: true
+										}
+										,nodes: createTree(result.value)
+									});
+									function createTree(node){
+										var arr= [];
+										for(var i=0;i<node.length;i++){
+											var menuF = new Object();
+											menuF.name = node[i].title;
+											menuF.checkboxValue = node[i].title;
+											menuF.data = { id : node[i].id};
+											if(node[i].status == "1"){
+												menuF.checked = true;
+											}
+											if(node[i].children){
+												var menuC = new Object();
+												var menuChildren =[];
+												for(var j = 0;j<node[i].children.length;j++){
+													var ischeck = node[i].children[j].status=="1"?true:false;
+													menuC = {
+														name : node[i].children[j].title,
+														checkboxValue : node[i].children[j].title,
+														checked : ischeck,
+														data: {
+															id : node[i].children[j].id
+														}
+													};
+													menuChildren.push(menuC);
+												}
+												menuF.children = menuChildren;
+											}
+											arr.push(menuF);
+										}
+										console.log(arr);
+										return arr;
+									}
+
+								},false);
+//								bajax.busajax('system.role.get', roleEdit, index, function (result) {
+//									$('form.layui-form').find('input[name=name]').val(result.value.name);
+//									$('form.layui-form').find('input[name=enname]').val(result.value.enname);
+//									$('form.layui-form').find('input[name=roleType]').val(result.value.roleType);
+//									$('form.layui-form').find('input[name=id]').val(result.value.id);
+//									console.log(JSON.stringify(result));
+//								},false);
+								//弹出窗口成功后渲染表单
+								form.render();
+								form.on('submit(menu)', function (data) {
+									console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+									console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+									console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+									$("input:checkbox[name = 'menu']").each(function (i) {
+										if($(this).is(":checked")&&($(this).attr("checked")==undefined)){
+											var roleApi = {
+												roleApi : {
+													roleId : id,
+													apiTreeId : $(this).attr("data-id"),
+													status : 1
+												}
+											};
+											console.log(JSON.stringify(roleApi));
+											bajax.busajax('system.roleApi.insertOrUpdateToRole', roleApi, index, function (result) {});
+
+										}
+										if((!$(this).is(":checked"))&&($(this).attr("checked")=="checked")){
+											var roleApi = {
+												roleApi : {
+													roleId : id,
+													apiTreeId : $(this).attr("data-id"),
+													status : 0
+												}
+											};
+											console.log(JSON.stringify(roleApi));
+											bajax.busajax('system.roleApi.insertOrUpdateToRole', roleApi, index, function (result) {});
+										}
+									});
+									return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+								});
+								//console.log(layero, index);
+							},
+							end: function () {
+								editBoxIndex = -1;
+							}
+						});
+					});
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

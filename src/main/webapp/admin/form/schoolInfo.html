@@ -1,0 +1,49 @@
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">教工号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="workId" id="workId" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学校</label>
+            <div class="layui-input-inline">
+                <select name="collegeId" lay-filter="college" id="college" lay-verify="required">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学院/系</label>
+            <div class="layui-input-inline">
+                <select name="departmentId" lay-filter="department" id="department" lay-verify="required">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专业</label>
+            <div class="layui-input-inline">
+                <input type="text" name="major" id="major" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">职称</label>
+            <div class="layui-input-inline">
+                <select name="rankId" lay-filter="rank" id="rank" lay-verify="required">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">个人简介</label>
+            <div class="layui-input-block">
+                <textarea type="text" name="desc" id="desc" placeholder="请输入" autocomplete="off" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <input type="text" name="id" id="id" autocomplete="off" class="layui-input" style="display: none">
+        <input type="text" name="userId" id="userId" autocomplete="off" class="layui-input" style="display: none">
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>

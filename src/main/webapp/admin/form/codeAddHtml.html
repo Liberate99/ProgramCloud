@@ -1,0 +1,51 @@
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <input type="hidden" name="chapterId" value="">
+        <input type="hidden" name="type" id="type" value="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <input type="number" name="sort" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block">
+                <!--<textarea id="editor" name="des" placeholder="请输入内容" autocomplete="off" class="layui-textarea"></textarea>-->
+                <div id="editor" name="message"></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">初始化代码</label>
+            <div class="layui-input-block">
+                <textarea type="text" name="content" id="starter" placeholder="请输入" autocomplete="off" class="layui-input" rows="15" style="height: auto"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">运行结果</label>
+            <div class="layui-input-block">
+                <textarea type="text" name="result" id="ender" placeholder="请输入" autocomplete="off" class="layui-input" rows="6" style="height: auto"></textarea>
+            </div>
+        </div>
+
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+
+<script src="../js/jquery-1.10.0.js"></script>
+<script src="../js/template-native.js"></script>
+<!-- 注意， 只需要引用 JS，无需引用任何 CSS ！！！-->
+<script type="text/javascript" src="js/wangEditor.min.js"></script>
+<script type="text/javascript">
+    var E = window.wangEditor;
+    var editor = new E('#editor');
+    // 或者 var editor = new E( document.getElementById('#editor') )
+    editor.customConfig.uploadImgServer = '/servlet/richtextImgUploadServlet?token='+JSON.parse(getCookie('user')).token;
+    editor.create()
+</script>

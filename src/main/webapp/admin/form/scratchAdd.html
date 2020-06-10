@@ -1,0 +1,52 @@
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <div class="layui-form-item">
+        <label class="layui-form-label">作品名称</label>
+        <div class="layui-input-inline">
+        <input type="text" name="desc" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">作品封面</label>
+            <div class="layui-input-inline">
+                <input type="file" name="pic" lay-title="点击上传" lay-type="images" class="layui-upload-file">
+                <!--<input type="text" name="pre" placeholder="请输入" autocomplete="off" class="layui-input">-->
+            </div>
+            <span style="color: #D84C29;font-size: 10px;line-height: 36px;margin-left: -70px;">图片比例为3:2为宜</span>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">作品</label>
+            <div class="layui-input-inline">
+                <input type="file" name="product" lay-title="点击上传" lay-type="file" class="layui-upload-file">
+                <!--<span id="path"></span>-->
+                <!--<input type="text" name="pre" placeholder="请输入" autocomplete="off" class="layui-input">-->
+            </div>
+        </div>
+        <input type="hidden" name="picUrl">
+        <input type="hidden" name="productUrl">
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+
+<script src="../js/jquery-1.10.0.js"></script>
+<script src="../js/template-native.js"></script>
+<script>
+    layui.use('upload', function(){
+        layui.upload({
+            url: '/servlet/fileUploadServlet?token='+JSON.parse(getCookie('user')).token,
+//			elem: '', //指定原始元素，默认直接查找class="layui-upload-file"
+            method: 'post', //上传接口的http类型
+            success: function(res){
+                console.log(res);
+                var urlType = res.value[0].url.split(".");
+                if(urlType[1] == "sb2"){
+                    $("input[name='productUrl']").val(res.value[0].url);
+                }else {
+                    $("input[name='picUrl']").val(res.value[0].url);
+                }
+//				alert(res.value[0].url)
+//              $("#path").html("上传成功!");
+            }
+        });
+    });
+</script>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+    <link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="../css/global.css" media="all">
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/table.css"/>
+    <link href="../css/tag-basic-style.css" rel="stylesheet">
+    <style>
+        .parent-categories li{
+            margin: 5px 0;
+        }
+        .sub-categories li{
+            padding-left: 30px;
+            margin: 5px 0;
+        }
+        .layui-form-label{
+            float: none;
+            text-align: left;
+            width: auto;
+        }
+        .layui-input-block,#new-test-case{
+            margin-left: 15px;
+        }
+        .layui-form-padding-left{
+            margin-left: 0;
+            padding-left: 0;
+        }
+    </style>
+</head>
+
+<body>
+<div class="layui-fluid">
+
+    <blockquote class="layui-elem-quote" style="margin-top: 10px;">
+        <a href="../problem.html" class="layui-btn layui-btn-sm">
+            <i class="layui-icon"></i> 返回
+        </a>
+    </blockquote>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>添加新试题</legend>
+    </fieldset>
+    <form class="layui-form" action="" id="problem-form">
+        <div class="layui-row layui-col-space30">
+            <div class="layui-col-md7">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">试题名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="problemName" lay-verify="required" autocomplete="off" placeholder="请输入试题名称"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">时间限制(ms)</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="problemTimeLimit" lay-verify="positiveInteger|required" autocomplete="off" placeholder="请输入时间限制"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">内存限制(kb)</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="problemMemoryLimit" lay-verify="positiveInteger|required" autocomplete="off" placeholder="请输入内存限制"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <label class="layui-form-label">试题描述</label>
+                </div>
+                <div class="layui-row" style="margin:0 0 15px 15px;">
+                    <div id="editor" name="problemDescription"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">提示</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入提示" name="problemHint" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">输入格式</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入输入格式" name="problemInputFormat" lay-verify="required" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">输出格式</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入输出格式" name="problemOutputFormat" lay-verify="required" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">输入样例</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入输入样例" name="problemSampleInput" lay-verify="required" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">输出样例</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入输出样例" name="problemSampleOutput" lay-verify="required" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">测试用例</label>
+                    <a id="new-test-case" class="layui-btn layui-btn-sm">
+                        <i class="layui-icon">&#xe608;</i> 添加
+                    </a>
+                </div>
+                <div class="layui-row">
+                    <div id="test-cases">
+                        <p id="no-test-cases" style="padding-left: 15px;">暂无测试用例.</p>
+                        <ul>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md5">
+                <div class="layui-elem-quote layui-quote-nm" style="margin-left: 15px">
+                    <div class="header">
+                        <h5>分类</h5>
+                    </div>
+                    <div class="body" id="categories-view"></div>
+                </div>
+                <div class="layui-elem-quote layui-quote-nm" style="margin-left: 15px">
+                    <div class="header">
+                        <h5>试题标签</h5>
+                    </div>
+                    <div class="body">
+                        <hr>
+                        <div id="tagBox"></div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="float: left">公开试题?</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" checked name="problemIsPublic" lay-skin="switch" lay-filter="public" lay-text="ON|OFF">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="float: left">精确匹配测试用例</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" checked name="checkpointExactlyMatch" lay-skin="switch" lay-filter="match" lay-text="ON|OFF">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="add" type="submit">发布</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="../../my/js/HOST.js"></script>
+<script type="text/javascript" src="../plugins/layui/layui.js"></script>
+<script type="text/javascript" src="../js/Global.js"></script>
+<script type="text/javascript" src="../js/jquery-1.10.0.js"></script>
+<script type="text/javascript" src="../js/wangEditor.min.js"></script>
+<script src="../js/tagging.min.js"></script>
+<script id="categories-demo" type="text/html">
+    <hr>
+    <ul class="parent-categories">
+        {{#  layui.each(d, function(index, item){ }}
+        <li>
+            <input class="parent-category" lay-filter="parent-category" type="checkbox" name="{{ item.slug }}" title="{{ item.name }}" lay-skin="primary">
+            <ul class="sub-categories">
+                {{#  layui.each(item.children, function(index, next){ }}
+                <li>
+                    <input class="child-category" lay-filter="child-category" type="checkbox" name="{{ next.slug }}" title="{{ next.name }}" lay-skin="primary">
+                </li>
+                {{#  }); }}
+            </ul>
+        </li>
+        {{#  }); }}
+    </ul>
+</script>
+
+<!--<script type="text/javascript">-->
+    <!--$(function() {-->
+        <!---->
+        <!--$('#test-on').on('click', function () {-->
+            <!--getProblemTags();-->
+        <!--});-->
+
+    <!--});-->
+<!--</script>-->
+<script type="text/javascript">
+    //获取试题标签数组
+    function getProblemTags(t) {
+        var $tag_box = t[0];
+        var problemTags = $tag_box.tagging( "getTags" );
+        return JSON.parse(JSON.stringify(problemTags));
+    }
+</script>
+<script type="text/javascript">
+    //获取试题测试用例数组
+    function getTestCases() {
+        var testCases   = [];
+
+        $('li.test-case').each(function() {
+            var input   = $('.standard-input', $(this)).val(),
+                output  = $('.standard-output', $(this)).val();
+
+            testCases.push({
+                'input': input,
+                'output': output
+            });
+        });
+        return JSON.parse(JSON.stringify(testCases));
+    }
+</script>
+<script type="text/javascript">
+    //获取试题分类
+    function getProblemCategories() {
+        var problemCategories = [];
+
+        $("input[type='checkbox']", '.parent-categories').each(function() {
+            if($(this)[0].checked == true) {
+                problemCategories.push($(this).attr('name'));
+            }
+        });
+        return JSON.parse(JSON.stringify(problemCategories));
+    }
+</script>
+<script type="text/javascript">
+    layui.config({
+        base: '../js/'
+    }).extend({
+        busajax: 'busajax'
+    });
+    layui.use(['form', 'layedit', 'laydate','element', 'laytpl', 'busajax'], function(){
+        var form = layui.form()
+            , laytpl = layui.laytpl
+            , element = layui.element()
+            , $ = layui.jquery
+            , bajax = layui.busajax
+            ,layer = layui.layer;
+        //加载tagging.js插件 js标签组所用
+        var t,my_custom_options = {
+            "no-duplicate": true,
+            "no-duplicate-callback": window.alert,
+            "no-duplicate-text": "该标签已存在",
+            "type-zone-class": "type-zone",
+            "tag-box-class": "tagging",
+            "tags-input-name": "tag",
+            "case-sensitive" : true
+        };
+        t = $("#tagBox").tagging( my_custom_options );
+
+        //设置时间和内存限制条件
+        form.verify({
+            positiveInteger: function (value, item) {
+                if (!/^[1-9]{1}[0-9]*$/.test(value)) {
+                    return '输入的数必须是大于0整数';
+                }
+            }
+        });
+
+        //加载试题分类
+        var datas = {};
+        bajax.busajax('business.vojProblemCategories.getTreeProblemCategoriesList', datas, null, function (result) {
+            var getTpl = document.getElementById('categories-demo').innerHTML
+                , view = document.getElementById('categories-view');
+            laytpl(getTpl).render(result.value, function(html){
+                view.innerHTML = html;
+                form.render('checkbox');
+
+                //监听父复选框操作
+                form.on('checkbox(parent-category)', function(data){
+                    var $this = $(data.elem);
+                    if (!data.elem.checked) {
+                        var len = $('input.child-category', $this.parent()).length;
+                        for(var i = 0; i < len; i ++) {
+                            $('input.child-category', $this.parent())[i].checked = false;
+                        }
+                    }
+                    form.render('checkbox','child-category');
+                });
+
+                //监听子复选框操作
+                form.on('checkbox(child-category)', function (data) {
+                    var $this = $(data.elem);
+                    if (data.elem.checked) {
+                        $('input.parent-category', $this.parent().parent().parent())[0].checked = true;
+                    }
+                    form.render('checkbox','parent-category');
+                });
+            });
+        }, false);
+
+
+        //监听提交按钮表单
+        form.on('submit(add)', function (data) {
+
+            var problemIsPublic=0,checkpointExactlyMatch=0;
+            if (data.field.problemIsPublic == 'on') {
+                problemIsPublic = 1;
+            }
+            if (data.field.checkpointExactlyMatch == 'on') {
+                checkpointExactlyMatch = 1;
+            }
+            var editortxt = editor.txt.text();
+            if (editortxt == null || editortxt.trim() == "") {
+                layer.msg("请输入试题描述", {time: 2000, icon:5});
+                return false;
+            }
+            var submitData = {
+                vojProblems:{
+                    problemIsPublic : problemIsPublic,
+                    problemName : data.field.problemName,
+                    problemTimeLimit : data.field.problemTimeLimit,
+                    problemMemoryLimit : data.field.problemMemoryLimit,
+                    problemDescription : editor.txt.html(),
+                    problemInputFormat : data.field.problemInputFormat,
+                    problemOutputFormat : data.field.problemOutputFormat,
+                    problemSampleInput : data.field.problemSampleInput,
+                    problemSampleOutput : data.field.problemSampleOutput,
+                    problemHint : data.field.problemHint == null ? "" : data.field.problemHint
+                },
+                checkpointExactlyMatch : checkpointExactlyMatch,
+                problemTags : getProblemTags(t),
+                testCases : getTestCases(),
+                problemCategories: getProblemCategories()
+            };
+
+            $(this).addClass('layui-btn-disabled');
+            $(this).attr('disabled','disabled');
+            $(this).html('请稍候...');
+            //提交表单请求
+            bajax.busajax('business.vojProblems.createProblem', submitData, null, function (result) {
+                if (result.code == 0) {
+                    $('button[type=submit]', '#problem-form').html('发布成功');
+                    layer.msg(result.msg);
+                    setTimeout(function () {
+                        layer.close(layer.index);
+                        location.href='../problem.html';
+                    }, 2000);
+                } else {
+                    $('button[type=submit]', '#problem-form').removeClass('layui-btn-disabled');
+                    $('button[type=submit]', '#problem-form').removeAttr('disabled');
+                    $('button[type=submit]', '#problem-form').html('发布');
+                }
+            }, false, true);
+            return false;
+        });
+    });
+</script>
+<script type="text/javascript">
+    //富文本编辑器插件
+    var E = window.wangEditor;
+    var editor = new E('#editor');
+    // 或者 var editor = new E( document.getElementById('#editor') )
+    // 配置服务器端地址
+    editor.customConfig.debug = true;
+    editor.customConfig.uploadImgServer = '/servlet/richtextImgUploadServlet?token='+JSON.parse(getCookie('user')).token;
+    editor.create()
+</script>
+<script type="text/javascript">
+    //新增测试用例
+    $('#new-test-case').click(function() {
+        var testCaseId = $('li.test-case', '#test-cases').length;
+
+        $('#no-test-cases').addClass('layui-hide');
+        $('#test-cases > ul').append(getTestCaseContainer(testCaseId));
+    });
+</script>
+<script type="text/javascript">
+    //测试用例模块化加载
+    function getTestCaseContainer(testCaseId){
+        var containerTemplate = '<li class="test-case layui-elem-quote layui-quote-nm" style="margin-left: 15px">' +
+                                '   <div class="layui-row test-header">' +
+                                '       <h5 class="layui-col-md2" style="float: left">测试用例 #%s</h5>' +
+                                '       <div class="layui-col-md2 layui-col-md-offset8 layui-btn-group" style="float: right">' +
+                                '           <a class="edit layui-btn layui-btn-primary layui-btn-sm">' +
+                                '               <i class="layui-icon">&#xe642;</i>' +
+                                '           </a>' +
+                                '           <a class="trash layui-btn layui-btn-primary layui-btn-sm">' +
+                                '               <i class="layui-icon">&#xe640;</i>' +
+                                '           </a>' +
+                                '       </div>' +
+                                '   </div>' +
+                                '   <div class="layui-row test-body">' +
+                                '       <hr>' +
+                                '       <div class="layui-form-item">' +
+                                '           <label class="layui-form-label layui-form-padding-left">标准输入</label>' +
+                                '           <div class="layui-input-block layui-form-padding-left" >' +
+                                '               <textarea placeholder="请输入内容" class="standard-input layui-textarea"></textarea>' +
+                                '           </div>' +
+                                '       </div>' +
+                                '       <div class="layui-form-item">' +
+                                '           <label class="layui-form-label layui-form-padding-left">标准输出</label>' +
+                                '           <div class="layui-input-block layui-form-padding-left">' +
+                                '               <textarea placeholder="请输入内容" class="standard-output layui-textarea"></textarea>' +
+                                '           </div>' +
+                                '       </div>' +
+                                '   </div>' +
+                                '</li>';
+        return containerTemplate.format(testCaseId);
+    }
+</script>
+<script type="text/javascript">
+    //监听测试用例编辑操作
+    $('#test-cases').on('click', 'a.edit', function() {
+        var testCaseContainer = $(this).parent().parent().parent(),
+            isBodyUnfolded      = $('.test-body', $(testCaseContainer)).is(':visible');
+
+        if ( isBodyUnfolded ) {
+            $('.test-body', $(testCaseContainer)).addClass('layui-hide');
+        } else {
+            $('.test-body', $(testCaseContainer)).removeClass('layui-hide');
+        }
+    });
+</script>
+<script type="text/javascript">
+    //监听测试用例删除操作
+    $('#test-cases').on('click', 'a.trash', function () {
+        var testCaseContainer = $(this).parent().parent().parent(),
+            testCases = $('li.test-case','#test-cases').length,
+            testCaseName = '测试用例 #%s';
+        $(testCaseContainer).remove();
+        $('li.test-case','#test-cases').each(function (index) {
+            $('h5', this).html(testCaseName.format(index));
+        });
+
+        if (testCases == 1) {
+            $('#no-test-cases').removeClass('layui-hide');
+        }
+    });
+</script>
+</body>
+
+</html>

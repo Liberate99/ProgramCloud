@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <!--响应式布局，宽度等于设备宽度-->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <title>实验云</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/head.css">
+    <link rel="stylesheet" type="text/css" href="css/page.css">
+    <link rel="stylesheet" type="text/css" href="css/mycourse.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.0.js"></script>
+    <script type="text/javascript" src="js/jquery.page.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/artTemplate.js"></script>
+    <script type="text/javascript" src="js/template-native.js"></script>
+    <script type="text/javascript" src="layer/layer.js"></script>
+    <script type="text/javascript" src="js/HOST.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <style>
+        .btn-primary {
+            background-color: #228AFF;
+            border-color: #228AFF;
+        }
+    </style>
+</head>
+<body>
+<div class="menu">
+    <div class="container con_header">
+        <nav class="navbar" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#cloud-navbar-collapse">
+                        <span class="sr-only">切换导航</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div style="width: 40px; height: 40px;">
+                        <a class="navbar-brand" href="index.html">
+                            <img src="img/logo.png" style="width: 40px; height: 40px;">
+                        </a>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="cloud-navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active hov"><a href="courseLibrary.html">课程库</a></li>
+                        <li class="hov"><a href="scrachPro.html">Scratch作品展</a></li>
+                        <li class="hov"><a href="scratch/ide.html">Scratch 3.0 在线编程</a></li>
+                        <li class="hov"><a href="personalMain.html">个人总览</a></li>
+                        <li class="hov"><a href="myCourse.html">我的课程</a></li>
+                        <li class="hov"><a href="virtualLab.html">虚拟实验室</a></li>
+                        <!-- <div class="mobile-show isDisplayMb">
+                            <li><a href="personalCenter.html">个人信息</a></li>
+                            <li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+                        </div> -->
+                        <li class="dropdown head-box isDisplay">
+                            <a href="#" class="head-pic" data-toggle="dropdown">
+                                <img id="userImg" src="img/head_pic.png">
+                                <span id="userName">编程云</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="personalCenter.html">个人信息</a></li>
+                                <!--<li><a href="javascript:;" onclick="alertGZT()">教师工作台</a></li>-->
+                                <li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <!-- <p class="main-tit col-md-2 col-xs-4">我的课程</p> -->
+            <div class="col-md-4 col-sm-12 col-xs-12 col-md-push-8 searchBox">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span id="courseTag">课程分类</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" id="searchTag">
+                            <li><a href="javascript:;" onclick="searchTag(this)">全部</a></li>
+                        </ul>
+                    </div><!-- /btn-group -->
+                    <input type="text" id="searchMain" class="form-control input-sm">
+                    <span class="input-group-btn">
+							<button class="btn btn-sm btn-primary" type="button" onclick="search()" style="outline: none">→</button>
+						</span>
+                </div><!-- /input-group -->
+            </div>
+            <div class="col-md-8 col-sm-12 col-xs-12 col-md-pull-4" id="dict">
+                <a href="javascript:;" onclick="allCourse()" class="courseKind courseKindAct">全部</a>
+            </div>
+        </div>
+
+
+        <div class="row" id="show" style="min-height: 200px;">
+            <!--课程列表-->
+        </div>
+
+        
+        <ul class="pagination" style="float: right;">
+            <!--分页-->
+        </ul>
+    </div>
+</div>
+<script id="classify" type="text/html">
+    <% for (var i = 0; i < value.length; i ++) { %>
+
+    <a href="javascript:;" class="courseKind" data-no=<%= value[i].value %>
+        onclick="choose(this)"><%=value[i].label%></a>
+
+    <% } %>
+</script>
+<script id="classifyTag" type="text/html">
+    <% for (var i = 0; i < value.length; i ++) { %>
+
+    <li><a href="javascript:;" data-no=<%= value[i].value %> onclick="searchTag(this)"><%=value[i].label%></a></li>
+
+    <% } %>
+</script>
+<script id="content" type="text/html">
+    <% for (var i = 0; i < value.length; i ++) { %>
+    <a href="#" data-id=<%= value[i].id %>
+        data-title=<%= value[i].title %> data-desc=<%= value[i].desc %>
+        data-classify=<%= value[i].classify %> data-classTime=<%= value[i].classtime %> data-score=<%= value[i].score %>
+        data-createTime=<%= value[i].createTime %> data-createBy=<%= value[i].createBy %> data-pic=<%= value[i].pic %>
+        data-view=<%= value[i].view %> data-focus=<%= value[i].focus %> onclick="courseDetail('<%= value[i].id %>')">
+        <div class="col-md-3 col-xs-6 courseBox" style="width: 265px;height:163px;">
+            <div class="courseMain" style="width: 100%;height:100%;">
+                <% if (value[i].pic != "") { %>
+                <img src="<%= value[i].pic %>" class="courseImg" style="width: 100%;height:100%;">
+                <% } %>
+                <% if (value[i].pic == "") { %>
+                <img src="img/course.png" class="courseImg" style="width: 100%;height:100%;">
+                <% } %>
+                <div class="zhezhao">
+                    <p class="courseName"><%=value[i].title%></p>
+                    <p class="courseLong"><span><%=value[i].classtime%>课时</span><span><%=value[i].score%>学分</span></p>
+                    <p class="courseLong"><span><%=value[i].focus%>人已加入</span></p>
+                </div>
+            </div>
+        </div>
+    </a>
+    <% } %>
+</script>
+
+<script id="content_new" type="text/html">
+    <% for (var i = 0; i < value.length; i ++) { %>
+    <a href="#"
+        data-id=<%= value[i].id %> 
+        data-title=<%= value[i].title %> 
+        data-desc=<%= value[i].desc %> 
+        data-classify=<%= value[i].classify %> 
+        data-classTime=<%= value[i].classtime %> 
+        data-score=<%= value[i].score %> 
+        data-createTime=<%= value[i].createTime %> 
+        data-createBy=<%= value[i].createBy %> 
+        data-pic=<%= value[i].pic %> 
+        data-view=<%= value[i].view %> 
+        data-focus=<%= value[i].focus %> 
+        onclick="courseDetail('<%= value[i].id %>')">
+        <div class="col-md-3 col-xs-6 courseBox" style="width: 265px;height:196px;">
+            <div class="courseContentBox">
+                <div style="width: 235px;height: 136px;padding: 0px; overflow: hidden;">
+                    <% if (value[i].pic != "") { %>
+                    <img src="<%= value[i].pic %>" class="courseImg">
+                    <% } %>
+                    <% if (value[i].pic == "") { %>
+                    <img src="img/course.png" class="courseImg" ><!-- style="width: 235px; height: 156px;" -->
+                    <% } %>
+                </div>
+                <div style="margin-top: 0px; background-color: #F8F8F8; width: 235px;height:60px;padding: 5px;">
+                    
+                    <div>
+                        <p style="margin-left: 15px; color: black; font-size: 110%;"><%=value[i].title%></p>
+                    </div>
+
+                    <div style="margin-top:3px; margin-left:10px; display: flex; flex-direction: left; float: left;">
+                        <i class="far fa-clock fa-lg" style="color: #989898; width:20px; height:20px;"></i>
+                        <p style="margin-left:5px; color: #989898; line-height: 12px;">
+                            <span> <%=value[i].classtime%></span>
+                        </p>
+                    </div>
+
+                    <!-- <p><span><%=value[i].score%>学分</span></p> -->
+                    <div  style="margin-top:3px; margin-left: 40px; display: flex; flex-direction: left; float: left;">
+                        <i class="far fa-user-circle fa-lg" style="color: #989898; width:20px; height:20px;"></i>
+                        <p style="margin-left:5px; color: #989898; line-height: 12px;">
+                            <span><%=value[i].focus%></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+    <% } %>
+</script>
+
+
+<div class="footer">
+    <div class="container">
+        <ul>
+            <li class="footer-tit">联系与反馈</li>
+            <li><a href="#">联系我们</a></li>
+            <li><a href="#">意见反馈</a></li>
+        </ul>
+        <ul>
+            <li class="footer-tit">资源共享</li>
+            <li><a href="#">学校支持</a></li>
+            <li><a href="#">文章干货</a></li>
+            <li><a href="#">相关下载</a></li>
+        </ul>
+        <ul>
+            <li class="footer-tit">关注我们</li>
+            <li><a href="#">微信公众号</a></li>
+            <li><a href="#">QQ群</a></li>
+        </ul>
+    </div>
+</div>
+
+
+<script>
+    //		document.ready
+    $(document).ready(function () {
+//			trace("初始化方法进入二");
+        getDict();
+
+        var classify = "";//课程分类
+        var page = 1;//第几页
+        var title = "";
+
+        courseList(classify, title, page, true);
+//			courseImgs();
+
+    });
+    $(window).resize(function () {
+        courseImgs();
+    });
+
+    function setP(classify, title, pages, current) {
+        console.log("页面初始化，当前页码" + current);
+
+        $(".pagination").createPage({
+            pageCount: pages,
+            current: current,
+            backFn: function (p) {
+                // console.log(p);
+//					var classify="0";
+                console.log("页码跳转到：" + p);
+                courseList(classify, title, p, false);
+                if (pages == 0) {
+                    $(".pagination").css("display", "none");
+                } else {
+                    $(".pagination").css("display", "block");
+                }
+            }
+        });
+    }
+
+    function allCourse() {
+        $(".courseKind").each(function () {
+            $(this).removeClass("courseKindAct");
+        });
+        $(".courseKind").eq(0).addClass("courseKindAct");
+        var classify = "";//课程分类
+        var title = "";
+        var page = 1;//第几页
+        courseList(classify, title, page, true);
+//			alert($(classify).data("no"))
+    }
+
+    function choose(classify) {
+//			alert($(classify).data("no"))
+        $(".courseKind").each(function () {
+            $(this).removeClass("courseKindAct");
+        });
+        $(classify).addClass("courseKindAct");
+        var classify = $(classify).data("no");//课程分类
+        var page = 1;//第几页
+        var title = "";
+        courseList(classify, title, page, true);
+
+    }
+
+
+    function courseDetail(id) {
+//        window.open("courseDetail.html?courseId=" + id);
+        window.location.href = "courseDetail.html?courseId=" + id;
+    }
+
+    function searchTag(obj) {
+        var textMain = $(obj).html();
+        $("#courseTag").html(textMain);
+        $("#courseTag").attr("data-no", $(obj).attr("data-no"));
+    }
+
+    function search() {
+
+        var tagNo = $("#courseTag").attr("data-no");
+        var main = $("#searchMain").val();
+//			console.log(tagNo+" "+main);
+        if (tagNo == "undefined") {
+            tagNo = "";
+        }
+        var page = 1;
+        console.log("搜索" + tagNo + main + page);
+        courseList(tagNo, main, page, true);
+    }
+
+    function alertGZT() {
+        var xxx = JSON.parse(getCookie('loginResult'));
+        console.log("xxx:"+xxx);
+        console.log("id:"+xxx.id)
+        console.log("token:"+xxx.token)
+        for (var key in xxx.value){
+            console.log("key:"+key+" value:"+xxx.value.key);
+        }
+        alert(xxx);
+    }
+
+</script>
+</body>
+</html>

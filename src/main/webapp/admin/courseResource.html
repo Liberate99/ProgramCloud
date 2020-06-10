@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+    <link rel="stylesheet" href="plugins/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="css/global.css" media="all">
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/table.css" />
+    <script type="text/javascript" src="../my/js/HOST.js"></script>
+    <style>
+        .search{
+            background-color: #009688;
+            color: white;
+            border: none;
+            outline: none;
+            width: 30px;
+            transition: all .2s;
+        }
+        .search:focus,.searchBox{
+            width: 125px;
+        }
+        ::-webkit-input-placeholder { /* WebKit browsers */
+            color: white;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color: white;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color: white;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+            color: white;
+        }
+        .layui-elem-quote .layui-select-title input{
+            height: 32px;
+            background-color: #009688;
+            font-size: 11px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+<div class="admin-main">
+
+    <blockquote class="layui-elem-quote">
+        <a href="javascript:;" class="layui-btn layui-btn-sm" id="add">
+            <i class="layui-icon">&#xe608;</i> 上传资源
+        </a>
+        <a href="#" class="layui-btn layui-btn-sm" id="import">
+            <i class="layui-icon">&#xe608;</i> 导入信息
+        </a>
+        <a href="#" class="layui-btn layui-btn-sm">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i> 导出信息
+        </a>
+        <div class="layui-btn layui-btn-sm">
+            <i class="layui-icon">&#xe615;</i>
+            <input type="text" name="search" class="search" id="search" placeholder="搜索"/>
+        </div>
+        <div class="layui-form" id="selectResType" style="display: inline-block">
+            <div class="layui-input-inline">
+                <select name="resType" id="resType" lay-filter="resType">
+                    <option value=""></option>
+                    <option value="all">所有</option>
+                    <option value="image">image</option>
+                    <option value="video">video</option>
+                    <option value="pdf">pdf</option>
+                    <option value="ppt">ppt</option>
+                    <option value="doc">doc</option>
+                </select>
+            </div>
+        </div>
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>数据列表</legend>
+        <div class="layui-field-box layui-form">
+            <table class="layui-table admin-table">
+                <thead>
+                <tr>
+                    <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+                    <!--<th>名称</th>-->
+                    <th>简介</th>
+                    <th>suffix</th>
+                    <th>url</th>
+                    <!--<th>path</th>-->
+                    <th>大小</th>
+                    <th>类型</th>
+                    <!--<th>创建者</th>-->
+                    <th>上传日期</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="content">
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+    <div class="admin-table-page">
+        <div id="paged" class="page">
+        </div>
+    </div>
+</div>
+<!--模板-->
+<script type="text/html" id="tpl">
+    {{# layui.each(d.value.records, function(index, item){ }}
+    <tr>
+        <td><input name="id" type="checkbox" lay-skin="primary"></td>
+        <!--<td style="max-width: 150px;word-wrap:break-word;">{{ item.name }}</td>-->
+        <td>{{ item.pre ? item.pre : "" }}</td>
+        <td>{{ item.suffix ? item.suffix : "" }}</td>
+        <!--<td style="max-width: 200px;word-break: break-all;">{{ item.url }}</td>-->
+        <td>{{ item.url?'<img style="max-height: 80px;" src="cpr.imayuan.com'+item.url+'"/>':"" }}</td>
+        <!--<td>{{ item.path }}</td>-->
+        <td>{{ item.size ? (item.size/1024/1024).toFixed(2)+"M" : ""}}</td>
+        <td>{{ item.type ? item.type : "" }}</td>
+        <!--<td>{{ item.createBy }}</td>-->
+        <td>{{ item.createTime ? new Date(parseInt(item.createTime) ).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ") : ""}}</td>
+        <td>
+            <!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-xs">预览</a>-->
+            <!--<a href="javascript:;" data-id="{{ item.id }}" data-opt="edit" class="layui-btn layui-btn-xs">编辑</a>-->
+            <a href="#" data-id="{{ item.id }}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
+        </td>
+    </tr>
+    {{# }); }}
+</script>
+<script type="text/javascript" src="plugins/layui/layui.js"></script>
+<script type="text/javascript" src="js/Global.js"></script>
+<script>
+    layui.config({
+        base: 'js/'
+    }).extend({
+        busajax: 'busajax'
+    });
+
+    layui.use(['paging', 'form', 'busajax'], function() {
+        var $ = layui.jquery,
+                bajax = layui.busajax,
+                paging = layui.paging(),
+                layerTips = parent.layer === undefined ? layui.layer : parent.layer, //获取父窗口的layer对象
+                layer = layui.layer, //获取当前窗口的layer对象
+                form = layui.form();
+        var datas={
+            page:{
+                current:"1"
+            },
+            busResource:{}
+        };
+        paging.init({
+            openWait: true,
+            url: HOST+'business.busResource.searchBusResourceByPage.hsr', //地址
+            elem: '#content', //内容容器
+            params:datas,
+            type: 'POST',
+            tempElem: '#tpl', //模块容器
+            header:{
+                token:"adasd"
+            },
+            pageConfig: { //分页参数配置
+                elem: '#paged', //分页容器
+                pageSize: 10 //分页大小
+            },
+            success: function() { //渲染成功的回调
+                //alert('渲染成功');
+            },
+            fail: function(msg) { //获取数据失败的回调
+                //alert('获取数据失败')
+            },
+            complate: function() { //完成的回调
+                //alert('处理完成');
+                //重新渲染复选框
+                form.render('checkbox');
+                form.on('checkbox(allselector)', function(data) {
+                    var elem = data.elem;
+
+                    $('#content').children('tr').each(function() {
+                        var $that = $(this);
+                        //全选或反选
+                        $that.children('td').eq(0).children('input[type=checkbox]')[0].checked = elem.checked;
+                        form.render('checkbox');
+                    });
+                });
+
+                //绑定所有编辑按钮事件
+                $('#content').children('tr').each(function() {
+                    var $that = $(this);
+//                    $that.children('td:last-child').children('a[data-opt=edit]').on('click', function() {
+////								layer.msg($(this).data('name'));
+//                        console.log($(this).data('id'));
+//                        edit($(this).data('id'));
+//                    });
+                    $that.children('td:last-child').children('a[data-opt=del]').on('click', function () {
+
+//                        layer.msg($(this).data('name'));
+                        var _this = $(this);
+                        layer.confirm('您确定要删除吗?', {
+                            btn: ['确定','取消'], //按钮
+                            shade: false //不显示遮罩
+                        }, function(index){
+                            // 提交表单的代码，需要你自己写，然后用 layer.close 关闭就可以了，取消可以省略
+                            var busresource = {
+                                busresource: {
+                                    id: _this.data('id')
+                                }
+                            };
+//                            console.log(JSON.stringify(busresource));
+                            bajax.busajax('business.busResource.delete', busresource, null);
+                            layer.close(index);
+                        });
+                    });
+
+                });
+
+            },
+        });
+
+        $('#selectResType input').eq(0).attr("placeholder","文件类型");
+
+        //获取所有选择的列
+        $('#getSelected').on('click', function() {
+            var names = '';
+            $('#content').children('tr').each(function() {
+                var $that = $(this);
+                var $cbx = $that.children('td').eq(0).children('input[type=checkbox]')[0].checked;
+                if($cbx) {
+                    var n = $that.children('td:last-child').children('a[data-opt=edit]').data('name');
+                    names += n + ',';
+                }
+            });
+            layer.msg('你选择的名称有：' + names);
+        });
+
+        $('#search').keyup(function (e) {
+            if(e.keyCode == 13){
+                var datas={
+                    page:{
+                        current:"1"
+                    },
+                    busResource:{
+                        pre:$("input[name='search']").val()
+                    }
+                };
+                $("#resType").val() && $("#resType").val() != "all" ? datas.busResource.type = $("#resType").val() : "";
+                paging.get(JSON.stringify(datas));
+            }
+        }).blur(function () {
+            $(this).val() ? $(this).addClass("searchBox") : $(this).removeClass("searchBox");
+        });
+
+        form.on('select(resType)', function(type){
+//            console.log(type);
+            var datas={
+                page:{
+                    current:"1"
+                },
+                busResource:{}
+            };
+            type.value != "all" ? datas.busResource.type = type.value : "";
+            $("input[name='search']").val() ? datas.busResource.pre = $("input[name='search']").val() : "";
+            paging.get(JSON.stringify(datas));
+        });
+
+        var addBoxIndex = -1;
+        $('#add').on('click', function() {
+            if(addBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('form/resourceAdd.html', null, function(form) {
+                addBoxIndex = layer.open({
+                    type: 1,
+                    title: '文件上传',
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    offset: ['80px', '26%'],
+                    area: ['600px', '460px'],
+                    maxmin: true,
+                    yes: function(index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=edit]').click();
+                    },
+                    full: function(elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function() {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function(layero, index) {
+                        //弹出窗口成功后渲染表单
+                        var form = layui.form();
+                        form.render();
+                        form.on('submit(edit)', function (data) {
+//                            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+//                            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+//                            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                            if(data.field.pre&&data.field.url){
+//                                data.field.pre=encode64(encodeURIComponent(data.field.pre));
+//                                data.field.url=encode64(encodeURIComponent(data.field.url));
+                                var busResource = {
+                                    busresource: {pre: data.field.pre, url: data.field.url, type: data.field.type}
+                                };
+                                console.log(JSON.stringify(busResource)); //当前容器的全部表单字段，名值对形式：{name: value}
+
+                                //这里可以写ajax方法提交表单
+                                bajax.busajax('business.busResource.insertOrUpdate', busResource, index, function (result) {
+//                                alert(result)
+                                })
+                            }
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                        //console.log(layero, index);
+                    },
+                    end: function() {
+                        addBoxIndex = -1;
+                    }
+                });
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

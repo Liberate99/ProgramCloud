@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.VojJudgeResultsDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.VojJudgeResults">
+		<id column="judge_result_id" property="judgeResultId" />
+		<result column="judge_result_slug" property="judgeResultSlug" />
+		<result column="judge_result_name" property="judgeResultName" />
+	</resultMap>
+
+</mapper>

@@ -1,0 +1,57 @@
+
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <input type="hidden" name="createBy" value="">
+        <input type="hidden" name="updateBy" value="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">父机构</label>
+            <div class="layui-input-inline">
+                <select name="parentId" id="pOrganization" lay-filter="fzj" lay-verify="required">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <input type="number" name="sort" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">子机构名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+
+<script src="../js/jquery-1.10.0.js"></script>
+<script src="../js/template-native.js"></script>
+
+<script>
+    $(document).ready(function(){
+        var form = layui.form();
+        //获取父机构
+        var url1=HOST+"system.organization.getParentOrganization.hsr";
+        $.ajax({
+            url: url1,
+            type: 'POST',
+            headers: {
+                token: JSON.parse(getCookie('user')).token
+            },
+            dataType: "json",
+            success: function(result){
+                for (var i= 0;i < result.value.length;i++){
+                    $("#pOrganization").append("<option value='"+result.value[i].id+"'>"+result.value[i].name+"</option>");
+                }
+                form.render('select','fzj');
+            },
+            error:function(xhr){
+                alert("错误提示： " + xhr.status + " " + xhr.statusText);
+            }
+        });
+
+    });
+</script>

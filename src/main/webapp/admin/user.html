@@ -1,0 +1,436 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+    <link rel="stylesheet" href="plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="css/global.css" media="all">
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/table.css"/>
+    <script type="text/javascript" src="../my/js/HOST.js"></script>
+</head>
+
+<body>
+<div class="admin-main">
+
+    <blockquote class="layui-elem-quote">
+        <a href="javascript:;" class="layui-btn layui-btn-sm" id="add">
+            <i class="layui-icon">&#xe608;</i> 添加用户
+        </a>
+        <a href="#" class="layui-btn layui-btn-sm" id="import">
+            <i class="layui-icon">&#xe608;</i> 导入信息
+        </a>
+        <a href="#" class="layui-btn layui-btn-sm">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i> 导出信息
+        </a>
+        <!--<a href="#" class="layui-btn layui-btn-sm" id="getSelected">-->
+            <!--<i class="fa fa-shopping-cart" aria-hidden="true"></i> 获取全选信息-->
+        <!--</a>-->
+        <a href="javascript:;" class="layui-btn layui-btn-sm" id="search">
+            <i class="layui-icon">&#xe615;</i> 搜索
+        </a>
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>数据列表</legend>
+        <div class="layui-field-box layui-form">
+            <table class="layui-table admin-table">
+                <thead>
+                <tr>
+                    <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+                    <th>登录名</th>
+                    <!--<th>身份证</th>-->
+                    <th>姓名</th>
+                    <!--<th>邮箱</th>-->
+                    <th>手机</th>
+                    <th>登陆日期</th>
+                    <th>创建日期</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="content">
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+    <div class="admin-table-page">
+        <div id="paged" class="page">
+        </div>
+    </div>
+</div>
+<!--模板-->
+<script type="text/html" id="tpl">
+    {{# layui.each(d.value.records, function(index, item){ }}
+    <tr>
+        <td><input name="id" type="checkbox" lay-skin="primary"></td>
+        <td>{{ item.loginName ? item.loginName : "" }}</td>
+        <!--<td>{{ item.identityNumber ? item.identityNumber : ""  }}</td>-->
+        <td>{{ item.name ? item.name : "" }}</td>
+        <!--<td>{{ item.email ? item.email : "" }}</td>-->
+        <td>{{ item.phone ? item.phone : "" }}</td>
+        <td>{{ item.loginDate ? new Date(parseInt(item.loginDate) ).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ") : "" }}</td>
+        <td>{{ item.createDate ? new Date(parseInt(item.createDate) ).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ") : ""}}</td>
+        <td>
+            <a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-xs">预览</a>
+            <a href="javascript:;" data-id="{{ item.id }}" data-opt="edit" class="layui-btn layui-btn-xs">编辑</a>
+            <a href="javascript:;" data-id="{{ item.id }}" data-name="{{ item.loginName }}" data-opt="role" class="layui-btn layui-btn-warm layui-btn-xs">角色</a>
+            <a href="#" data-id="{{ item.id }}" data-opt="del"
+               class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
+        </td>
+    </tr>
+    {{# });
+    }}
+</script>
+<script type="text/javascript" src="plugins/layui/layui.js"></script>
+<script type="text/javascript" src="js/Global.js"></script>
+<script>
+    layui.config({
+        base: 'js/'
+    }).extend({
+        busajax: 'busajax'
+    });
+
+    layui.use(['paging', 'form', 'busajax'], function () {
+        var $ = layui.jquery,
+                bajax = layui.busajax,
+                paging = layui.paging(),
+                layer = layui.layer, //获取当前窗口的layer对象
+                form = layui.form();
+        //busajax.test();
+        //busajax('system.user.insertOrUpdate',"asdas",b);
+        var datas = {
+            page: {
+                current: "1"
+            }
+        };
+        paging.init({
+            openWait: true,
+            url: HOST+'/system.user.getUserByPage.hsr', //地址
+            elem: '#content', //内容容器
+            params: datas,
+            type: 'POST',
+            tempElem: '#tpl', //模块容器
+            pageConfig: { //分页参数配置
+                elem: '#paged', //分页容器
+                pageSize: 10 //分页大小
+            },
+            success: function () { //渲染成功的回调
+                //alert('渲染成功');
+            },
+            fail: function (msg) { //获取数据失败的回调
+                //alert('获取数据失败')
+            },
+            complate: function () { //完成的回调
+                //alert('处理完成');
+                //重新渲染复选框
+                form.render('checkbox');
+                form.on('checkbox(allselector)', function (data) {
+                    var elem = data.elem;
+
+                    $('#content').children('tr').each(function () {
+                        var $that = $(this);
+                        //全选或反选
+                        $that.children('td').eq(0).children('input[type=checkbox]')[0].checked = elem.checked;
+                        form.render('checkbox');
+                    });
+                });
+                //绑定所有编辑按钮事件
+                $('#content').children('tr').each(function () {
+                    var $that = $(this);
+                    $that.children('td:last-child').children('a[data-opt=edit]').on('click', function () {
+//                        layer.msg($(this).data('id'));
+                        console.log($(this).data('id'));
+                        edit($(this).data('id'));
+                    });
+                    $that.children('td:last-child').children('a[data-opt=role]').on('click', function () {
+//                        layer.msg($(this).data('id'));
+                        console.log($(this).data('id')+" "+$(this).data('name'));
+                        role($(this).data('id'),$(this).data('name'));
+                    });
+                    $that.children('td:last-child').children('a[data-opt=del]').on('click', function () {
+
+//                        layer.msg($(this).data('name'));
+                        var _this = $(this);
+                        layer.confirm('您确定要删除吗?', {
+                            btn: ['确定','取消'], //按钮
+                            shade: false //不显示遮罩
+                        }, function(index){
+                            // 提交表单的代码，需要你自己写，然后用 layer.close 关闭就可以了，取消可以省略
+                            var user = {
+                                user: {
+                                    id: _this.data('id')
+                                }
+                            };
+//                            console.log(JSON.stringify(user));
+                            bajax.busajax('system.user.delete', user, null);
+                            layer.close(index);
+                        });
+                    });
+
+                });
+
+            },
+        });
+//        $('#del').on('click', function () {
+//            console.log('asdas');
+//            var user = {
+//                user: {
+//                    id: ("#del").attr(name)
+//                }
+//            };
+//            console.log(JSON.stringify(user));
+//            busajax.busajax('system.user.delete',user,null);
+//        });
+        //获取所有选择的列
+        $('#getSelected').on('click', function () {
+            var names = '';
+            $('#content').children('tr').each(function () {
+                var $that = $(this);
+                var $cbx = $that.children('td').eq(0).children('input[type=checkbox]')[0].checked;
+                if ($cbx) {
+                    var n = $that.children('td:last-child').children('a[data-opt=edit]').data('name');
+                    names += n + ',';
+                }
+            });
+            layer.msg('你选择的名称有：' + names);
+        });
+
+        $('#search').on('click', function () {
+            parent.layer.alert('你点击了搜索按钮')
+        });
+
+        var addBoxIndex = -1;
+        $('#add').on('click', function () {
+            if (addBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('form/userAdd.html', null, function (form) {
+                addBoxIndex = layer.open({
+                    type: 1,
+                    title: '添加用户',
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    offset: ['100px', '30%'],
+                    area: ['600px', '400px'],
+                    zIndex: 19950924,
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=edit]').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        //弹出窗口成功后渲染表单
+                        var form = layui.form();
+                        form.render();
+                        form.on('submit(edit)', function (data) {
+                            var user = {
+                                user: data.field
+                            };
+                            console.log(JSON.stringify(user)) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                            //这里可以写ajax方法提交表单
+                            bajax.busajax('system.user.insertOrUpdate', user, index, function (result) {
+
+                            },true);
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                        //console.log(layero, index);
+                    },
+                    end: function () {
+                        addBoxIndex = -1;
+                    }
+                });
+            });
+        });
+
+//        $('#import').on('click', function () {
+//            var that = this;
+//            var index = layer.tips('只想提示地精准些', that, {tips: [1, 'white']});
+//            $('#layui-layer' + index).children('div.layui-layer-content').css('color', '#000000');
+//        });
+        var editBoxIndex = -1;
+        function edit(id) {
+                    if (editBoxIndex !== -1)
+                        return;
+                    //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+                    $.get('form/userEdit.html', null, function (form) {
+                        editBoxIndex = layer.open({
+                            type: 1,
+                            title: '编辑用户',
+                            content: form,
+                            btn: ['保存', '取消'],
+                            shade: false,
+                            offset: ['100px', '30%'],
+                            area: ['600px', '400px'],
+                            zIndex: 19950924,
+                            maxmin: true,
+                            yes: function (index) {
+                                //触发表单的提交事件
+                                $('form.layui-form').find('button[lay-filter=edit]').click();
+                            },
+                            full: function (elem) {
+                                var win = window.top === window.self ? window : parent.window;
+                                $(win).on('resize', function () {
+                                    var $this = $(this);
+                                    elem.width($this.width()).height($this.height()).css({
+                                        top: 0,
+                                        left: 0
+                                    });
+                                    elem.children('div.layui-layer-content').height($this.height() - 95);
+                                });
+                            },
+                            success: function (layero, index) {
+                                var userEdit = {
+                                    user: {
+                                        id:id
+                                    }
+
+                                };
+                                var form = layui.form();
+                                //这里可以写ajax方法获取表单
+                                bajax.busajax('system.user.get', userEdit, index, function (result) {
+                                    $('form.layui-form').find('select[name=identityRole]').attr('select-data', result.value.identityRole);
+                                    $('form.layui-form').find('input[name=name]').val(result.value.name);
+                                    $('form.layui-form').find('input[name=loginName]').val(result.value.loginName);
+                                    $('form.layui-form').find('input[name=phone]').val(result.value.phone);
+                                    $('form.layui-form').find('input[name=id]').val(result.value.id);
+                                    console.log(JSON.stringify(result));
+                                },false);
+                                //弹出窗口成功后渲染表单
+                                form.render();
+                                form.on('submit(edit)', function (data) {
+                                    console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+                                    console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+                                    console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                                    var user = {
+                                        user: data.field
+                                    };
+                                    console.log(JSON.stringify(user)) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                                    //这里可以写ajax方法提交表单
+                                    bajax.busajax('system.user.insertOrUpdate', user, index, function (result) {
+
+                                    },true)
+                                    return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                                });
+                                //console.log(layero, index);
+                            },
+                            end: function () {
+                                editBoxIndex = -1;
+                            }
+                        });
+                    });
+
+            }
+        var editBoxIndex = -1;
+        function role(id,loginName) {
+            if (editBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('form/userRole.html', null, function (form) {
+                editBoxIndex = layer.open({
+                    type: 1,
+                    title: '编辑用户角色',
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    offset: ['100px', '30%'],
+                    area: ['600px', '400px'],
+                    zIndex: 19950924,
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=role]').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        var form = layui.form();
+                        var role = {
+                            role: {
+                                delFlag:0
+                            }
+                        };
+//                        var form = layui.form();
+                        $('form.layui-form').find('input[name=loginName]').val(loginName);
+                        //这里可以写ajax方法获取表单
+                        bajax.busajax('system.role.getRoleList',role,index,function (result) {
+                            var roleValue = result.value;
+                            var opt;
+                            for(var i = 0;i<roleValue.length;i++){
+                                opt = opt + "<option value="+roleValue[i].id+">"+roleValue[i].name+"</option>";
+                            }
+                            $('form.layui-form').find('select').html(opt);
+                        },false);
+                        var getRole = {
+                            userRole: {
+                                userId:id
+                            }
+                        };
+                        bajax.busajax('system.userRole.get',getRole,index,function (result) {
+                            var roleId = "";
+                            if (result.value != null) {
+                                roleId = result.value.roleId;
+                            }
+                            $("form.layui-form select > option").each(function (i) {
+                                if($(this).attr("value") == roleId){
+                                    $(this).attr("selected","selected");
+                                }
+                            });
+
+                        },false);
+                        //弹出窗口成功后渲染表单
+                        form.render();
+                        form.on('submit(role)', function (data) {
+                            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+                            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+                            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                            var userRole = {
+                                userRole: {
+                                    userId:id,
+                                    roleId:data.field.id
+                                }
+                            };
+                            console.log(JSON.stringify(userRole)); //当前容器的全部表单字段，名值对形式：{name: value}
+
+                            //这里可以写ajax方法提交表单
+                            bajax.busajax('system.userRole.insertOrUpdate', userRole, index, function (result) {
+
+                            });
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                        //console.log(layero, index);
+                    },
+                    end: function () {
+                        editBoxIndex = -1;
+                    }
+                });
+            });
+
+        }
+    });
+</script>
+</body>
+
+</html>

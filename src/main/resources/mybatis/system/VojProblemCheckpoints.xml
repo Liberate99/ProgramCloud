@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.VojProblemCheckpointsDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.VojProblemCheckpoints">
+		<id column="problem_id" property="problemId" />
+		<result column="checkpoint_id" property="checkpointId" />
+		<result column="checkpoint_exactly_match" property="checkpointExactlyMatch" />
+		<result column="checkpoint_score" property="checkpointScore" />
+		<result column="checkpoint_input" property="checkpointInput" />
+		<result column="checkpoint_output" property="checkpointOutput" />
+	</resultMap>
+
+</mapper>

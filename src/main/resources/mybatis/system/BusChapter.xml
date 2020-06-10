@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.BusChapterDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.BusChapter">
+		<id column="id" property="id" />
+		<result column="parent_id" property="parentId" />
+		<result column="parent_ids" property="parentIds" />
+		<result column="title" property="title" />
+		<result column="sort" property="sort" />
+		<result column="des" property="des" />
+		<result column="resource_id" property="resourceId" />
+		<result column="code_id" property="codeId" />
+		<result column="course_id" property="courseId" />
+		<result column="classtime" property="classtime" />
+		<result column="score" property="score" />
+		<result column="create_ime" property="createTime" />
+		<result column="create_by" property="createBy" />
+		<result column="del_flag" property="delFlag" />
+		<result column="type" property="type" />
+		<result column="has_public" property="hasPublic" />
+	</resultMap>
+
+</mapper>

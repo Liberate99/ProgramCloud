@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+    <link rel="stylesheet" href="plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="css/global.css" media="all">
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/table.css"/>
+    <style>
+        .text_overflow_1{
+            width:200px;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            -o-text-overflow:ellipsis;
+            overflow:hidden;
+        }
+        .search{
+            background-color: #009688;
+            color: white;
+            border: none;
+            outline: none;
+        }
+        ::-webkit-input-placeholder { /* WebKit browsers */
+            color: white;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color: white;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color: white;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+            color: white;
+        }
+        .layui-select-title input{
+            height: 30px;
+            background-color: #009688;
+            font-size: 11px;
+            color: white;
+            border: 0;
+        }
+    </style>
+
+</head>
+<body>
+<div class="admin-main">
+
+    <blockquote class="layui-elem-quote">
+        <a href="chapterNew.html" class="layui-btn layui-btn-sm">
+            <i class="layui-icon"></i> 返回
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-sm" id="add">
+            <i class="layui-icon">&#xe608;</i> 添加代码任务
+        </a>
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>代码任务列表</legend>
+        <div class="layui-field-box layui-form">
+            <table class="layui-table admin-table">
+                <thead>
+                <tr>
+                    <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+                    <th>标题</th>
+                    <th>创建日期</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="content">
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+    <div class="admin-table-page">
+        <div id="paged" class="page">
+        </div>
+    </div>
+</div>
+<!--模板-->
+<script type="text/html" id="tpl">
+    {{# layui.each(d.value.records, function(index, item){ }}
+    <tr>
+        <td><input name="id" type="checkbox" lay-skin="primary"></td>
+        <td style="max-width: 100px">{{ item.name ? item.name : item.title }}</td>
+        <td>{{new Date(parseInt(item.createTime) ).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ")}}</td>
+        <td>
+            {{# if(window.location.href.indexOf("public") == -1){ }}
+            <a href="javascript:;" data-id="{{ item.id }}" data-opt="edit" class="layui-btn layui-btn-xs">编辑</a>
+            <a href="javascript:;" data-id="{{ item.id }}" data-opt="del"  class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
+            {{# } }}
+        </td>
+    </tr>
+    {{# });
+    }}
+</script>
+</body>
+<script type="text/javascript" src="../my/js/HOST.js"></script>
+<script type="text/javascript" src="plugins/layui/layui.js"></script>
+<script type="text/javascript" src="js/Global.js"></script>
+<script>
+    function getCookie(c_name)
+    {
+        if (document.cookie.length>0)
+        {
+            c_start=document.cookie.indexOf(c_name + "=")
+            if (c_start!=-1)
+            {
+                c_start=c_start + c_name.length+1
+                c_end=document.cookie.indexOf(";",c_start)
+                if (c_end==-1) c_end=document.cookie.length
+                return unescape(document.cookie.substring(c_start,c_end))
+            }
+        }
+        return ""
+    }
+    layui.config({
+        base: 'js/'
+    }).extend({
+        busajax: 'busajax'
+    });
+
+    layui.use(['paging', 'form', 'busajax'], function () {
+        var $ = layui.jquery,
+            bajax = layui.busajax,
+            paging = layui.paging(),
+            layerTips = parent.layer === undefined ? layui.layer : parent.layer, //获取父窗口的layer对象
+            layer = layui.layer, //获取当前窗口的layer对象
+            form = layui.form();
+        //busajax.test();
+        //busajax('system.user.insertOrUpdate',"asdas",b);
+
+        if(window.location.href.indexOf("public") > -1){
+            $("#add").css("display","none");
+        }
+
+        var datas;
+        var listUrl = "";
+        var type = getCookie("type");
+        if(type == "3" || type == "4"){ //如果语言类型是scratch或者html
+            datas = {
+                page: {
+                    current: "1",
+                    size: "10"
+                },
+                busChapter: {
+                    id:getCookie("chapterId")
+                }
+            };
+            listUrl = "business.busCode.getCodeListByChapter.hsr";
+        }else{
+            datas = {
+                page: {
+                    current: "1",
+                    size: "10"
+                },
+                chapterId: getCookie("chapterId")
+            };
+            listUrl = "business.busProgrammingTask.getBusProgrammingTaskByPageWithChapterId.hsr";
+        }
+        paging.init({
+            openWait: true,
+            url: HOST+listUrl, //地址
+            elem: '#content', //内容容器
+            params: datas,
+            type: 'POST',
+            tempElem: '#tpl', //模块容器
+            pageConfig: { //分页参数配置
+                elem: '#paged', //分页容器
+                pageSize: 10 //分页大小
+            },
+            success: function () { //渲染成功的回调
+//                alert('渲染成功');
+            },
+            fail: function (msg) { //获取数据失败的回调
+//                alert('获取数据失败')
+            },
+            complate: function () { //完成的回调
+//                alert('处理完成');
+                //重新渲染复选框
+                form.render('checkbox');
+                form.on('checkbox(allselector)', function (data) {
+                    var elem = data.elem;
+
+                    $('#content').children('tr').each(function () {
+                        var $that = $(this);
+                        //全选或反选
+                        $that.children('td').eq(0).children('input[type=checkbox]')[0].checked = elem.checked;
+                        form.render('checkbox');
+                    });
+                });
+
+                //绑定所有编辑按钮事件
+                $('#content').children('tr').each(function () {
+                    var $that = $(this);
+                    $that.children('td:last-child').children('a[data-opt=edit]').on('click', function () {
+//                        layer.msg($(this).data('id'));
+//                        console.log($(this).data('id'));
+                        edit($(this).data('id'));
+                    });
+                    $that.children('td:last-child').children('a[data-opt=del]').on('click', function () {
+                        var _this = $(this);
+                        layer.confirm('您确定要删除吗?', {
+                            btn: ['确定','取消'], //按钮
+                            shade: false //不显示遮罩
+                        }, function(index){
+                            // 提交表单的代码，需要你自己写，然后用 layer.close 关闭就可以了，取消可以省略
+                            var code;
+                            if(type == "3" || type == "4"){
+                                code = {
+                                    buscode: {
+                                        id: _this.data('id')
+                                    }
+                                };
+                                bajax.busajax('business.busCode.delete', code, null);
+                            }else{
+                                code = {
+                                    busProgrammingTask: {
+                                        id: _this.data('id')
+                                    }
+                                };
+                                bajax.busajax('business.busProgrammingTask.delete', code, null);
+                            }
+                            layer.close(index);
+                        });
+
+//                        console.log(JSON.stringify(course));
+
+//                        layer.msg($(this).data('id'));
+                    });
+
+                });
+
+            },
+        });
+
+        var addBoxIndex = -1;
+        $('#add').on('click', function () {
+            if (addBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            var type = getCookie('type');
+            if (type == "3"){
+                $.get('form/scratchCodeAdd.html', null, function (form) {
+                    addBoxIndex = layer.open({
+                        type: 1,
+                        title: '添加代码任务',
+                        content: form,
+                        btn: ['保存', '取消'],
+                        shade: false,
+                        offset: ['50px', '8%'],
+                        area: ['1000px', '500px'],
+                        maxmin: true,
+                        yes: function (index) {
+                            //触发表单的提交事件
+                            $('form.layui-form').find('button[lay-filter=edit]').click();
+                        },
+                        full: function (elem) {
+                            var win = window.top === window.self ? window : parent.window;
+                            $(win).on('resize', function () {
+                                var $this = $(this);
+                                elem.width($this.width()).height($this.height()).css({
+                                    top: 0,
+                                    left: 0
+                                });
+                                elem.children('div.layui-layer-content').height($this.height() - 95);
+                            });
+                        },
+                        success: function (layero, index) {
+                            //弹出窗口成功后渲染表单
+                            var form = layui.form();
+                            form.render();
+                            form.on('submit(edit)', function (data) {
+//                            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+//                            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+//                            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                                data.field.title=encode64(encodeURIComponent(data.field.title));
+                                data.field.content=encode64(encodeURIComponent(data.field.content));
+                                data.field.message=encode64(encodeURIComponent(editor.txt.html()));
+                                data.field.type=getCookie("type");
+                                var datas = {
+                                    user:{
+                                        id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+                                    },
+                                    busChapter:{
+                                        id: getCookie("chapterId")
+                                    },
+                                    busCode: data.field
+                                };
+//                            console.log(JSON.stringify(code)) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                                //这里可以写ajax方法提交表单
+                                bajax.busajax('business.busCode.insertOrUpdateCode', datas, index, function (result) {
+//                                alert(result)
+                                })
+                                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                            });
+                            //console.log(layero, index);
+                        },
+                        end: function () {
+                            addBoxIndex = -1;
+                        }
+                    });
+                });
+            } else if(type == "4"){
+                $.get('form/codeAddHtml.html', null, function (form) {
+                    addBoxIndex = layer.open({
+                        type: 1,
+                        title: '添加代码任务',
+                        content: form,
+                        btn: ['保存', '取消'],
+                        shade: false,
+                        offset: ['50px', '8%'],
+                        area: ['1000px', '500px'],
+                        maxmin: true,
+                        yes: function (index) {
+                            //触发表单的提交事件
+                            $('form.layui-form').find('button[lay-filter=edit]').click();
+                        },
+                        full: function (elem) {
+                            var win = window.top === window.self ? window : parent.window;
+                            $(win).on('resize', function () {
+                                var $this = $(this);
+                                elem.width($this.width()).height($this.height()).css({
+                                    top: 0,
+                                    left: 0
+                                });
+                                elem.children('div.layui-layer-content').height($this.height() - 95);
+                            });
+                        },
+                        success: function (layero, index) {
+                            //弹出窗口成功后渲染表单
+                            var form = layui.form();
+                            form.render();
+                            form.on('submit(edit)', function (data) {
+                                console.log("data:"+data);
+                                data.field.title=encode64(encodeURIComponent(data.field.title));
+                                data.field.content=encode64(encodeURIComponent(data.field.content));
+                                data.field.result=encode64(encodeURIComponent(data.field.result));
+                                data.field.message=encode64(encodeURIComponent(editor.txt.html()));
+                                data.field.type=getCookie("type");
+                                var datas = {
+                                    user:{
+                                        id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+                                    },
+                                    busChapter:{
+                                        id: getCookie("chapterId")
+                                    },
+                                    busCode: data.field
+                                };
+//                            console.log(JSON.stringify(code)) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                                //这里可以写ajax方法提交表单
+                                bajax.busajax('business.busCode.insertOrUpdateCode', datas, index, function (result) {
+//                                alert(result)
+                                })
+                                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                            });
+                            //console.log(layero, index);
+                        },
+                        end: function () {
+                            addBoxIndex = -1;
+                        }
+                    });
+                });
+            }else{
+                $.get('form/codeAdd.html', null, function (form) {
+                    addBoxIndex = layer.open({
+                        type: 1,
+                        title: '添加代码任务',
+                        content: form,
+                        btn: ['保存', '取消'],
+                        shade: false,
+                        offset: ['50px', '8%'],
+                        area: ['1000px', '500px'],
+                        maxmin: true,
+                        yes: function (index) {
+                            //触发表单的提交事件
+                            $('form.layui-form').find('button[lay-filter=edit]').click();
+                        },
+                        full: function (elem) {
+                            var win = window.top === window.self ? window : parent.window;
+                            $(win).on('resize', function () {
+                                var $this = $(this);
+                                elem.width($this.width()).height($this.height()).css({
+                                    top: 0,
+                                    left: 0
+                                });
+                                elem.children('div.layui-layer-content').height($this.height() - 95);
+                            });
+                        },
+                        success: function (layero, index) {
+                            //弹出窗口成功后渲染表单
+                            var form = layui.form();
+                            form.render();
+                            form.on('submit(edit)', function (data) {
+                                var datas = {
+                                    busProgrammingTask:{
+                                        chapterId:getCookie("chapterId"),
+                                        problemId:data.field.problemId,
+                                        sort:data.field.sort,
+                                        name:data.field.title,
+                                        content:editor.txt.html()
+                                    }
+                                };
+//                            console.log(JSON.stringify(code)) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                                //这里可以写ajax方法提交表单
+                                bajax.busajax('business.busProgrammingTask.insertOrUpdate', datas, index, function (result) {
+//                                alert(result)
+                                });
+                                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                            });
+                            //console.log(layero, index);
+                        },
+                        end: function () {
+                            addBoxIndex = -1;
+                        }
+                    });
+                });
+            }
+
+        });
+
+        var editBoxIndex = -1;
+        function edit(id) {
+            if (editBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            var type = getCookie('type');
+            if (type == "3") {
+                $.get('form/scratchCodeEdit.html', null, function (form) {
+                    editBoxIndex = layer.open({
+                        type: 1,
+                        title: '编辑代码任务',
+                        content: form,
+                        btn: ['保存', '取消'],
+                        shade: false,
+                        offset: ['50px', '8%'],
+                        area: ['1000px', '500px'],
+                        maxmin: true,
+                        yes: function (index) {
+                            //触发表单的提交事件
+                            $('form.layui-form').find('button[lay-filter=edit]').click();
+                        },
+                        full: function (elem) {
+                            var win = window.top === window.self ? window : parent.window;
+                            $(win).on('resize', function () {
+                                var $this = $(this);
+                                elem.width($this.width()).height($this.height()).css({
+                                    top: 0,
+                                    left: 0
+                                });
+                                elem.children('div.layui-layer-content').height($this.height() - 95);
+                            });
+                        },
+                        success: function (layero, index) {
+                            var courseEdit = {
+                                buscode: {
+                                    id:id
+                                }
+
+                            };
+                            var form = layui.form();
+                            var _form = $('form.layui-form');
+                            //这里可以写ajax方法获取表单
+                            bajax.busajax('business.busCode.get', courseEdit, index, function (result) {
+//                            alert(result.value.pic);
+                                _form.find('input[name=title]').val(result.value.title);
+                                _form.find('input[name=type]').val(result.value.type);
+                                _form.find('input[name=sort]').val(result.value.sort);
+                                editor.txt.html(result.value.message);
+                                _form.find('select[name=content]').attr('select-data', result.value.content);
+                                _form.find('input[name=id]').val(result.value.id);
+//                            console.log(JSON.stringify(result));
+                            },false);
+                            //弹出窗口成功后渲染表单
+                            form.render();
+                            form.on('submit(edit)', function (data) {
+//                            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+//                            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+//                            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                                data.field.title=encode64(encodeURIComponent(data.field.title));
+                                data.field.content=encode64(encodeURIComponent(data.field.content));
+                                data.field.result=encode64(encodeURIComponent(data.field.result));
+                                data.field.message=encode64(encodeURIComponent(editor.txt.html()));
+                                var datas = {
+                                    user:{
+                                        id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+                                    },
+                                    busChapter:{
+                                        id: getCookie("chapterId")
+                                    },
+                                    busCode: data.field
+                                };
+//                            console.log(JSON.stringify(course)) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                                //这里可以写ajax方法提交表单
+                                bajax.busajax('business.busCode.insertOrUpdateCode', datas, index, function (result) {
+
+                                });
+                                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                            });
+                            //console.log(layero, index);
+                        },
+                        end: function () {
+                            editBoxIndex = -1;
+                        }
+                    });
+                });
+            }
+            else if(type == "4"){
+                // ！！
+                $.get('form/codeEditHtml.html', null, function (form) {
+                    editBoxIndex = layer.open({
+                        type: 1,
+                        title: '编辑代码任务',
+                        content: form,
+                        btn: ['保存', '取消'],
+                        shade: false,
+                        offset: ['50px', '8%'],
+                        area: ['1000px', '500px'],
+                        maxmin: true,
+                        yes: function (index) {
+                            //触发表单的提交事件
+                            $('form.layui-form').find('button[lay-filter=edit]').click();
+                        },
+                        full: function (elem) {
+                            var win = window.top === window.self ? window : parent.window;
+                            $(win).on('resize', function () {
+                                var $this = $(this);
+                                elem.width($this.width()).height($this.height()).css({
+                                    top: 0,
+                                    left: 0
+                                });
+                                elem.children('div.layui-layer-content').height($this.height() - 95);
+                            });
+                        },
+                        success: function (layero, index) {
+                            var courseEdit = {
+                                buscode: {
+                                //busProgrammingTask: {
+                                    id:id
+                                }
+                            };
+                            var form = layui.form();
+                            var _form = $('form.layui-form');
+                            //这里可以写ajax方法获取表单
+                            bajax.busajax('business.busCode.get', courseEdit, index, function (result) {
+                                _form.find('input[name=title]').val(result.value.title);
+                                _form.find('input[name=type]').val(result.value.type);
+                                _form.find('input[name=sort]').val(result.value.sort);
+                                editor.txt.html(result.value.message);
+                                _form.find('textarea[name=content]').val(result.value.content);
+                                _form.find('textarea[name=result]').val(result.value.result);
+                                _form.find('input[name=id]').val(result.value.id);
+                            },false);
+                            //弹出窗口成功后渲染表单
+                            form.render();
+                            form.on('submit(edit)', function (data) {
+//                            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+//                            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+//                            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                                data.field.title=encode64(encodeURIComponent(data.field.title));
+                                data.field.content=encode64(encodeURIComponent(data.field.content));
+                                data.field.result=encode64(encodeURIComponent(data.field.result));
+                                data.field.message=encode64(encodeURIComponent(editor.txt.html()));
+                                var datas = {
+                                    user:{
+                                        id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+                                    },
+                                    busChapter:{
+                                        id: getCookie("chapterId")
+                                    },
+                                    busCode: data.field
+                                };
+//                            console.log(JSON.stringify(course)) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                                //这里可以写ajax方法提交表单
+                                bajax.busajax('business.busCode.insertOrUpdateCode', datas, index, function (result) {
+
+                                });
+                                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                            });
+                            //console.log(layero, index);
+                        },
+                        end: function () {
+                            editBoxIndex = -1;
+                        }
+                    });
+                });
+            }
+            else {
+                $.get('form/codeEdit.html', null, function (form) {
+                    editBoxIndex = layer.open({
+                        type: 1,
+                        title: '编辑代码任务',
+                        content: form,
+                        btn: ['保存', '取消'],
+                        shade: false,
+                        offset: ['50px', '8%'],
+                        area: ['1000px', '500px'],
+                        maxmin: true,
+                        yes: function (index) {
+                            //触发表单的提交事件
+                            $('form.layui-form').find('button[lay-filter=edit]').click();
+                        },
+                        full: function (elem) {
+                            var win = window.top === window.self ? window : parent.window;
+                            $(win).on('resize', function () {
+                                var $this = $(this);
+                                elem.width($this.width()).height($this.height()).css({
+                                    top: 0,
+                                    left: 0
+                                });
+                                elem.children('div.layui-layer-content').height($this.height() - 95);
+                            });
+                        },
+                        success: function (layero, index) {
+                            var courseEdit = {
+                                busProgrammingTask: {
+                                    id:id
+                                }
+                            };
+                            var form = layui.form();
+                            var _form = $('form.layui-form');
+                            //这里可以写ajax方法获取表单
+                            bajax.busajax('business.busProgrammingTask.get', courseEdit, index, function (result) {
+//                            alert(result.value.pic);
+                                _form.find('input[name=title]').val(result.value.name);
+                                _form.find('input[name=sort]').val(result.value.sort);
+                                editor.txt.html(result.value.content);
+                                _form.find('input[name=id]').val(result.value.id);
+                                _form.find('input[name=chapterId]').val(result.value.chapterId);
+                                _form.find('input[name=problemId]').val(result.value.problemId);
+//                            console.log(JSON.stringify(result));
+                            },false);
+                            //弹出窗口成功后渲染表单
+                            form.render();
+                            form.on('submit(edit)', function (data) {
+                                var datas = {
+                                    busProgrammingTask:{
+                                        id:data.field.id,
+                                        chapterId:data.field.chapterId,
+                                        problemId:data.field.problemId,
+                                        sort:data.field.sort,
+                                        name:data.field.title,
+                                        content:editor.txt.html()
+                                    }
+                                };
+//                            console.log(JSON.stringify(code)) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                                //这里可以写ajax方法提交表单
+                                bajax.busajax('business.busProgrammingTask.insertOrUpdate', datas, index, function (result) {
+//                                alert(result)
+                                });
+                                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                            });
+                            //console.log(layero, index);
+                        },
+                        end: function () {
+                            editBoxIndex = -1;
+                        }
+                    });
+                });
+            }
+        }
+
+    });
+//    alert(getCookie('chapterId'));
+</script>
+</html>

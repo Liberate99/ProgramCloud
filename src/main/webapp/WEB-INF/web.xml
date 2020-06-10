@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+  <display-name>Archetype Created Web Application</display-name>
+  <!-- 加载Spring配置文件 -->
+
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring/spring.xml</param-value>
+  </context-param>
+
+
+
+  <!-- Spring监听器 -->
+  <listener>
+    <description>Spring监听器</description>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <!-- 防止Spring内存溢出监听器 -->
+  <listener>
+    <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+  </listener>
+
+  <listener>
+    <listener-class>com.yunjuanyunshu.yunfd.listener.YFDListener</listener-class>
+  </listener>
+
+
+
+  <!--静态资源请求-->
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/my/*</url-pattern>
+    <url-pattern>/admin/*</url-pattern>
+    <url-pattern>/scratch/*</url-pattern>
+    <url-pattern>/upload/*</url-pattern>
+    <url-pattern>/userfiles/*</url-pattern>
+    <url-pattern>/scripts/*</url-pattern>
+    <url-pattern>/code/*</url-pattern>
+    <url-pattern>/show/*</url-pattern>
+    <url-pattern>/styles/*</url-pattern>
+    <url-pattern>/favicon.ico</url-pattern>
+    <url-pattern>/crossdomain.xml</url-pattern>
+  </servlet-mapping>
+
+  <!-- 字符集 -->
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+
+  <!--<filter>-->
+    <!--<filter-name>AuthServlet</filter-name>-->
+    <!--<filter-class>com.yunjuanyunshu.modules.servlet.AuthFilter</filter-class>-->
+  <!--</filter>-->
+
+  <filter>
+  <filter-name>AuthFilter</filter-name>
+  <filter-class>com.yunjuanyunshu.modules.servlet.AuthFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!--<filter>-->
+  <!--<filter-name>DelegatingFilterProxy</filter-name>-->
+  <!--<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
+  <!--<init-param>-->
+    <!--<param-name>targetBeanName</param-name>-->
+    <!--<param-value>AuthFilter</param-value>-->
+  <!--</init-param>-->
+  <!--<init-param>-->
+    <!--<param-name>targetFilterLifecycle</param-name>-->
+    <!--<param-value>true</param-value>-->
+  <!--</init-param>-->
+<!--</filter>-->
+
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>*.hsr</url-pattern>
+    <url-pattern>*.html</url-pattern>
+  </filter-mapping>
+  <!--<servlet>-->
+    <!--<servlet-name>FileUploadServlet</servlet-name>-->
+    <!--<servlet-class>com.yunjuanyunshu.modules.servlet.FileUploadServlet</servlet-class>-->
+  <!--</servlet>-->
+  <servlet>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <servlet-class>com.yunjuanyunshu.modules.servlet.ProxyServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>RichtextImgUploadServlet</servlet-name>
+    <servlet-class>com.yunjuanyunshu.modules.servlet.ProxyServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>FileUploadStatusServlet</servlet-name>
+    <servlet-class>com.yunjuanyunshu.modules.servlet.ProxyServlet</servlet-class>
+  </servlet>
+
+  <!--<filter-mapping>-->
+    <!--<filter-name>AuthServlet</filter-name>-->
+    <!--<url-pattern>*.hsr</url-pattern>-->
+  <!--</filter-mapping>-->
+  <!-- 前置控制器 -->
+  <filter>
+    <filter-name>preposeControl</filter-name>
+    <filter-class>com.yunjuanyunshu.yunfd.filter.PreposeControl</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>preposeControl</filter-name>
+    <url-pattern>*.hsr</url-pattern>
+  </filter-mapping>
+  <servlet>
+    <servlet-name>staticPage</servlet-name>
+    <servlet-class>com.yunjuanyunshu.yunfd.servlet.StaticPageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>staticPage</servlet-name>
+    <url-pattern>*.js</url-pattern>
+    <url-pattern>*.png</url-pattern>
+    <url-pattern>*.css</url-pattern>
+    <url-pattern>*.jpeg</url-pattern>
+    <url-pattern>*.jpg</url-pattern>
+    <url-pattern>*.ttf</url-pattern>
+    <url-pattern>*.woff</url-pattern>
+    <url-pattern>*.woff2</url-pattern>
+  </servlet-mapping>
+  <!-- Validate code -->
+  <servlet>
+    <servlet-name>ValidateCodeServlet</servlet-name>
+    <servlet-class>com.yunjuanyunshu.modules.servlet.ValidateCodeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ValidateCodeServlet</servlet-name>
+    <url-pattern>/servlet/validateCodeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FileUploadServlet</servlet-name>
+    <url-pattern>/servlet/fileUploadServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FileUploadStatusServlet</servlet-name>
+    <url-pattern>/servlet/fileUploadStatusServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RichtextImgUploadServlet</servlet-name>
+    <url-pattern>/servlet/richtextImgUploadServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>singlePage</servlet-name>
+    <servlet-class>com.yunjuanyunshu.yunfd.servlet.SinglePageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>singlePage</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+</web-app>

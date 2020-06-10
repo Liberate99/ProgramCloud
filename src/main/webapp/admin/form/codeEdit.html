@@ -1,0 +1,146 @@
+
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <input type="hidden" name="chapterId" value="">
+        <input type="hidden" name="type" id="type" value="">
+        <input type="hidden" name="problemId" id="problemId" value="">
+        <input type="hidden" name="id" id="id" value="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">代码</label>
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-sm" type="button" style="margin-top: 4px;" id="codeConnect">点击关联试题</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <input type="number" name="sort" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容</label>
+            <div class="layui-input-block">
+                <!--<textarea id="editor" name="des" placeholder="请输入内容" autocomplete="off" class="layui-textarea"></textarea>-->
+                <div id="editor" name="message"></div>
+            </div>
+        </div>
+        <!--<div class="layui-form-item">-->
+        <!--<label class="layui-form-label">初始化代码</label>-->
+        <!--<div class="layui-input-inline">-->
+        <!--<textarea type="text" name="content" id="starter" placeholder="请输入" autocomplete="off" class="layui-input" rows="5" style="height: auto"></textarea>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="layui-form-item">-->
+        <!--<label class="layui-form-label">运行结果</label>-->
+        <!--<div class="layui-input-inline">-->
+        <!--<textarea type="text" name="result" id="ender" placeholder="请输入" autocomplete="off" class="layui-input" style="height: auto"></textarea>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+
+<script src="../js/jquery-1.10.0.js"></script>
+<script src="../js/template-native.js"></script>
+<!-- 注意， 只需要引用 JS，无需引用任何 CSS ！！！-->
+<script type="text/javascript" src="js/wangEditor.min.js"></script>
+<script type="text/javascript">
+    var E = window.wangEditor;
+    var editor = new E('#editor');
+    // 或者 var editor = new E( document.getElementById('#editor') )
+    editor.customConfig.uploadImgServer = '/servlet/richtextImgUploadServlet?token='+JSON.parse(getCookie('user')).token;
+    editor.create();
+    layui.use(['paging', 'form', 'busajax'], function () {
+        var $ = layui.jquery,
+                bajax = layui.busajax,
+                paging = layui.paging(),
+                layerTips = parent.layer === undefined ? layui.layer : parent.layer, //获取父窗口的layer对象
+                layer = layui.layer, //获取当前窗口的layer对象
+                form = layui.form();
+        var codeAddIndex = -1;
+        $("#codeConnect").on('click',function () {
+            if (codeAddIndex !== -1) {
+                return;
+            }
+            $.get('form/codeSearch.html', null, function (form) {
+                codeAddIndex = layer.open({
+                    type: 1,
+                    title: '试题库',
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    offset: ['50px', '8%'],
+                    area: ['1000px', '500px'],
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+//						$('form.layui-form').find('button[lay-filter=edit]').click();
+                        var codeId;
+                        $('input[name=codeId]').each(function (e) {
+                            if($(this).is(':checked')){
+                                codeId = $(this).val();
+                                return false;
+                            }
+                        });
+                        if(codeId){
+                            //加载试题信息
+                            var getData = {
+                                ojProblem : {
+                                    id : codeId
+                                }
+                            };
+                            $.ajax({
+                                url: HOST+"business.ojProblem.getProblem.hsr",
+                                type: 'POST',
+                                headers: {
+                                    token: JSON.parse(getCookie('user')).token
+                                },
+                                data: JSON.stringify(getData),
+                                dataType: "json",
+                                success: function(result){
+                                    if(result.code == 0 && result.value){
+                                        $("input[name=title]").val(result.value.ojProblem.name);
+                                        $("#problemId").val(result.value.ojProblem.id);
+                                        editor.txt.html(result.value.ojProblem.description);
+                                        codeAddIndex = -1;
+                                        layer.close(index);
+//										console.log($("input[name=title]"));
+                                    }
+                                },
+                                error:function(xhr){
+                                    alert("错误提示： " + xhr.status + " " + xhr.statusText);
+                                }
+                            });
+                        }
+
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        //弹出窗口成功后渲染表单
+
+                    },
+                    end: function () {
+                        codeAddIndex = -1;
+                    }
+                });
+            });
+        });
+    });
+</script>

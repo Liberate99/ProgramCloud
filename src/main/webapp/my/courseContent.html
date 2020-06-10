@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <!--响应式布局，宽度等于设备宽度-->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <title>实验云</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/head.css">
+    <link rel="stylesheet" type="text/css" href="css/mycourse.css">
+    <link rel="stylesheet" type="text/css" href="css/page.css">
+    <link rel="stylesheet" type="text/css" href="css/courseDetail.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.0.js"></script>
+    <script src="js/jquery.params.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.page.js"></script>
+    <script type="text/javascript" src="js/artTemplate.js"></script>
+    <script type="text/javascript" src="js/template-native.js"></script>
+    <script type="text/javascript" src="layer/layer.js"></script>
+    <script type="text/javascript" src="js/HOST.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <style>
+        .breadcrumb > li {
+            line-height: 30px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="menu">
+    <div class="container con_header">
+        <nav class="navbar" role="navigation">
+            <div class="container-fluid" style="display: flex; flex-direction: row;">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#cloud-navbar-collapse">
+                        <span class="sr-only">切换导航</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">
+                        <img src="img/logo.png" style="width: 50px;">
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="cloud-navbar-collapse">
+                    <ul class="nav navbar-nav" style="width: 80px;">
+                        <li class="active">
+                            <a href="courseLibrary.html">课程库</a>
+                        </li>
+                    </ul>
+                    <div style="float: right; margin-right: 20px; margin-top: 13px;">
+                        <button onclick="show_codeFrame()" style="border-color: transparent;background-color: transparent;color: white; font-size: 110%;font-weight: normal;margin-left: 150px;">进行实验</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+</div>
+<div class="main">
+    <div class="container">
+
+        <!--<div id="chapterMenu" style="background-color: green;width: 30%;height: 100%;">课程目录</div>-->
+        <div id="caseContent">课程内容</div>
+    </div>
+</div>
+<script type="text/javascript" src="js/code.js"></script>
+<script>
+    function show_codeFrame() {
+        console.log("show_codeFrame");
+        console.log(courseId);
+        console.log(chapterId);
+        url = "codeFrame.html?chapterId="+chapterId+"&courseId="+courseId;//此处拼接内容
+        window.location.href = url;
+    }
+</script>
+</body>
+</html>

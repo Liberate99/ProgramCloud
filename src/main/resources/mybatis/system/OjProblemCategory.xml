@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.OjProblemCategoryDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.OjProblemCategory">
+		<id column="id" property="id" />
+		<result column="category_slug" property="categorySlug" />
+		<result column="category_name" property="categoryName" />
+		<result column="parent_id" property="parentId" />
+	</resultMap>
+
+	<resultMap id="ProblemCategoryRelationResultMap" type="com.yunjuanyunshu.modules.entity.OjProblemCategoryRelation">
+		<id column="problem_id" property="problemId" />
+		<result column="category_id" property="categoryId" />
+		<result column="category_slug" property="categorySlug" />
+		<result column="category_name" property="categoryName" />
+	</resultMap>
+
+	<select id="getCategory"
+			parameterType="map"
+			resultMap="ProblemCategoryRelationResultMap"
+			useCache="true">
+		SELECT *
+		FROM oj_problem_category_relation AS pcr
+		INNER JOIN oj_problem_category AS pc
+		WHERE problem_id &gt;= #{lowerId}
+		AND problem_id &lt;= #{upperId} AND pcr.category_id = pc.id
+	</select>
+	<select id="getCategoryByProblemId"
+			parameterType="long"
+			resultMap="BaseResultMap"
+			useCache="true">
+		SELECT pc.id, pc.category_slug, pc.category_name, pc.parent_id
+		FROM oj_problem_category AS pc
+		INNER JOIN oj_problem_category_relation AS pcr
+		ON pcr.category_id = pc.id
+		WHERE pcr.problem_id = #{problemId}
+	</select>
+</mapper>

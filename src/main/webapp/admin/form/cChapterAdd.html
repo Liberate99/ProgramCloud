@@ -1,0 +1,238 @@
+
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <input type="hidden" name="courseId" value="">
+        <input type="hidden" name="createBy" value="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">父章节</label>
+            <div class="layui-input-inline">
+                <select name="parentId" id="pChapter" lay-filter="fzj" lay-verify="required">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <input type="number" name="sort" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类</label>
+            <div class="layui-input-inline">
+                <select name="type" id="dict" lay-filter="leixin" lay-verify="required">
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <label class="layui-form-label" id="video">视频文件</label>
+            <div class="layui-input-block">
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn layui-btn-normal" id="test8">选择文件</button>
+                    <button type="button" class="layui-btn site-demo-active layui-hide" data-type="loading" id="test9">开始上传</button><span id="demoText" style="color: #FF5722; margin-left:20px;"></span>
+                    <!--<button class="layui-btn site-demo-active" data-type="loading" type="button">模拟loading</button>-->
+                </div>
+                <div style="margin-top: 15px; width:300px">
+                    <div class="layui-progress" lay-filter="demo">
+                        <div class="layui-progress-bar" lay-percent="0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">课时</label>
+            <div class="layui-input-inline">
+                <input type="number" name="classtime" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required" disabled value="0">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学分</label>
+            <div class="layui-input-inline">
+                <input type="number" name="score" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">简介</label>
+            <div class="layui-input-block" style="z-index: 100;">
+                <!--<textarea name="des" placeholder="请输入内容" autocomplete="off" class="layui-textarea"></textarea>-->
+                <div id="editor" name="des"></div>
+            </div>
+        </div>
+        <input type="hidden" name="resourceId" class="layui-input" id="resourcePath">
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+
+<script src="../js/jquery-1.10.0.js"></script>
+<script src="../js/template-native.js"></script>
+
+<script>
+    $(document).ready(function(){
+        var form = layui.form();
+        //获取父章节
+        var datac={
+            busCourse:{
+                id:getCookie('courseId')
+            }
+        };
+        var url1=HOST+"business.busChapter.getChaptersByCourseId.hsr";
+        $.ajax({
+            url: url1,
+            type: 'POST',
+            headers: {
+                token: JSON.parse(getCookie('user')).token
+            },
+            data: JSON.stringify(datac),
+            dataType: "json",
+            success: function(result){
+                for (var i= 0;i < result.value.length;i++){
+                    $("#pChapter").append("<option value='"+result.value[i].id+"'>"+result.value[i].title+"</option>");
+                }
+                form.render('select','fzj');
+            },
+            error:function(xhr){
+                alert("错误提示： " + xhr.status + " " + xhr.statusText);
+            }
+        });
+
+        //获取分类
+        var data={
+            dict:{
+                type:'chapter_type'
+            }
+        };
+        var url=HOST+"system.dict.get.hsr";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            headers: {
+                token: JSON.parse(getCookie('user')).token
+            },
+            data: JSON.stringify(data),
+            dataType: "json",
+            success: function(result){
+                for (var i= 0;i < result.value.length;i++){
+                    $("#dict").append("<option value='"+result.value[i].value+"'>"+result.value[i].label+"</option>");
+                }
+                form.render('select','leixin');
+            },
+            error:function(xhr){
+                alert("错误提示： " + xhr.status + " " + xhr.statusText);
+            }
+        });
+
+        form.on('select(leixin)', function(data){
+            if (data.value === "1") {
+                $('#video').parent().removeClass("layui-hide");
+            } else {
+                $('#video').parent().addClass("layui-hide");
+            }
+        });
+
+    });
+
+    layui.use(['upload', 'element'], function(){
+        var $ = layui.jquery
+            ,element = layui.element()
+            ,upload = layui.upload;
+
+        //选完文件后不自动上传
+        upload.render({
+            elem: '#test8'
+            ,url: '/servlet/fileUploadServlet?token='+JSON.parse(getCookie('user')).token
+            ,auto: false
+            ,size: 1024*80 //限制文件大小，单位 KB
+            ,accept: 'video' //视频
+            //,multiple: true
+            ,bindAction: '#test9'
+            ,choose: function(obj){
+
+                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                obj.preview(function(index, file, result){
+                    var demoText = $('#demoText');
+                    demoText.text(file.name);
+                });
+
+                $('.site-demo-active').removeClass("layui-hide");
+            }
+            ,before: function(obj){
+                $('.site-demo-active').addClass("layui-hide");
+            }
+            ,done: function(res){
+                var demoText = $('#demoText');
+                if (res.code == 0) {
+                    $("#resourcePath").val(res.value[0].id);
+                } else {
+                    demoText.text("上传失败!");
+                }
+            }
+        });
+
+        //触发事件
+        var active = {
+            setPercent: function(){
+                //设置50%进度
+                element.progress('demo', '50%')
+            }
+            ,loading: function(othis){
+                var DISABLED = 'layui-btn-disabled';
+                if(othis.hasClass(DISABLED)) return;
+
+                //模拟loading
+                var uploadProcessTimer = setInterval(function(){
+                    $.ajax({
+                        type:"GET",
+                        url:"/servlet/fileUploadStatusServlet",
+                        dataType:"text",
+                        cache:false,
+                        success:function(data){
+
+                            var demoText = $('#demoText');
+                            if(data == null || data == "") {
+                                clearInterval(uploadProcessTimer);
+                                demoText.text("请确认上传文件");
+                                othis.removeClass(DISABLED);
+                            }
+                            if(data=="100%"){
+                                clearInterval(uploadProcessTimer);
+                                layui.element().progress('demo', data);
+                                demoText.text("上传成功,注意点击保存按钮!");
+                                othis.removeClass(DISABLED);
+                            }else{
+                                layui.element().progress('demo', data);
+                            }
+                        }
+                    });
+                }, 100);
+
+                othis.addClass(DISABLED);
+            }
+        };
+
+        $('.site-demo-active').on('click', function(){
+            var othis = $(this), type = $(this).data('type');
+            active[type] ? active[type].call(this, othis) : '';
+        });
+    });
+
+
+</script>
+<!-- 注意， 只需要引用 JS，无需引用任何 CSS ！！！-->
+<script type="text/javascript" src="js/wangEditor.min.js"></script>
+<script type="text/javascript">
+    var E = window.wangEditor;
+    var editor = new E('#editor');
+    // 或者 var editor = new E( document.getElementById('#editor') )
+    // 配置服务器端地址
+    editor.customConfig.debug = true;
+    editor.customConfig.uploadImgServer = '/servlet/richtextImgUploadServlet?token='+JSON.parse(getCookie('user')).token;
+    editor.create()
+</script>

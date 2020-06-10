@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+    <link rel="stylesheet" href="plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="css/global.css" media="all">
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/table.css"/>
+    <script type="text/javascript" src="../my/js/HOST.js"></script>
+</head>
+
+<body>
+<div class="admin-main">
+    <blockquote class="layui-elem-quote">
+        <a href="course.html" class="layui-btn layui-btn-sm">
+            <i class="layui-icon"></i> 返回
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-sm" id="add">
+            <i class="layui-icon">&#xe608;</i> 添加一级章节
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-sm" id="add2">
+            <i class="layui-icon">&#xe608;</i> 添加二级章节
+        </a>
+    </blockquote>
+    <div style="display: block; width: 250px; height: 496px; padding: 10px; border: 1px solid #ddd; overflow: auto;float: left">
+        <h1>章节目录</h1>
+        <hr class="layui-bg-black">
+        <ul id="demo1">
+            <!--<style>-->
+                <!--.cite{-->
+                    <!--overflow: hidden;-->
+                    <!--text-overflow:ellipsis;-->
+                    <!--white-space: nowrap;-->
+                <!--}-->
+            <!--</style>-->
+        </ul>
+    </div>
+    <div id="content"
+         style="display: block; padding: 10px; border: 1px solid #ddd; overflow: auto; vertical-align: top;margin-left: 255px;">
+    </div>
+</div>
+
+<script type="text/javascript" src="plugins/layui/layui.js"></script>
+<script type="text/javascript" src="js/Global.js"></script>
+<script id="content_tpl" type="text/html">
+    <div style="float: left;">
+        <h3>章节详情</h3>
+    </div>
+    <div style="display: inline-block; float: right; height: 40px;">
+        <div class="layui-btn-group">
+            {{# if(d.data.type == 0 || d.data.type == 2){ }}
+            <button data-id="{{ d.data.id }}" data-classify="" id="insert"
+                    class="layui-btn layui-btn-primary layui-btn-sm">编程任务
+            </button>
+            {{# } }}
+            {{# if(window.location.href.indexOf("public") == -1){ }}
+                {{# if(d.data.parentId == ""){ }}
+                <button data-id="{{ d.data.id }}" id="edit" class="layui-btn layui-btn-primary layui-btn-sm"><i
+                        class="layui-icon"></i></button>
+                {{# } else { }}
+                <button data-id="{{ d.data.id }}" id="edit2" class="layui-btn layui-btn-primary layui-btn-sm"><i
+                        class="layui-icon"></i></button>
+                {{# } }}
+                <button data-id="{{ d.data.id }}" id="del" class="layui-btn layui-btn-primary layui-btn-sm"><i
+                        class="layui-icon"></i></button>
+            {{# } }}
+        </div>
+    </div>
+
+    <hr class="layui-bg-black">
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" class="layui-input" disabled value="{{d.data.sort}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" class="layui-input" disabled value="{{d.name}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">课时</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" class="layui-input" disabled value="{{d.data.classtime}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学分</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" class="layui-input" disabled value="{{d.data.score}}">
+            </div>
+        </div>
+        <!--<div class="layui-form-item">-->
+        <!--<label class="layui-form-label">简介</label>-->
+        <!--<div class="layui-input-block">-->
+        <!--<textarea name="des" class="layui-textarea" disabled>{{d.data.des}}</textarea>-->
+        <!--</div>-->
+        <!--</div>-->
+    </div>
+</script>
+
+<script>
+    function createTree(node) {
+        var arr = [];
+        for (var i = 0; i < node.length; i++) {
+            var menuF = new Object();
+            menuF.name = node[i].title;
+            menuF.data = {
+                id: node[i].id,
+                classtime: node[i].classtime,
+                score: node[i].score,
+                sort: node[i].sort,
+                type: node[i].type,
+                parentId: node[i].parentId
+            };
+            if (node[i].children) {
+                var menuC = new Object();
+                var menuChildren = [];
+                for (var j = 0; j < node[i].children.length; j++) {
+                    var name = node[i].children[j].title;
+                    if(name.length >= 10){
+                        name = name.substring(0, 9) + "...";
+                    }
+                    menuC = {
+                        name: name,
+                        data: {
+                            id: node[i].children[j].id,
+                            classtime: node[i].children[j].classtime,
+                            score: node[i].children[j].score,
+                            sort: node[i].children[j].sort,
+                            type: node[i].children[j].type,
+                            parentId: node[i].children[j].parentId
+                        }
+                    };
+                    menuChildren.push(menuC);
+                }
+                menuF.children = menuChildren;
+            }
+            arr.push(menuF);
+        }
+//        console.log(arr);
+        return arr;
+    }
+
+    layui.config({
+        base: 'js/'
+    }).extend({
+        busajax: 'busajax'
+    });
+
+    layui.use(['form', 'tree', 'layer', 'form', 'busajax', 'laytpl'], function () {
+        var form = layui.form
+            , laytpl = layui.laytpl
+            , layer = layui.layer
+            , $ = layui.jquery
+            , bajax = layui.busajax;
+
+        var templeteCourseId = "";
+
+        //获取章节目录
+        var datas = {
+            busCourse: {
+                id: getCookie('courseId')
+            }
+        };
+
+        bajax.busajax('business.busChapter.getTreeChapterList', datas, null, function (result) {
+            if(result.value.length>0){
+                templeteCourseId = result.value[0].courseId;
+            }
+            layui.tree({
+                elem: '#demo1' //指定元素
+                , target: '_blank' //是否新选项卡打开（比如节点返回href才有效）
+                , click: function (item) { //点击节点回调
+//                    layer.msg('当前节名称：'+ item.data.id + '<br>全部参数：'+ JSON.stringify(item));
+                    var getTpl = document.getElementById('content_tpl').innerHTML
+                        , view = document.getElementById('content');
+                    laytpl(getTpl).render(item, function (html) {
+                        view.innerHTML = html;
+                        //获取编辑任务按钮course_classify属性
+                        if (item.data.type == 0 || item.data.type == 2) {
+                            var dd = {
+                                busChapter: {
+                                    courseId: getCookie('courseId')
+                                }
+                            };
+                            bajax.busajax('business.busChapter.getClassifyByChapter', dd, null, function (result) {
+                                if (result.code == 0) {
+                                    $('#insert').attr('data-classify', result.value.classify);
+                                }
+                            }, false);
+                        }
+                        //绑定删除按钮事件
+                        $('#del').on('click', function () {
+                            var _this = $(this);
+                            layer.confirm('您确定要删除吗?', {
+                                btn: ['确定', '取消'], //按钮
+                                shade: false //不显示遮罩
+                            }, function (index) {
+                                // 提交表单的代码，需要你自己写，然后用 layer.close 关闭就可以了，取消可以省略
+                                var chapter = {
+                                    busChapter: {
+                                        id: _this.data('id')
+                                    }
+                                };
+                                bajax.busajax('business.busChapter.deleteChapter', chapter, null);
+                                layer.close(index);
+                            });
+                        });
+                        $('#edit').on('click', function () {
+                            edit($(this).data('id'));
+                        });
+                        $('#edit2').on('click', function () {
+                            edit2($(this).data('id'));
+                        });
+                        $('#insert').on('click', function () {
+                            insert($(this).data('id'), $(this).data('classify'));
+                        });
+                    });
+                }
+                , nodes: createTree(result.value)
+            });
+
+        }, false);
+
+
+        var addBoxIndex = -1;
+        $('#add').on('click', function () {
+            if (addBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('form/pChapterAdd.html', null, function (form) {
+                addBoxIndex = layer.open({
+                    type: 1,
+                    title: '添加一级章节',
+                    content: form,
+                    btn: ['提交', '取消'],
+                    shade: false,
+                    offset: ['100px', '30%'],
+                    area: ['600px', '400px'],
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=edit]').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        //弹出窗口成功后渲染表单
+                        var form = layui.form();
+                        $('form.layui-form').find('input[name=courseId]').val(getCookie('courseId'));
+                        $('form.layui-form').find('input[name=createBy]').val(JSON.parse(getCookie('user')).id);
+                        form.render();
+                        form.on('submit(edit)', function (data) {
+//                            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+//                            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+//                            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                            data.field.title = encode64(encodeURIComponent(data.field.title));
+                            data.field.des = encode64(encodeURIComponent(data.field.des));
+                            data.field.courseId = templeteCourseId;
+                            var chapter = {
+                                busCourse: {
+                                    id: getCookie('courseId')
+                                },
+                                busChapter: data.field
+                            };
+                            //这里可以写ajax方法提交表单
+                            bajax.busajax('business.busChapter.insertOrUpdateChapter', chapter, index, function (result) {
+                            })
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                    },
+                    end: function () {
+                        addBoxIndex = -1;
+                    }
+                });
+            });
+        });
+
+        var add2BoxIndex = -1;
+        $('#add2').on('click', function () {
+            if (add2BoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('form/cChapterAdd.html', null, function (form) {
+                add2BoxIndex = layer.open({
+                    type: 1,
+                    title: '添加二级章节',
+                    content: form,
+                    btn: ['提交', '取消'],
+                    shade: false,
+                    offset: ['50px', '8%'],
+                    area: ['1000px', '500px'],
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=edit]').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        //弹出窗口成功后渲染表单
+                        var form = layui.form();
+                        $('form.layui-form').find('input[name=courseId]').val(getCookie('courseId'));
+                        $('form.layui-form').find('input[name=createBy]').val(JSON.parse(getCookie('user')).id);
+                        form.render();
+                        form.on('submit(edit)', function (data) {
+//                            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+//                            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+//                            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                            data.field.title = encode64(encodeURIComponent(data.field.title));
+                            data.field.des = encode64(encodeURIComponent(editor.txt.html()));
+                            data.field.courseId = templeteCourseId;
+                            var chapter = {
+                                busCourse: {
+                                    id: getCookie('courseId')
+                                },
+                                busChapter: data.field
+                            };
+                            //这里可以写ajax方法提交表单
+                            bajax.busajax('business.busChapter.insertOrUpdateChapter', chapter, index, function (result) {
+                            })
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                    },
+                    end: function () {
+                        add2BoxIndex = -1;
+                    }
+                });
+            });
+        });
+
+        var editBoxIndex = -1;
+
+        function edit(id) {
+            if (editBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('form/pChapterEdit.html', null, function (form) {
+                editBoxIndex = layer.open({
+                    type: 1,
+                    title: '编辑父章节',
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    offset: ['50px', '8%'],
+                    area: ['1000px', '500px'],
+                    zIndex: 19950924,
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=edit]').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        var chapterEdit = {
+                            buschapter: {
+                                id: id
+                            }
+
+                        };
+                        var form = layui.form();
+                        //这里可以写ajax方法获取表单
+                        bajax.busajax('business.busChapter.get', chapterEdit, index, function (result) {
+                            $('form.layui-form').find('input[name=sort]').val(result.value.sort);
+                            $('form.layui-form').find('input[name=title]').val(result.value.title);
+                            $('form.layui-form').find('input[name=classtime]').val(result.value.classtime);
+                            $('form.layui-form').find('input[name=score]').val(result.value.score);
+                            $('form.layui-form').find('textarea[name=des]').val(result.value.des);
+                            $('form.layui-form').find('input[name=id]').val(result.value.id);
+                        }, false);
+                        //弹出窗口成功后渲染表单
+                        form.render();
+                        form.on('submit(edit)', function (data) {
+                            data.field.title = encode64(encodeURIComponent(data.field.title));
+                            data.field.des = encode64(encodeURIComponent(data.field.des));
+                            data.field.courseId = templeteCourseId;
+                            var chapter = {
+                                busCourse: {
+                                    id: getCookie('courseId')
+                                },
+                                busChapter: data.field
+                            };
+
+                            //这里可以写ajax方法提交表单
+                            bajax.busajax('business.busChapter.insertOrUpdateChapter', chapter, index, function (result) {
+
+                            });
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                    },
+                    end: function () {
+                        editBoxIndex = -1;
+                    }
+                });
+            });
+
+        }
+
+        var edit2BoxIndex = -1;
+
+        function edit2(id) {
+            if (edit2BoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('form/cChapterEdit.html', null, function (form) {
+                edit2BoxIndex = layer.open({
+                    type: 1,
+                    title: '编辑章节',
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    offset: ['50px', '8%'],
+                    area: ['1000px', '500px'],
+                    zIndex: 19950924,
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=edit]').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        var chapterEdit = {
+                            buschapter: {
+                                id: id
+                            }
+
+                        };
+                        var form = layui.form();
+                        //这里可以写ajax方法获取表单
+                        bajax.busajax('business.busChapter.get', chapterEdit, index, function (result) {
+                            $('form.layui-form').find('select[name=parentId]').attr('select-data', result.value.parentId);
+                            $('form.layui-form').find('input[name=sort]').val(result.value.sort);
+                            $('form.layui-form').find('input[name=title]').val(result.value.title);
+                            $('form.layui-form').find('select[name=type]').attr('select-data', result.value.type);
+                            
+                            $('form.layui-form').find('input[name=classtime]').val(result.value.classtime);
+                            $('form.layui-form').find('input[name=score]').val(result.value.score);
+//                            $('form.layui-form').find('div[name=des]').html(result.value.des);
+                            editor.txt.html(result.value.des);
+                            $('form.layui-form').find('input[name=resourceId]').val(result.value.resourceId);
+                            $('form.layui-form').find('input[name=id]').val(result.value.id);
+                        }, false);
+                        
+                        //弹出窗口成功后渲染表单
+                        form.render();
+                        form.on('submit(edit)', function (data) {
+                            data.field.title = encode64(encodeURIComponent(data.field.title));
+                            data.field.des = encode64(encodeURIComponent(editor.txt.html()));
+                            data.field.courseId = templeteCourseId;
+                            var chapter = {
+                                busCourse: {
+                                    id: getCookie('courseId')
+                                },
+                                busChapter: data.field
+                            };
+
+                            //这里可以写ajax方法提交表单
+                            bajax.busajax('business.busChapter.insertOrUpdateChapter', chapter, index, function (result) {
+
+                            });
+                            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                        });
+                    },
+                    end: function () {
+                        edit2BoxIndex = -1;
+                    }
+                });
+            });
+
+        }
+
+//        var insertBoxIndex = -1;
+        function insert(id, type) {
+            setCookie('type', type);
+            setCookie('chapterId', id);
+//            parent.tab.tabAdd({
+//                href: 'codeManager.html',
+//                title: '代码任务管理'
+//            });
+            if(window.location.href.indexOf("public") > -1){
+                window.location.href = 'codeManager.html?public=true';
+            }else{
+                window.location.href = 'codeManager.html';
+            }
+        }
+
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.BusClassDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.BusClass">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="course_id" property="courseId" />
+		<result column="organization_id" property="organizationId" />
+		<result column="school_year" property="schoolYear" />
+		<result column="semester" property="semester" />
+		<result column="invitation_code" property="invitationCode" />
+		<result column="begin_date" property="beginDate" />
+		<result column="finish_date" property="finishDate" />
+		<result column="status" property="status" />
+		<result column="create_by" property="createBy" />
+		<result column="create_date" property="createDate" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_date" property="updateDate" />
+		<result column="del_flag" property="delFlag" />
+		<result column="course_name" property="courseName" />
+		<result column="school_year_name" property="schoolYearName" />
+		<result column="semester_name" property="semesterName" />
+	</resultMap>
+
+
+	<select id="selectBusClassesWithName" resultMap="BaseResultMap">
+		SELECT c.id,c.name,b.title AS course_name,s.label AS school_year_name,s1.label AS semester_name
+		,c.invitation_code
+		FROM bus_class c
+		INNER JOIN bus_course b ON c.course_id = b.id
+		INNER JOIN sys_dict s ON s.value = c.school_year AND s.type = 'school_year'
+		INNER JOIN sys_dict s1 ON s1.value = c.semester AND s1.type = 'semester'
+			${ew.sqlSegment}
+	</select>
+</mapper>

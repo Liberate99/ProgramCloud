@@ -1,0 +1,58 @@
+
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="categoryName" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+            <div class="layui-form-mid layui-word-aux">这将是它在站点上显示的名字.</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">别名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="categorySlug" placeholder="请输入" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+            <div class="layui-form-mid layui-word-aux">"别名"是在URL中使用的别称.</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父节点</label>
+            <div class="layui-input-inline">
+                <select name="parentId" lay-filter="fjd" id="parentId" lay-verify="required">
+                    <option value="">--请选择--</option>
+                    <option value="0">无</option>
+                </select>
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+
+<script src="../js/jquery-1.10.0.js"></script>
+<script src="../js/template-native.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var form = layui.form();
+        var data = {};
+        var url=HOST+"business.ojProblemCategory.getParentProblemCategory.hsr";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            headers: {
+                token: JSON.parse(getCookie('user')).token
+            },
+            data: JSON.stringify(data),
+            dataType: "json",
+            success: function(result){
+                for (var i= 0;i < result.value.length;i++){
+                    $("#parentId").append("<option value='"+result.value[i].id+"'>"+result.value[i].categoryName+"</option>");
+                }
+                form.render('select','fjd');
+            },
+            error:function(xhr){
+                alert("错误提示： " + xhr.status + " " + xhr.statusText);
+            }
+        });
+    });
+</script>

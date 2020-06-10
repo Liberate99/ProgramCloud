@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+    <link rel="stylesheet" href="plugins/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="css/global.css" media="all">
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/table.css"/>
+    <style>
+        .search{
+            background-color: #009688;
+            color: white;
+            border: none;
+            outline: none;
+        }
+        ::-webkit-input-placeholder { /* WebKit browsers */
+            color: white;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color: white;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color: white;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+            color: white;
+        }
+        .layui-select-title input{
+            height: 30px;
+            background-color: #009688;
+            font-size: 11px;
+            color: white;
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+<div class="admin-main">
+
+    <blockquote class="layui-elem-quote">
+        <a href="form/problemAdd.html" class="layui-btn layui-btn-sm" id="add">
+            <i class="layui-icon">&#xe608;</i> 添加试题
+        </a>
+        <a href="problemCategories.html" class="layui-btn layui-btn-sm">
+            <i class="layui-icon">&#xe608;</i> 试题分类
+        </a>
+        <div class="layui-form" id="selectIPublic" style="display: inline-block;">
+            <div class="layui-input-inline">
+                <select name="iPublic" id="iPublic" lay-filter="iPublic">
+                    <option value="0">私有</option>
+                    <option value="1">公开</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form" id="selectResType" style="display: inline-block;">
+            <div class="layui-input-inline">
+                <select name="category" id="category" lay-filter="category">
+                    <option value="">请选择试题类型</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-btn layui-btn-sm" style="display: inline-block;">
+            <i class="layui-icon">&#xe615;</i>
+            <input type="text" name="search" id="search" class="search" placeholder="搜索"/>
+        </div>
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>试题列表</legend>
+        <div class="layui-field-box layui-form">
+            <table class="layui-table admin-table">
+                <thead>
+                <tr>
+                    <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+                    <th>#</th>
+                    <th>公开/私有</th>
+                    <th>试题名称</th>
+                    <th>分类</th>
+                    <th>标签</th>
+                    <th>全部提交</th>
+                    <th>通过提交</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="content">
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+    <div class="admin-table-page">
+        <div id="paged" class="page">
+        </div>
+    </div>
+</div>
+<!--模板-->
+<script type="text/html" id="tpl">
+    {{# layui.each(d.value.records, function(index, item){ }}
+    <tr>
+        <td><input name="id" type="checkbox" lay-skin="primary"></td>
+        <td style="max-width: 100px">{{ item.id }}</td>
+        {{# if (item.hasPublic == 1) { }}
+        <td>公开</td>
+        {{# } else { }}
+        <td>私有</td>
+        {{# } }}
+        <td>{{ item.name }}</td>
+        <td style="word-wrap:break-word;max-width: 150px;">{{ item.categoryName}}</td>
+        <td style="word-wrap:break-word;max-width: 150px;">{{ item.tagName}}</td>
+        <td>{{ item.totalSubmission }}</td>
+        <td>{{ item.acceptedSubmission }}</td>
+        {{# if (item.createBy == JSON.parse(getCookie('user')).id) { }}
+        <td>
+            <a href="javascript:;" data-id="{{ item.id }}" data-opt="edit" class="layui-btn layui-btn-xs">编辑</a>
+            <a href="javascript:;" data-id="{{ item.id }}" data-opt="del"
+               class="layui-btn layui-btn-danger layui-btn-xs">删除</a>
+        </td>
+        {{# } else { }}
+        <td>
+            <a href="javascript:;" data-id="{{ item.id }}" data-opt="view" class="layui-btn layui-btn-xs">查看</a>
+        </td>
+        {{# } }}
+    </tr>
+    {{# });
+    }}
+</script>
+<script type="text/javascript" src="../my/js/HOST.js"></script>
+<script type="text/javascript" src="plugins/layui/layui.js"></script>
+<script type="text/javascript" src="js/Global.js"></script>
+<script>
+    layui.config({
+        base: 'js/'
+    }).extend({
+        busajax: 'busajax'
+    });
+
+    layui.use(['paging', 'form', 'busajax'], function () {
+        var $ = layui.jquery,
+            bajax = layui.busajax,
+            paging = layui.paging(),
+            layerTips = parent.layer === undefined ? layui.layer : parent.layer, //获取父窗口的layer对象
+            layer = layui.layer, //获取当前窗口的layer对象
+            form = layui.form();
+        var datas = {
+            page: {
+                current: "1"
+            },
+            user:{
+                id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+            },
+            publicType : $("#iPublic").val() == 1 ? 1 : 0,
+            categoryId : 0
+        };
+        paging.init({
+            openWait: true,
+            url: HOST+'business.ojProblem.getProblemByPage.hsr', //地址
+            elem: '#content', //内容容器
+            params: datas,
+            type: 'POST',
+            tempElem: '#tpl', //模块容器
+            pageConfig: { //分页参数配置
+                elem: '#paged', //分页容器
+                pageSize: 10 //分页大小
+            },
+            success: function () { //渲染成功的回调
+//                alert('渲染成功');
+            },
+            fail: function (msg) { //获取数据失败的回调
+                alert('获取数据失败')
+            },
+            complate: function () { //完成的回调
+//                alert('处理完成');
+                //重新渲染复选框
+                form.render('checkbox');
+                form.on('checkbox(allselector)', function (data) {
+                    var elem = data.elem;
+
+                    $('#content').children('tr').each(function () {
+                        var $that = $(this);
+                        //全选或反选
+                        $that.children('td').eq(0).children('input[type=checkbox]')[0].checked = elem.checked;
+                        form.render('checkbox');
+                    });
+                });
+
+                //绑定所有编辑按钮事件
+                $('#content').children('tr').each(function () {
+                    var $that = $(this);
+
+                    $that.children('td:last-child').children('a[data-opt=edit]').on('click', function () {
+//                        console.log($(this).data('id'));
+                        setCookie('problemId',$(this).data('id'));
+                        window.location.href = 'form/problemEdit.html';
+                    });
+                    $that.children('td:last-child').children('a[data-opt=view]').on('click', function () {
+//                        console.log($(this).data('id'));
+                        setCookie('problemId',$(this).data('id'));
+                        window.location.href = 'form/problemEdit.html?view=true';
+                    });
+                    $that.children('td:last-child').children('a[data-opt=del]').on('click', function () {
+                        var _this = $(this);
+                        layer.confirm('您确定要删除吗?', {
+                            btn: ['确定','取消'], //按钮
+                            shade: false //不显示遮罩
+                        }, function(index){
+                            // 提交表单的代码，需要你自己写，然后用 layer.close 关闭就可以了，取消可以省略
+                            var datas = {
+                                ojProblem: {
+                                    id: _this.data('id')
+                                }
+                            };
+                            bajax.busajax('business.ojProblem.deleteProblem', datas, null);
+                            layer.close(index);
+                        });
+                    });
+
+                });
+
+            }
+        });
+
+        $.ajax({
+            url: HOST + 'business.ojProblemCategory.getAllProblemCategoryList.hsr',
+            type: 'POST',
+            headers: {
+                token: JSON.parse(getCookie('user')).token
+            },
+            data: {},
+            dataType: "json",
+            success: function(result){
+                if (result.code == 0 && result.value) {
+                    $('#category').append("<option value='0'>所有类型</option>");
+                    for (var i= 0;i < result.value.length;i++) {
+                        $('#category').append("<option value='"+result.value[i].id+"'>"+result.value[i].categoryName+"</option>");
+                    }
+                    form.render();
+                }
+            },
+            error:function(xhr){
+                alert("错误提示： " + xhr.status + " " + xhr.statusText);
+            }
+        });
+
+        $('#search').keyup(function (e) {
+            if(e.keyCode == 13){
+                datas={
+                    page:{
+                        current:"1"
+                    },
+                    user:{
+                        id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+                    },
+                    keyword : $(this).val(),
+                    categoryId : $("#category").val()?$("#category").val():0,
+                    publicType : $("#iPublic").val() == 1 ? 1 : 0
+                };
+                paging.get(JSON.stringify(datas));
+            }
+        });
+
+        form.on('select(category)', function(type){
+            datas={
+                page:{
+                    current : "1"
+                },
+                user:{
+                    id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+                },
+                keyword : $("#search").val(),
+                categoryId : type.value?type.value:0,
+                publicType : $("#iPublic").val() == 1 ? 1 : 0
+            };
+            paging.get(JSON.stringify(datas));
+        });
+
+        form.on('select(iPublic)', function(type){
+            datas={
+                page:{
+                    current : "1"
+                },
+                user:{
+                    id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+                },
+                keyword : $("#search").val(),
+                categoryId : $("#category").val()?$("#category").val():0,
+                publicType : type.value == 1 ? 1 : 0
+            };
+            paging.get(JSON.stringify(datas));
+        });
+    });
+
+</script>
+</body>
+
+</html>

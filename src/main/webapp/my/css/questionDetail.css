@@ -1,0 +1,242 @@
+a,a:hover,a:focus{
+    text-decoration: none;
+}
+.main .question-container{
+    background-color: transparent;
+    padding: 0;
+}
+.question-l,.question-r,.answer-box,.my-answer-box{
+    background-color: #fff;
+}
+.question-l{
+    padding: 40px 30px 30px 30px;
+}
+.shadow{
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+}
+#ques-title{
+    font-size: 20px;
+    color: #555;
+}
+.ques-info,.answer-time{
+    line-height: 40px;
+    font-size: 12px;
+    color: #999;
+    border-bottom: 1px solid #eee;
+}
+#ques-desc{
+    margin: 20px 0;
+    line-height: 30px;
+}
+.ques-info>span{
+    margin-right: 15px;
+}
+#ques-asker,#ques-chapter{
+    color: #999;
+    font-weight: bold;
+}
+#ques-asker:hover,#ques-chapter:hover{
+    color: #00a0e9;
+}
+.question-tit{
+    margin-bottom: 5px;
+    line-height: 30px;
+}
+.coin-img{
+    width: 20px;
+    margin: 0 5px 0 10px;
+    vertical-align: sub;
+}
+#bonur{
+    color: #666;
+    line-height: 30px;
+}
+.answer-box{
+    padding: 30px;
+    margin-top: 15px;
+    overflow: hidden;
+}
+.all-ques{
+    font-size: 16px;
+    line-height: 30px;
+}
+.answer,#other-ques{
+    border-top: 1px solid #eee;
+    padding: 10px 0;
+}
+.answer-img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+}
+.answer-name{
+    line-height: 50px;
+    color: #666;
+    font-weight: bold;
+    font-size: 13px;
+}
+.answer-main{
+    line-height: 30px;
+    margin: 15px 0;
+    min-height: 20px;
+}
+.answer-time{
+    border-bottom: none;
+    margin-bottom: 0;
+    line-height: 20px;
+}
+.question-r{
+    padding: 15px;
+}
+#other-ques>li{
+    list-style-type: none;
+    margin: 10px 0;
+}
+.ques-link{
+    line-height: 24px;
+    color: #666;
+    font-size: 14px;
+}
+.ques-link:hover{
+    color: #00a2d4;
+}
+.margin-top-f{
+    margin-top: 4px;
+}
+.margin-padding-no{
+    margin: 0;
+    padding: 0;
+}
+#myAnswer{
+    width: 100%;
+}
+.my-answer-box{
+    padding: 30px;
+    margin-top: 15px;
+    overflow: hidden;
+}
+.sub-answer{
+    float: right;
+    margin-top: 12px;
+    font-size: 13px;
+    padding: 8px 20px;
+    background-color: #238aff;
+    border: 1px solid #238aff;
+}
+.sub-answer:hover,.sub-answer:focus{
+    background-color: #238aff;
+    border: 1px solid #238aff;
+}
+.zan,.recommend{
+    float: right;
+    line-height: 20px;
+    color: #999;
+    cursor: pointer;
+}
+.zan:hover,.recommend:hover{
+    color: #999;
+}
+.zan-img{
+    width: 20px;
+    vertical-align: sub;
+}
+.agree-num{
+    padding: 0 6px;
+}
+.recommend{
+    margin-right: 25px;
+}
+.ques-recommend,.adopt-answer,.del-link{
+    color: #429BFF;
+    border: 1px solid #429BFF;
+    padding: 3px 12px;
+    border-radius: 4px;
+    float: right;
+    font-size: 13px;
+}
+.ques-recommend:focus,.ques-recommend:hover,.adopt-answer:focus,.adopt-answer:hover{
+    box-shadow: 0 0 2px 1px #ddddff;
+    color: #429BFF;
+}
+.ques-recommend-act,.adopt-answer-act{
+    background-color: #429BFF;
+    color: #fff;
+}
+.ques-recommend-act:focus,.ques-recommend-act:hover,.adopt-answer-act:focus,.adopt-answer-act:hover{
+    color: #fff;
+}
+.adopt-answer{
+    opacity: 0;
+    transition: all .3s;
+    line-height: 30px;
+    margin-top: 10px;
+}
+.answer:hover .adopt-answer{
+    opacity: 1;
+}
+.pd-15{
+    padding: 15px;
+}
+.pagination{
+    padding: 0;
+    float: right;
+}
+.no-answer,.no-answer>a{
+    color: #999;
+}
+.no-answer{
+    line-height: 60px;
+    border-top: 1px solid #eee;
+}
+.no-answer>a{
+    text-decoration: underline;
+}
+.no-answer>a:hover,.no-answer>a:focus{
+    color: #429BFF;
+}
+.del-link{
+    /*background-color: #fe483f;*/
+    /*color: #fff;*/
+    border: 1px solid #c21a0c;
+    color: #c21a0c;
+}
+.del-link:hover,.del-link:focus{
+    color: #c21a0c;
+}
+.recommended{
+    font-size: 13px;
+    color: #71ba4c;
+}
+.recommend-tag{
+    width: 22px;
+    display: none;
+}
+#ques-status{
+    margin: 0 10px;
+    font-size: 14px;
+    color: #71ba4c;
+}
+.codeViewLink,#codeView{
+    font-size: 12px;
+    color: #999;
+}
+.codeViewLink:hover,.codeViewLink:focus,#codeView:hover,#codeView:focus{
+    color: #238aff;
+}
+.attachBox{
+    float: right;
+    margin: 12px 10px 0 0;
+    line-height: 36px;
+    font-size: 12px;
+    color: #999;
+}
+@media screen and (max-width: 700px){
+    .question-l,.answer-box,.my-answer-box{
+        padding: 15px;
+    }
+    .question-row{
+        margin: 0;
+    }
+}

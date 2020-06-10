@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.OjCheckpointDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.OjCheckpoint">
+		<id column="problem_id" property="problemId" />
+		<result column="checkpoint_no" property="checkpointNo" />
+		<result column="checkpoint_score" property="checkpointScore" />
+		<result column="checkpoint_input" property="checkpointInput" />
+		<result column="checkpoint_output" property="checkpointOutput" />
+	</resultMap>
+
+	<insert id="addCheckpoint"
+			parameterType="com.yunjuanyunshu.modules.entity.OjCheckpoint"
+			flushCache="true">
+		INSERT INTO oj_checkpoint (problem_id, checkpoint_no, checkpoint_score, checkpoint_input, checkpoint_output)
+		VALUES (#{problemId}, #{checkpointNo}, #{checkpointScore}, #{checkpointInput}, #{checkpointOutput})
+	</insert>
+
+	<delete id="deleteCheckpoint"
+			parameterType="long"
+			flushCache="true">
+		DELETE FROM oj_checkpoint
+		WHERE problem_id = #{problemId}
+	</delete>
+</mapper>

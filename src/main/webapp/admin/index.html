@@ -1,0 +1,476 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>实验云后台</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+
+		<link rel="stylesheet" href="plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="css/global.css" media="all">
+		<link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+		<script type="text/javascript" src="../my/js/HOST.js"></script>
+	</head>
+
+	<body>
+		<div class="layui-layout layui-layout-admin" style="border-bottom: solid 5px #1aa094;">
+			<div class="layui-header header header-demo">
+				<div class="layui-main">
+					<div class="admin-login-box">
+						<a class="logo" style="left: 0;" href="http://">
+							<span style="font-size: 22px;">实验云</span>
+						</a>
+						<div class="admin-side-toggle">
+							<i class="fa fa-bars" aria-hidden="true"></i>
+						</div>
+						<div class="admin-side-full">
+							<i class="fa fa-life-bouy" aria-hidden="true"></i>
+						</div>
+
+					</div>
+					<ul class="layui-nav admin-header-item">
+						<!--<li class="layui-nav-item">-->
+							<!--<a href="javascript:;">清除缓存</a>-->
+						<!--</li>-->
+                        <!--<li class="layui-nav-item" id="pay">-->
+                            <!--<a href="javascript:;">捐赠我</a>-->
+                        <!--</li>-->
+						<!--<li class="layui-nav-item">-->
+							<!--<a href="javascript:;">浏览网站</a>-->
+						<!--</li>-->
+						<!--<li class="layui-nav-item">-->
+							<!--<a   target="_blank" href="http://code.imayuan.com/my/scratch/ide.html">Scratch 3.0 在线编程</a>-->
+						<!--</li>-->
+						<li class="layui-nav-item">
+							<a href="javascript:;" class="admin-header-user">
+								<img id="userImg" src="images/0.jpg" />
+								<span id="userName" >beginner</span>
+							</a>
+							<dl class="layui-nav-child">
+								<dd>
+									<a href="javascript:;" id="userInfo"><i class="fa fa-user-circle" aria-hidden="true"></i> 个人信息</a>
+								</dd>
+								<dd>
+									<a href="javascript:;" id="collegeInfo"><i class="fa fa-user-circle" aria-hidden="true"></i> 院校信息</a>
+								</dd>
+								<!--<dd>-->
+									<!--<a href="javascript:;"><i class="fa fa-gear" aria-hidden="true"></i> 设置</a>-->
+								<!--</dd>-->
+								<!--<dd id="lock">-->
+									<!--<a href="javascript:;">-->
+										<!--<i class="fa fa-lock" aria-hidden="true" style="padding-right: 3px;padding-left: 1px;"></i> 锁屏 (Alt+L)-->
+									<!--</a>-->
+								<!--</dd>-->
+								<dd>
+									<a href="javascript:;" onclick="logOutSys()"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a>
+								</dd>
+							</dl>
+						</li>
+					</ul>
+					<ul class="layui-nav admin-header-item-mobile">
+						<li class="layui-nav-item">
+							<a href="login.html"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="layui-side layui-bg-black" id="admin-side">
+				<div class="layui-side-scroll" id="admin-navbar-side" lay-filter="side"></div>
+			</div>
+			<div class="layui-body" style="bottom: 0;border-left: solid 2px #1AA094;" id="admin-body">
+				<div class="layui-tab admin-nav-card layui-tab-brief" lay-filter="admin-tab">
+					<ul class="layui-tab-title">
+						<li class="layui-this">
+							<i class="fa fa-dashboard" aria-hidden="true"></i>
+							<cite>控制面板</cite>
+						</li>
+					</ul>
+					<div class="layui-tab-content" style="min-height: 150px; padding: 5px 0 0 0;">
+						<div class="layui-tab-item layui-show">
+							<iframe src="main.html"></iframe>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-footer footer footer-demo" id="admin-footer">
+				<div class="layui-main">
+					<p>2017 &copy;
+						<a href="http://www.imayuan.com/">编程云</a>
+					</p>
+				</div>
+			</div>
+			<div class="site-tree-mobile layui-hide">
+				<i class="layui-icon">&#xe602;</i>
+			</div>
+			<div class="site-mobile-shade"></div>
+			
+			<!--锁屏模板 start-->
+			<script type="text/template" id="lock-temp">
+				<div class="admin-header-lock" id="lock-box">
+					<div class="admin-header-lock-img">
+						<img src="images/0.jpg"/>
+					</div>
+					<div class="admin-header-lock-name" id="lockUserName">beginner</div>
+					<input type="text" class="admin-header-lock-input" value="输入密码解锁.." name="lockPwd" id="lockPwd" />
+					<button class="layui-btn layui-btn-sm" id="unlock">解锁</button>
+				</div>
+			</script>
+		</div>
+		<!--锁屏模板 end -->
+		<script type="text/javascript" src="js/jquery-1.10.0.js"></script>
+		<script type="text/javascript" src="plugins/layui/layui.js"></script>
+		<script type="text/javascript" src="datas/nav.js"></script>
+		<script type="text/javascript" src="js/Global.js"></script>
+		<script src="js/index.js"></script>
+		<script>
+			layui.config({
+				base: 'js/'
+			}).extend({
+				busajax: 'busajax'
+			});
+			layui.use(['layer','form','busajax'], function() {
+				var $ = layui.jquery,
+						bajax = layui.busajax,
+						layer = layui.layer,
+						form = layui.form();
+
+				//判断教师院校信息是否完善
+				var userCookie = JSON.parse(getCookie('user'));
+				var schoolInfoIndex = -1;
+				if(userCookie.identityRole == '1'){
+					var userData = {
+						user:{
+							id:userCookie.id,
+							identityRole:userCookie.identityRole
+						}
+					};
+					$.ajax({
+						url: HOST+"system.user.getCollegeInfo.hsr",
+						type: 'POST',
+						headers: {
+							token: JSON.parse(getCookie('user')).token
+						},
+						data: JSON.stringify(userData),
+						dataType: "json",
+						success: function(result){
+							if(result.code == -1){
+								showCollegeInfo();
+							}
+						},
+						error:function(xhr){
+							alert("错误提示： " + xhr.status + " " + xhr.statusText);
+						}
+					});
+				}
+
+				//院校信息展示弹窗
+				function showCollegeInfo(info) {
+					$.get('form/schoolInfo.html',null,function(form){
+						schoolInfoIndex = layer.open({
+							type: 1,
+							title: '院校信息',
+							content: form,
+							btn: ['保存', '取消'],
+							shade: false,
+							offset: ['100px', '30%'],
+							area: ['660px', '560px'],
+							maxmin: true,
+							yes: function (index) {
+								//触发表单的提交事件
+								$('form.layui-form').find('button[lay-filter=edit]').click();
+							},
+							full: function (elem) {
+								var win = window.top === window.self ? window : parent.window;
+								$(win).on('resize', function () {
+									var $this = $(this);
+									elem.width($this.width()).height($this.height()).css({
+										top: 0,
+										left: 0
+									});
+									elem.children('div.layui-layer-content').height($this.height() - 95);
+								});
+							},
+							success: function (layero, index) {
+								//弹出窗口成功后渲染表单
+								var form = layui.form();
+								if(info){
+									getCollegeList(form,info);
+									getTeacherTitle(form,info);
+									$("#workId").val(info.workId);
+									$('#college').val(info.collegeId);
+									$('#department').val(info.departmentId);
+									$('#major').val(info.major);
+									$('#rank').val(info.rankId);
+									$('#desc').val(info.desc);
+									$('#id').val(info.id);
+								}else{
+									getCollegeList(form);
+									getTeacherTitle(form);
+								}
+								$('#userId').val(userCookie.id);
+//								form.render();
+//								form.render('select');
+								form.on('submit(edit)', function (data) {
+									console.log(data.elem); //被执行事件的元素DOM对象，一般为button对象
+									console.log(data.form); //被执行提交的form对象，一般在存在form标签时才会返回
+									console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value}
+									var usr = {
+										busTeacherInfo: data.field
+									};
+//											//这里可以写ajax方法提交表单
+									bajax.busajax('business.busTeacherInfo.insertOrUpdateTeacher', usr, index, function (result) {
+										if (result.code == 0) {
+											layer.msg("保存成功",{time: 2000, icon:1});
+										}else {
+											layer.msg("保存失败",{time: 2000, icon:5});
+										}
+									});
+									return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+								});
+							},
+							end: function () {
+								schoolInfoIndex = -1;
+							}
+						});
+					});
+				}
+
+				//获取学校列表
+				function getCollegeList(form,info) {
+					var data = {};
+					$.ajax({
+						url: HOST + 'system.organization.getCollegeSelect.hsr',
+						type: 'POST',
+						headers: {
+							token: JSON.parse(getCookie('user')).token
+						},
+						data: JSON.stringify(data),
+						dataType: "json",
+						success: function(result){
+							if (result.code == 0) {
+								for (var i= 0;i < result.value.length;i++) {
+									if(info && info.collegeId && info.collegeId == result.value[i].id){
+										$('#college').append("<option value='"+result.value[i].id+"' selected='selected'>"+result.value[i].name+"</option>");
+										getDepartment();
+									}else {
+										$('#college').append("<option value='"+result.value[i].id+"'>"+result.value[i].name+"</option>");
+									}
+								}
+								form.render('select');
+							}
+						},
+						error:function(xhr){
+							alert("错误提示： " + xhr.status + " " + xhr.statusText);
+						}
+					});
+					function getDepartment() {
+						var datas = {
+							organization:{
+								id : $('#college').val()
+							}
+						};
+						$.ajax({
+							url: HOST + 'system.organization.getDepartmentSelect.hsr',
+							type: 'POST',
+							headers: {
+								token: JSON.parse(getCookie('user')).token
+							},
+							data: JSON.stringify(datas),
+							dataType: "json",
+							success: function (result) {
+								if (result.code == 0) {
+									$('#department').empty();
+									$('#department').append('<option value="">--请选择--</option>');
+									for (var i= 0;i < result.value.length;i++) {
+										if(info && info.departmentId && info.departmentId == result.value[i].id){
+											$('#department').append("<option value='"+result.value[i].id+"' selected='selected'>"+result.value[i].name+"</option>");
+										}else{
+											$('#department').append("<option value='"+result.value[i].id+"'>"+result.value[i].name+"</option>");
+										}
+									}
+									form.render('select');
+								}
+							},
+							error: function (xhr) {
+								alert("错误提示： " + xhr.status + " " + xhr.statusText);
+							}
+						});
+					}
+					form.on('select(college)',function (type) {
+						getDepartment();
+					});
+
+				}
+
+				//获取教师职称列表
+				function getTeacherTitle(form,info) {
+					var data={
+						dict:{
+							type:'teacher_title'
+						}
+					};
+					$.ajax({
+						url: HOST + 'system.dict.get.hsr',
+						type: 'POST',
+						headers: {
+							token: JSON.parse(getCookie('user')).token
+						},
+						data: JSON.stringify(data),
+						dataType: "json",
+						success: function (result) {
+							if (result.code == 0) {
+								for (var i= 0;i < result.value.length;i++) {
+									if (info && info.rankId && info.rankId == result.value[i].id) {
+										$('#rank').append("<option value='"+result.value[i].id+"' selected>"+result.value[i].label+"</option>");
+									} else {
+										$('#rank').append("<option value='"+result.value[i].id+"'>"+result.value[i].label+"</option>");
+									}
+								}
+								form.render('select');
+							}
+						},
+						error: function (xhr) {
+							alert("错误提示： " + xhr.status + " " + xhr.statusText);
+						}
+					});
+				}
+
+				$("#collegeInfo").on('click',function () {
+					if(schoolInfoIndex != -1){
+						return;
+					}
+					var userData = {
+						user:{
+							id:userCookie.id,
+							identityRole:userCookie.identityRole
+						}
+					};
+					$.ajax({
+						url: HOST+"system.user.getCollegeInfo.hsr",
+						type: 'POST',
+						headers: {
+							token: JSON.parse(getCookie('user')).token
+						},
+						data: JSON.stringify(userData),
+						dataType: "json",
+						success: function(result){
+							if(result.code == -1){
+								showCollegeInfo();
+							}else if(result.code == 0 && result.value){
+								showCollegeInfo(result.value);
+							}
+						},
+						error:function(xhr){
+							alert("错误提示： " + xhr.status + " " + xhr.statusText);
+						}
+					});
+				});
+
+				//用户个人信息弹窗
+				var userInfoIndex = -1;
+				$('#userInfo').on('click', function() {
+					if(userInfoIndex !== -1) {
+						return;
+					}
+					$.get('form/userInfo.html',null,function(form){
+						userInfoIndex = layer.open({
+							type: 1,
+							title: '用户信息',
+							content: form,
+							btn: ['保存', '取消'],
+							shade: false,
+							offset: ['100px', '30%'],
+							area: ['600px', '400px'],
+							maxmin: true,
+							yes: function (index) {
+								//触发表单的提交事件
+								$('form.layui-form').find('button[lay-filter=edit]').click();
+							},
+							full: function (elem) {
+								var win = window.top === window.self ? window : parent.window;
+								$(win).on('resize', function () {
+									var $this = $(this);
+									elem.width($this.width()).height($this.height()).css({
+										top: 0,
+										left: 0
+									});
+									elem.children('div.layui-layer-content').height($this.height() - 95);
+								});
+							},
+							success: function (layero, index) {
+								//弹出窗口成功后渲染表单
+								var userData = {
+									user:{
+										id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+									}
+								};
+//									console.log(JSON.parse(getCookie('user')));
+								var form = layui.form();
+								bajax.busajax('system.user.get', userData, index, function (result) {
+									$('form.layui-form').find('input[name=loginName]').val(result.value.loginName);
+									$('form.layui-form').find('input[name=name]').val(result.value.name);
+									$('form.layui-form').find('input[name=email]').val(result.value.email);
+									$('form.layui-form').find('input[name=phone]').val(result.value.phone);
+									$('form.layui-form').find('input[name=id]').val(result.value.id);
+//                                        console.log(result);
+								},false);
+
+								form.render();
+								form.on('submit(edit)', function (data) {
+									console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+									console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+									console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+
+									var usr = {
+										user: data.field
+									};
+
+									//这里可以写ajax方法提交表单
+									bajax.busajax('system.user.insertOrUpdate', usr, index, function (result) {
+
+									});
+									return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+								});
+								//console.log(layero, index);
+							},
+							end: function () {
+								userInfoIndex = -1;
+							}
+						});
+					});
+				});
+
+				$('#video1').on('click', function() {
+					layer.open({
+						title: 'YouTube',
+						maxmin: true,
+						type: 2,
+						content: 'video.html',
+						area: ['800px', '500px']
+					});
+				});
+				$('#pay').on('click', function () {
+					layer.open({
+						title: false,
+						type: 1,
+						content: '<img src="images/xx.png" />',
+						area: ['500px', '250px'],
+						shadeClose: true
+					});
+				});
+
+
+			});
+		</script>
+	</body>
+	<ul id="layer_notice"  class="layer_notice layui-layer-wrap" style="display: none;">
+		<li><a>令牌过期，请重新登录！</a></li>
+	</ul>
+
+</html>

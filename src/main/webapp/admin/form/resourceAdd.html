@@ -1,0 +1,104 @@
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <!--<div class="layui-form-item">-->
+            <!--<label class="layui-form-label">名称</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+        <fieldset class="layui-elem-field" style="margin-bottom: 22px;">
+            <legend style="font-size: 14px;color: #aaa;">本地文件上传</legend>
+            <div class="layui-form-item" style="margin:20px 0;">
+                <label class="layui-form-label">文件</label>
+                <div class="layui-input-inline" style="width: 300px;">
+                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" id="upload" style="margin-top: 4px;"><i class="layui-icon">&#xe654;</i> 上传文件</button>
+                    <button type="button" class="layui-btn site-demo-active layui-hide layui-btn-sm" data-type="loading" id="startLoad" style="margin-top: 4px;">开始上传</button><span id="demoText" style="color: #FF5722; margin-left:20px;"></span>
+                    <!--<input type="file" name="file" lay-title="点击上传" lay-type="file" class="layui-upload-file">-->
+                    <!--<span id="path"></span>-->
+                    <!--<input type="text" name="pre" placeholder="请输入" autocomplete="off" class="layui-input">-->
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend style="font-size: 14px;color: #aaa;">网络文件上传</legend>
+            <div class="layui-form-item" style="margin-top: 20px;">
+                <label class="layui-form-label">文件简介</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="pre" placeholder="请输入" autocomplete="off" class="layui-input layui-input-sm">
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-bottom: 20px;">
+                <label class="layui-form-label">文件url</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="url" placeholder="请输入" autocomplete="off" class="layui-input layui-input-sm">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">文件类型</label>
+                <div class="layui-input-inline">
+                    <select name="type">
+                        <option value=""></option>
+                        <option value="image">image</option>
+                        <option value="video">video</option>
+                        <option value="pdf">pdf</option>
+                        <option value="ppt">ppt</option>
+                        <option value="doc">doc</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+
+<script src="../js/jquery-1.10.0.js"></script>
+<script src="../js/template-native.js"></script>
+<script>
+    layui.use('upload', function(){
+        var $ = layui.jquery
+                ,upload = layui.upload;
+        upload.render({
+            elem: '#upload'
+            ,url: '/servlet/fileUploadServlet?token='+JSON.parse(getCookie('user')).token
+            ,auto: false
+            ,size: 1024*80 //限制文件大小，单位 KB
+//            ,accept: 'video' //视频
+            //,multiple: true
+            ,bindAction: '#startLoad'
+            ,choose: function(obj){
+
+                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                obj.preview(function(index, file, result){
+                    var demoText = $('#demoText');
+                    demoText.text(file.name);
+                });
+
+                $('.site-demo-active').removeClass("layui-hide");
+            }
+            ,before: function(obj){
+                $('.site-demo-active').addClass("layui-hide");
+            }
+            ,done: function(res){
+                var demoText = $('#demoText');
+                if (res.code == 0) {
+                    demoText.text("上传成功!");
+//                    $("#resourcePath").val(res.value[0].id);
+                } else {
+                    demoText.text("上传失败!");
+                }
+            }
+        });
+//        layui.upload({
+//            url: '/servlet/fileUploadServlet?token='+JSON.parse(getCookie('user')).token,
+////			elem: '', //指定原始元素，默认直接查找class="layui-upload-file"
+//            method: 'post', //上传接口的http类型
+//            success: function(res){
+//                console.log(res);
+////				alert(res.value[0].url)
+////                $("#picPath").val(res.value[0].url);
+////				LAY_demo_upload.src = res.url;
+//                $("#path").html("上传成功!");
+//            }
+//        });
+    });
+</script>

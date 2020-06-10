@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.BusProductCommentDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.BusProductComment">
+		<id column="id" property="id" />
+		<result column="product_id" property="productId" />
+		<result column="content" property="content" />
+		<result column="createBy" property="createBy" />
+		<result column="createName" property="createName" />
+		<result column="createTime" property="createTime" />
+	</resultMap>
+
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.OjProblemDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.OjProblem">
+		<id column="id" property="id" />
+		<result column="has_public" property="hasPublic" />
+		<result column="time_limit" property="timeLimit" />
+		<result column="memory_limit" property="memoryLimit" />
+		<result column="name" property="name" />
+		<result column="description" property="description" />
+		<result column="has_input" property="hasInput" />
+		<result column="input_format" property="inputFormat" />
+		<result column="sample_input" property="sampleInput" />
+		<result column="has_output" property="hasOutput" />
+		<result column="output_format" property="outputFormat" />
+		<result column="sample_output" property="sampleOutput" />
+		<result column="has_checkpoint" property="hasCheckpoint" />
+		<result column="has_hint" property="hasHint" />
+		<result column="hint" property="hint" />
+		<result column="create_by" property="createBy" />
+		<result column="create_time" property="createTime" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_time" property="updateTime" />
+		<result column="del_flag" property="delFlag" />
+		<result column="total_submission" property="totalSubmission" />
+		<result column="accepted_submission" property="acceptedSubmission" />
+	</resultMap>
+
+	<insert id="addProblem"
+			parameterType="com.yunjuanyunshu.modules.entity.OjProblem"
+			flushCache="true"
+			keyProperty="id"
+			keyColumn="id"
+			useGeneratedKeys="true">
+		INSERT INTO oj_problem (has_public, time_limit, memory_limit, name, description, has_input,
+		input_format, sample_input, has_output, output_format, sample_output, has_checkpoint, has_hint, hint,
+		create_by, create_time, update_by, update_time)
+		VALUES (#{hasPublic}, #{timeLimit}, #{memoryLimit}, #{name}, #{description}, #{hasInput}, #{inputFormat},
+		#{sampleInput}, #{hasOutput}, #{outputFormat}, #{sampleOutput}, #{hasCheckpoint}, #{hasHint}, #{hint},
+		#{createBy}, now(), #{updateBy}, now())
+	</insert>
+
+	<update id="updateProblem"
+			parameterType="com.yunjuanyunshu.modules.entity.OjProblem"
+			flushCache="true">
+		UPDATE oj_problem
+		SET has_public = #{hasPublic}, time_limit = #{timeLimit}, memory_limit = #{memoryLimit}, name = #{name},
+		description = #{description}, has_input = #{hasInput}, input_format = #{inputFormat}, sample_input = #{sampleInput},
+		has_output = #{hasOutput}, output_format = #{outputFormat}, sample_output = #{sampleOutput}, has_checkpoint = #{hasCheckpoint},
+		has_hint = #{hasHint}, hint = #{hint}, update_by = #{updateBy}, update_time = now()
+		WHERE id = #{id}
+	</update>
+
+	<select id="selectProblemWithTotalAndAcList" resultMap="BaseResultMap">
+		SELECT DISTINCT(p.id), name, has_public,p.create_by,(
+		SELECT COUNT(*)
+		FROM oj_submission s
+		WHERE s.problem_id = p.id
+		) AS total_submission, (
+		SELECT COUNT(*)
+		FROM oj_submission s
+		WHERE s.problem_id = p.id AND s.judge_result = 'AC'
+		) AS accepted_submission
+		FROM oj_problem p
+		<if test="categoryId != null">
+			INNER JOIN oj_problem_category_relation AS pcr
+			ON p.id = pcr.problem_id
+		</if>
+		WHERE p.del_flag = 0
+		<if test="keyword != null">
+			AND p.name LIKE #{keyword}
+		</if>
+		<if test="categoryId != null">
+			AND pcr.category_id = #{categoryId}
+		</if>
+-- 		publicType表示题库筛选情况，2表示查询所有公开题目以及当前用户的私有题库
+-- 		1表示所有公开题库，0表示当前用户的私有题库，3表示查询所有题库
+		<if test="publicType == 2 ">
+			AND (p.has_public = 1 OR ( p.create_by = #{userId} AND p.has_public = 0 ))
+		</if>
+		<if test="publicType == 1 ">
+			AND p.has_public = 1
+		</if>
+		<if test="publicType == 0  ">
+			AND p.has_public = 0 AND p.create_by = #{userId}
+		</if>
+
+	</select>
+
+	<select id="selectProblemByCategoryIdAndName" resultMap="BaseResultMap">
+		SELECT p.id, p.name, p.has_public
+		FROM oj_problem AS p
+		<if test="categoryId != null">
+			INNER JOIN oj_problem_category_relation AS pcr
+			ON p.id = pcr.problem_id
+		</if>
+		WHERE p.del_flag = 0
+		<if test="keyword != null">
+			AND p.name LIKE #{keyword}
+		</if>
+		<if test="categoryId != null">
+			AND pcr.category_id = #{categoryId}
+		</if>
+		<if test="userId != null">
+			AND (p.has_public = 1 OR ( p.create_by = #{userId} AND p.has_public = 0 ))
+		</if>
+	</select>
+</mapper>

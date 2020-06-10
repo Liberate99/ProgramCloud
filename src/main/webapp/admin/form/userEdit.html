@@ -1,0 +1,58 @@
+<div style="margin: 15px;">
+	<form class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">身份类型</label>
+			<div class="layui-input-inline">
+				<select name="identityRole" id="identityRole" lay-verify="required">
+					<option value="">--请选择--</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">姓名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">登录名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="loginName" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">手机</label>
+			<div class="layui-input-inline">
+				<input type="text" name="phone" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<input type="hidden" name="id" value="">
+		<!--<div class="layui-form-item">-->
+			<!--<label class="layui-form-label">密码框</label>-->
+			<!--<div class="layui-input-inline">-->
+				<!--<input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">-->
+			<!--</div>-->
+			<!--<div class="layui-form-mid layui-word-aux"> </div>-->
+		<!--</div>-->
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>
+<script src="../js/jquery-1.10.0.js"></script>
+
+<script>
+    $(document).ready(function(){
+        var form = layui.form();
+
+        if ($('#identityRole').attr('select-data') == "0") {
+            $("#identityRole").append("<option value='0' selected>学生</option>");
+            $("#identityRole").append("<option value='1'>教师</option>");
+        } else if ($('#identityRole').attr('select-data') == "1"){
+            $("#identityRole").append("<option value='0'>学生</option>");
+            $("#identityRole").append("<option value='1' selected>教师</option>");
+        } else {
+            $("#identityRole").append("<option value='0'>学生</option>");
+            $("#identityRole").append("<option value='1'>教师</option>");
+		}
+        form.render('select');
+    });
+</script>

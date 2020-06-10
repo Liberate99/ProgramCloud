@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.OjProblemTagDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.OjProblemTag">
+		<id column="id" property="id" />
+		<result column="tag_slug" property="tagSlug" />
+		<result column="tag_name" property="tagName" />
+	</resultMap>
+
+	<resultMap id="ProblemTagRelationResultMap" type="com.yunjuanyunshu.modules.entity.OjProblemTagRelation">
+		<id column="problem_id" property="problemId" />
+		<result column="tag_id" property="tagId" />
+		<result column="tag_slug" property="tagSlug" />
+		<result column="tag_name" property="tagName" />
+	</resultMap>
+
+	<insert id="addProblemTag"
+			parameterType="com.yunjuanyunshu.modules.entity.OjProblemTag"
+			flushCache="true"
+			keyProperty="id"
+			keyColumn="id"
+			useGeneratedKeys="true">
+		INSERT INTO oj_problem_tag (tag_slug, tag_name)
+		VALUES (#{tagSlug}, #{tagName})
+	</insert>
+
+	<select id="getTag"
+			parameterType="map"
+			resultMap="ProblemTagRelationResultMap"
+			useCache="true">
+		SELECT *
+		FROM oj_problem_tag_relation AS ptr
+		INNER JOIN oj_problem_tag AS pt
+		WHERE problem_id &gt;= #{lowerId}
+		AND problem_id &lt;= #{upperId} AND ptr.tag_id = pt.id
+	</select>
+
+	<select id="getTagByProblemId"
+			parameterType="long"
+			resultMap="BaseResultMap"
+			useCache="true">
+		SELECT pt.id, pt.tag_slug, pt.tag_name
+		FROM oj_problem_tag AS pt
+		INNER JOIN oj_problem_tag_relation AS ptr
+		ON ptr.tag_id = pt.id
+		WHERE ptr.problem_id = #{problemId}
+	</select>
+</mapper>

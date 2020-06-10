@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<!--响应式布局，宽度等于设备宽度-->
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+	<title>实验云</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/head.css">
+	<link rel="stylesheet" type="text/css" href="css/page.css">
+	<link rel="stylesheet" type="text/css" href="css/questionDetail.css">
+	<!--<script src="js/bootstrap.min.js" charset="utf-8"></script>-->
+	<!--[if lt IE 9]>
+    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+	<!--[endif]-->
+
+</head>
+<body>
+	<div class="menu">
+		<div class="container con_header">
+			<nav class="navbar" role="navigation">
+			    <div class="container-fluid">
+				    <div class="navbar-header">
+				        <button type="button" class="navbar-toggle" data-toggle="collapse"
+				                data-target="#cloud-navbar-collapse">
+				            <span class="sr-only">切换导航</span>
+				            <span class="icon-bar"></span>
+				            <span class="icon-bar"></span>
+				            <span class="icon-bar"></span>
+				        </button>
+				        <a class="navbar-brand" href="index.html">
+							<img src="img/logo.png" style="width: 50px;">
+						</a>
+				    </div>
+				    <div class="collapse navbar-collapse" id="cloud-navbar-collapse">
+				        <ul class="nav navbar-nav">
+				            <li class="active"><a href="courseLibrary.html">课程库</a></li>
+				            <li><a href="scrachPro.html">Scratch作品展</a></li>
+							<li><a href="scratch/ide.html">Scratch 3.0 在线编程</a></li>
+				            <li><a href="personalMain.html">个人总览</a></li>
+				            <li><a href="myCourse.html">我的课程</a></li>
+				            <div class="mobile-show">
+				            	<li><a href="personalCenter.html">个人信息</a></li>
+	            				<li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+				            </div>
+				            <li class="dropdown head-box">
+				            	<a href="#" class="head-pic" data-toggle="dropdown">
+				            		<img id="userImg" src="img/head_pic.png">
+				            		<span id="userName">编程云</span>
+				            	</a>
+				            	<ul class="dropdown-menu">
+				            		<li><a href="personalCenter.html">个人信息</a></li>
+				            		<li><a href="javascript:;" onclick="logOut()">退出登录</a></li>
+				            	</ul>
+				            </li>
+				        </ul>
+				    </div>
+			    </div>
+			</nav>
+		</div>
+	</div>
+	<div class="main">
+		<div class="container question-container">
+			<div class="row question-row">
+				<div class="col-md-9">
+					<div class="question-l shadow">
+						<p class="question-tit">
+							<img src="img/icon_tag.png" class="recommend-tag" alt="推荐问题"/>
+							<a href="javascript:;" id="ques-title">问题标题</a><img class="coin-img" src="img/coin.png"/><span id="bonur">奖励金</span>
+							<span id="ques-status"></span>
+							<a href="javascript:;" class="ques-recommend" onclick="questionRecommend(this)" style="display: none">推荐该问题</a>
+							<a href="javascript:;" class="del-link" onclick="delQuestion(this)" style="display: none">删除问题</a>
+						</p>
+						<p class="ques-info">
+							<span><a href="javascript:;" id="ques-asker">发布者</a></span>
+							<span id="ques-time">发布日期</span>
+							<!--<span>来源于 <a href="#" id="ques-chapter">instanceof 运算符</a></span>-->
+						</p>
+						<p id="ques-desc">问题描述</p>
+					</div>
+					<div class="answer-box shadow" id="teacherArea">
+						<p class="all-ques">老师回答</p>
+						<div id="teacherAnswer"></div>
+					</div>
+					<div class="answer-box shadow" id="acceptArea" style="display: none">
+						<p class="all-ques">已采纳回答</p>
+						<div id="acceptAnswer">
+
+						</div>
+					</div>
+					<div class="answer-box shadow">
+						<p class="all-ques">所有回答</p>
+						<div id="recommendList"></div>
+						<div id="answerList">
+							<p class="no-answer">暂无答复 , <a href="javascript:;" data-target="#myAnswer" onclick="scrollToTag(this)">我来回答</a> (..•˘_˘•..)</p>
+						</div>
+						<ul class="pagination">
+						</ul>
+						<!--<div class="answer">-->
+							<!--<img class="answer-img shadow" src="img/answer.jpg"/>-->
+							<!--<a href="#" class="answer-name">飞鱼</a>-->
+							<!--<a href="javascript:;" class="adopt-answer" onclick="adoptAnswer(this)">采纳该回答</a>-->
+							<!--<div class="answer-main">-->
+								<!--<p>可以穿空字符串，插入空字符串之后是能够遍历出来的<br/>后台获取到null,那要看null代表什么意义？是没有值，还是说没有值，空字符串都被处理成null 了。</p>-->
+							<!--</div>-->
+							<!--<div class="answer-time">-->
+								<!--<span>2018-01-21</span>-->
+								<!--<a href="javascript:;" class="zan" data-flag="0" title="点赞" onclick="answerAgree(this)"><img class="zan-img" src="img/zan.png"><span class="agree-num">0</span></a>-->
+								<!--<a href="javascript:;" class="recommend" data-flag="0" title="推荐该回答" onclick="answerRecommend(this)"><img class="zan-img" src="img/recommend.png"><span> 荐 </span></a>-->
+							<!--</div>-->
+						<!--</div>-->
+					</div>
+
+					<div class="my-answer-box shadow">
+						<p class="all-ques">我的回答</p>
+						<textarea rows="10" name="myAnswer" id="myAnswer" class ="form-control" placeholder="撰写我的回答……"></textarea>
+						<button type="button" class="btn btn-primary sub-answer" id="submitAnswer" onclick="submitAnswer()">提交回答</button>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="question-r shadow">
+						<p class="all-ques">相关问题</p>
+						<ul id="other-ques">
+							<p class="no-answer">暂无问题</p>
+							<!--<li>-->
+								<!--<a class="ques-link" href="#">Laravel 使用vue-resource发送ajax请求怎么添加CsrfToken</a>-->
+								<!--<p class="answer-time margin-top-f">2018-01-21</p>-->
+							<!--</li>-->
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/html" id="question">
+		<% for (var i = 0; i < value.length; i ++) { %>
+		<li class="item">
+			<% if(value[i].questionType == '1') {%>
+			<a class="ques-link" target="_blank" href="answer02.html?questionId=<%= value[i].id %>"><%= value[i].title %></a>
+			<% }else{ %>
+			<a class="ques-link" target="_blank" href="questionDetail.html?questionId=<%= value[i].id %>"><%= value[i].title %></a>
+			<% } %>
+			<p class="answer-time margin-top-f"><%= value[i].createDate %></p>
+		</li>
+		<% } %>
+	</script>
+	<script type="text/html" id="reply">
+		<% for (var i = 0; i < value.length; i ++) { %>
+		<div class="answer">
+			<img class="answer-img shadow" src="<%= value[i].photo %>"/>
+			<a href="#" class="answer-name"><%= value[i].createByName %></a>
+			<% if(value[i].recommended == '1'){ %>
+			<span class="recommended">[推荐回答]</span>
+			<% } %>
+			<% if(isAsker && isSolve == '1'){ %>
+			<a href="javascript:;" class="adopt-answer" data-id="<%= value[i].id %>" data-create="<%= value[i].createBy %>" onclick="adoptAnswer(this)">采纳该回答</a>
+			<% } %>
+			<div class="answer-main">
+				<p><%= value[i].reason %></p>
+			</div>
+			<div class="answer-time">
+				<span><%= value[i].createDate %></span>
+				<a href="javascript:;" class="zan" data-flag="0" data-id="<%= value[i].id %>" title="点赞" onclick="answerAgree(this)"><img class="zan-img" src="img/zan.png"><span class="agree-num"><%= value[i].supportNum%></span></a>
+				<% if(isTeacher){ %>
+				<a href="javascript:;" class="recommend" data-flag="0" data-id="<%= value[i].id %>" title="推荐该回答" onclick="answerRecommend(this)"><img class="zan-img" src="img/recommend.png"><span> 荐 </span></a>
+				<% } %>
+			</div>
+		</div>
+		<% } %>
+	</script>
+	<script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<script type="text/javascript" src="js/jquery-1.10.0.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/jquery.page.js"></script>
+	<script type="text/javascript" src="js/artTemplate.js"></script>
+	<script type="text/javascript" src="js/template-native.js"></script>
+	<script type="text/javascript" src="layer/layer.js"></script>
+	<script type="text/javascript" src="js/HOST.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/questionDetail.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			var questionId = window.location.href.split("=")[1];
+			var questionInfo = getQuestionInfo(questionId);
+			if(questionInfo){
+				reply(questionId,1,"createDate",true,questionInfo.courseId,questionInfo.createBy);
+				getOtherQuestion(questionInfo.courseId);
+				if(questionInfo.status == "0"){
+					$("#acceptArea").css('display','block');
+				}
+				$("#ques-title").attr("data-courseId",questionInfo.courseId);
+			}
+		});
+		function setPage(questionId,courseId,askerId,pages,current){
+			console.log("页面初始化，当前页码"+current);
+
+			$(".pagination").createPage({
+				pageCount:pages,
+				current:current,
+				backFn:function(p){
+					// console.log(p);
+//					var classify="0";
+					console.log("页码跳转到："+p);
+					reply(questionId,p,"create_date",true,courseId,askerId);
+					if(pages ==0){
+						$(".pagination").css("display","none");
+					}else{
+						$(".pagination").css("display","block");
+					}
+				}
+			});
+		}
+		function scrollToTag(e) {
+//			console.log($(e).attr("data-target"));
+			var top = $($(e).attr("data-target")).offset().top;
+			document.documentElement.scrollTop = top;
+		}
+	</script>
+</body>
+</html>

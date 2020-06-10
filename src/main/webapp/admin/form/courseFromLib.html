@@ -1,0 +1,157 @@
+<div class="layui-form courseLib" id="selectCourseType" style="display: block;margin: 15px 15px 0;float: left">
+    <div class="layui-input-inline">
+        <select name="courseType" id="courseType" lay-filter="courseType">
+            <option value="">请选择课程分类</option>
+        </select>
+    </div>
+</div>
+<div class="layui-btn layui-btn-sm courseLib" style="margin: 15px 0 0">
+    <i class="layui-icon">&#xe615;</i>
+    <input type="text" name="search" id="search" class="search" placeholder="搜索"/>
+</div>
+<div class="layui-field-box layui-form">
+    <table class="layui-table admin-table">
+        <thead>
+        <tr>
+            <th style="width: 30px;"><input type="checkbox" lay-skin="primary"></th>
+            <th>标题</th>
+            <th>分类</th>
+            <th>课时</th>
+            <th>学分</th>
+            <th>状态</th>
+            <th>创建日期</th>
+        </tr>
+        </thead>
+        <tbody id="codeContent">
+        </tbody>
+    </table>
+</div>
+<div class="admin-table-page" style="border-bottom: none;background-color: transparent;width: auto;bottom: 7px;">
+    <div id="codePages" class="page">
+    </div>
+</div>
+<!--模板-->
+<script type="text/html" id="codeTpl">
+    {{# layui.each(d.value.records, function(index, item){ }}
+    <tr>
+        <td><input name="courseId" type="checkbox" lay-skin="primary" value="{{item.id}}"></td>
+        <td style="max-width: 100px">{{ item.title }}</td>
+        <td>{{ item.classifyName }}</td>
+        <td>{{ item.classtime }}</td>
+        <td>{{ item.score }}</td>
+        <td>{{ item.delFlagName }}</td>
+        <td>{{new Date(parseInt(item.createTime) ).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ")}}</td>
+    </tr>
+    {{# });
+    }}
+</script>
+<script src="../js/jquery-1.10.0.js"></script>
+<script src="../js/template-native.js"></script>
+<script>
+    layui.use(['paging', 'form', 'busajax'], function () {
+        var $ = layui.jquery,
+                bajax = layui.busajax,
+                paging = layui.paging(),
+                layerTips = parent.layer === undefined ? layui.layer : parent.layer, //获取父窗口的layer对象
+                layer = layui.layer, //获取当前窗口的layer对象
+                form = layui.form();
+        var resdatas = {
+            page: {
+                current: "1",
+                size: 7
+            },
+            user:{
+                id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+            },
+            hasPublic: 1
+        };
+        paging.init({
+            openWait: true,
+            url: HOST+'business.busCourse.getCourse.hsr', //地址
+            elem: '#codeContent', //内容容器
+            params: resdatas,
+            type: 'POST',
+            tempElem: '#codeTpl', //模块容器
+            pageConfig: { //分页参数配置
+                elem: '#codePages', //分页容器
+                pageSize: 7 //分页大小
+            },
+            success: function () { //渲染成功的回调
+//                alert('渲染成功');
+            },
+            fail: function (msg) { //获取数据失败的回调
+                alert('获取数据失败')
+            },
+            complate: function () { //完成的回调
+//                alert('处理完成');
+                //绑定所有编辑按钮事件
+
+                //重新渲染复选框
+                form.render();
+
+            }
+        });
+
+        // 获取课程分类
+        function getType() {
+            var data={
+                dict:{
+                    type:'course_tag'
+                }
+            };
+            $.ajax({
+                url: HOST + 'system.dict.get.hsr',
+                type: 'POST',
+                headers: {
+                    token: JSON.parse(getCookie('user')).token
+                },
+                data: JSON.stringify(data),
+                dataType: "json",
+                success: function(result){
+                    if (result.code == 0 && result.value) {
+                        var $courseType = $('#courseType');
+                        for (var i= 0;i < result.value.length;i++) {
+                            $courseType.append("<option value='"+result.value[i].value+"'>"+result.value[i].label+"</option>");
+                        }
+                        form.render();
+                    }
+                },
+                error:function(xhr){
+                    alert("错误提示： " + xhr.status + " " + xhr.statusText);
+                }
+            });
+        }
+
+        getType();  // 获取课程分类
+
+        $('#search').keyup(function (e) {
+            if(e.keyCode == 13){
+                resdatas={
+                    page:{
+                        current:"1",
+                        size: 7
+                    },
+                    user:{
+                        id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+                    },
+                    hasPublic: 1
+                };
+                paging.get(JSON.stringify(resdatas));
+            }
+        });
+
+        form.on('select(courseType)', function(type){
+            resdatas={
+                page:{
+                    current : "1",
+                    size: 7
+                },
+                user:{
+                    id: getCookie('user') === "" ? "" : JSON.parse(getCookie('user')).id
+                },
+                hasPublic: 1
+            };
+            paging.get(JSON.stringify(resdatas));
+        });
+    });
+</script>

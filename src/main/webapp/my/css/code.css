@@ -1,0 +1,283 @@
+.col-center-block {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+#courseTit,#answerTit{
+    font-size: 14px;
+    line-height: 20px;
+}
+.head-box button:hover{
+    color: white;
+}
+.head-box button{
+    border: 1px solid #59a6fc;
+    background-color: #3592ff;
+    padding: 5px 10px;
+}
+#run, #back, #input, #reset{
+    margin-top: 4px;
+}
+.drag{
+    float: left;
+    width: 0.5%;
+    height: 100%;
+    cursor: e-resize;
+    background: #bd3f13;
+    margin-bottom: 0;
+}
+#goBack{
+    width: 100%;
+    height: 46px;
+    /*background-color: #2c343b;*/
+    background-color: #ededed;
+    border-top: 1px solid #ccc;
+}
+.back{
+    margin: 6px 0 0 15px;
+    padding: 5px 10px;
+    min-width: 72px;
+}
+.result{
+    background-color: #f7f7f7;
+}
+.result .showresult{
+    border:0;
+}
+#caseTop{
+    height: 55%;
+    overflow-y: auto;
+}
+#caseExample{
+    height: 45%;
+    overflow-y: auto;
+    border-top:2px solid #060;
+}
+#example,.menuList{
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: #ededed;
+    text-decoration: none;
+    cursor: pointer;
+    height: 30px;
+    line-height: 30px;
+    color: #a94442;
+    border-bottom: 1px dashed #ccc;
+}
+.menuList:hover,.menuList:focus{
+    text-decoration: none;
+    color: #a94442;
+}
+#caseExample .caret,.menuList .caret{
+    position: relative;
+    top:-2px;
+    left: -6px;
+}
+#caseExample ul.dropdown-menu{
+    width: 80%;
+    margin-left: 10%;
+}
+#exampleMain,#caseContent{
+    padding: 16px 10px 10px 10px;
+    overflow-y: auto;
+}
+.caseTop{
+    position: relative;
+}
+.hornBox{
+    width: 80%;
+    margin-left: 10%;
+    height: 12px;
+    position: absolute;
+    left: 0;
+    top: 26px;
+    display: none;
+    z-index: 1001;
+    overflow: hidden;
+}
+.horn{
+    position: relative;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    margin: 0 auto;
+    background-color: white;
+    transform:rotate(-45deg);
+    -ms-transform:rotate(-45deg); 	/* IE 9 */
+    -moz-transform:rotate(-45deg); 	/* Firefox */
+    -webkit-transform:rotate(-45deg); /* Safari 和 Chrome */
+    -o-transform:rotate(-45deg); 	/* Opera */
+}
+#courseMenu{
+    position: absolute;
+    left: 0;
+    top: 30px;
+    background-color: white;
+    display: none;
+    z-index: 1000;
+    max-height:550px;
+    overflow-y: auto;
+    width: 80%;
+    margin-left: 10%;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 6px 2px #ccc;
+    padding: 10px;
+    border-radius: 6px;
+}
+.panel-title,#menuMain li.list-group-item a{
+    font-size: 14px;
+    color: #555;
+}
+#menuMain{
+    margin-bottom: 0;
+}
+.menuLink{
+    padding: 8px 15px;
+    color: #555;
+    display: block;
+    margin: 4px 0 4px 0;
+}
+.menuLink:hover{
+    background-color: #f9f9f9;
+    text-decoration: none;
+}
+#tab_nav{
+    height: 30px;
+}
+#tab_nav li a{
+    height: 30px;
+    padding: 0 15px;
+    line-height: 30px;
+}
+.code{
+    position: relative;
+}
+.codePlay{
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 999;
+}
+.codePlay a{
+    display: block;
+    float: left;
+    margin: 5px 8px 5px 0;
+    height: 20px;
+    border-radius: 4px;
+    color: white;
+    padding: 0 4px;
+}
+.codePlay a:hover,.codePlay a:focus,.codePlay a:active{
+    color: white;
+}
+.codePlay a span{
+    line-height: 18px;
+    font-size: 12px;
+}
+#inputText,#code{
+    outline: none;
+}
+#inputText{
+    resize: none;
+    width: 100%;
+    height: 100px;
+    background-color: #151718;
+    border:none;
+    caret-color:#f9f9f9;
+    border-top: 1px dashed #888;
+    padding: 5px;
+    color: #ccc;
+}
+textarea#inputText::-webkit-input-placeholder{
+    color: #aaa;
+}
+textarea#inputText:-moz-placeholder{
+    color: #aaa;
+}
+textarea#inputText::-moz-placeholder{
+    color: #aaa;
+}
+textarea#inputText:-ms-input-placeholder{
+    color: #aaa;
+}
+.resultTag{
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 0;
+    background-color: #f7f7f7;
+    text-indent: 10px;
+    color: #a94442;
+    opacity: .7;
+    text-align: center;
+    border-bottom: 1px dashed #ccc;
+}
+.result .showresult,.result .showresult:hover{
+    box-shadow: none;
+}
+#showQuestionCode{
+    cursor:pointer;
+    color: #72ACE3;
+    float: right;
+    padding: 0 5px 5px 0;
+    font-size: 13px;
+}
+
+/*视频滑块目录*/
+#sliderMenuBox{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -360px;
+    width: 360px;
+    z-index: 999;
+    display: none;
+}
+#sliderControl{
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 60px;
+    margin-top: -30px;
+    right: -50px;
+    background-color: #666;
+    text-align: center;
+    color: #dbdbdb;
+    font-size: 12px;
+    cursor: pointer;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.menuIcon{
+    display: block;
+    width: 30px;
+    margin: 5px auto 0;
+}
+#sliderMenu{
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    /*border-right: 2px solid #eee;*/
+    box-shadow: 5px 0 5px -5px #888;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+#sliderMenuMain{
+    /*margin-top: 20px;*/
+    margin: 0;
+    padding: 20px 0;
+    height: 100%;
+    overflow: auto;
+    width: 380px;
+}
+#sliderMenuMain:hover{
+    width: 360px;
+}
+#sliderMenuMain .panel{
+    border: 0;
+}
+#sliderMenuMain a:focus,#sliderMenuMain a:active{
+    text-decoration: none;
+}

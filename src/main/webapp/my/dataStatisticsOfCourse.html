@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <!--响应式布局，宽度等于设备宽度-->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+
+
+    <title>实验云</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/head.css">
+    <!--<link href='https://fonts.googleapis.com/css?family=Playfair+Display:700,900|Fira+Sans:400,400italic'-->
+    <!--rel='stylesheet' type='text/css'>-->
+    <link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+    <link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
+    <link rel="stylesheet" type="text/css" href="css/mycourse.css">
+    <script src="js/modernizr.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.0.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.mobile.custom.min.js"></script>
+    <script type="text/javascript" src="js/artTemplate.js"></script>
+    <script type="text/javascript" src="js/template-native.js"></script>
+    <script type="text/javascript" src="layer/layer.js"></script>
+    <script type="text/javascript" src="js/HOST.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="jqueryChat/font_Icon/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="jqueryChat/css/chat.css">
+
+    <script type="text/javascript">
+        $(function () {
+            $(document).FnWebIM({
+                autoLogin: true,       //boolean型，默认是否自动登录，true：自动登录，false：手动登录，默认为true
+                msgRefreshTime: 1000,       //number型，消息刷新时间，单位为ms
+                friendRefreshTime: 10000,      //number型，好友刷新时间，单位为ms
+                showSecretary: true,       //boolean型，默认是否显示小秘书，true：显示，false：不显示，默认为true
+                noticeContent: "唐僧师徒历经千辛万苦，终于见到了佛祖……",        //string型，公告内容 为空时不显示公告
+                sendPicture: true,       //boolean型，是否允许发送图片，true：允许，false：不允许，默认为true
+                msgMaxSize: 300,        //number型，单条消息最大允许字符
+                msgSound: false,      //boolean型，是否开启声音提醒，true：开启，false:关闭，默认为true
+                defaultWindow: ""          //string型，登录后打开新聊天窗口，此处接收的参数为联系人的uid，否则会出错
+            });
+        });
+    </script>
+
+
+    <script src="js/echarts.min.js"></script>
+    <script src="js/dataTool.min.js"></script>
+
+    <script type="text/javascript"></script>
+    <!--[if lt IE 9]>
+    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <!--[endif]-->
+    <style type="text/css">
+        .zhezhao .courseName, .zhezhao .courseLong {
+            font-family: "微软雅黑";
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        #timeLine {
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="menu">
+    <div class="container con_header">
+        <nav class="navbar" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#cloud-navbar-collapse">
+                        <span class="sr-only">切换导航</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div style="width: 40px; height: 40px;">
+                        <a class="navbar-brand" href="index.html">
+                            <img src="img/logo.png" style="width: 40px; height: 40px;">
+                        </a>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse" id="cloud-navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="hov"><a href="courseLibrary.html">课程库</a></li>
+                        <li class="hov"><a href="scrachPro.html">Scratch作品展</a></li>
+                        <li class="hov"><a href="scratch/ide.html">Scratch 3.0 在线编程</a></li>
+                        <li class="active"><a href="personalMain.html">个人总览</a></li>
+                        <li class="hov"><a href="myCourse.html">我的课程</a></li>
+                        <li class="hov"><a href="virtualLab.html">虚拟实验室</a></li>
+                        <div class="mobile-show">
+                            <li><a href="personalCenter.html">个人信息</a></li>
+                            <li><a href="#" onclick="logOut()">退出登录</a></li>
+                        </div>
+                        <li class="dropdown head-box">
+                            <a href="#" class="head-pic" data-toggle="dropdown">
+                                <img id="userImg" src="img/head_pic.png">
+                                <span id="userName"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="personalCenter.html">个人信息</a></li>
+                                <li><a href="#" onclick="logOut()">退出登录</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    <!--<div class="container">-->
+        <!--&lt;!&ndash;<p class="main-tit" style="font-family: '黑体';">推荐课程<span class="gotoLibrary"><a href="courseLibrary.html">进入课程库</a></span></p>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="row" id="show">&ndash;&gt;-->
+
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;<script id="commend" type="text/html">&ndash;&gt;-->
+            <!--&lt;!&ndash;<%if (value!=null){&ndash;&gt;-->
+            <!--&lt;!&ndash;for (var i = 0; i < value.length; i ++) { %>&ndash;&gt;-->
+            <!--&lt;!&ndash;<a href="#" data-id=<%= value[i].id %> data-title=<%= value[i].title %> data-desc=<%= value[i].desc %>&ndash;&gt;-->
+                <!--&lt;!&ndash;data-classify=<%= value[i].classify %> data-classTime=<%= value[i].classtime %> data-score=<%=&ndash;&gt;-->
+                <!--&lt;!&ndash;value[i].score %> data-createTime=<%= value[i].createTime %> data-createBy=<%= value[i].createBy %>&ndash;&gt;-->
+                <!--&lt;!&ndash;data-pic=<%= value[i].pic %> data-view=<%= value[i].view %> data-focus=<%= value[i].focus %>&ndash;&gt;-->
+                <!--&lt;!&ndash;onclick="courseDetail('<%= value[i].id %>')">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="col-md-3 col-xs-6 courseBox">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="courseMain">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<img src="<%=value[i].pic==null?'img/course.png':value[i].pic%>" class="courseImg">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="zhezhao" style="z-index: 0;">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<p class="courseName"><%=value[i].title%></p>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<p class="courseLong">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<span><%=value[i].classtime%>课时</span><span><%=value[i].score%>学分</span></p>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<p class="courseLong"><span><%=value[i].focus%>人已加入</span></p>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="checkD">查看详情</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</a>&ndash;&gt;-->
+            <!--&lt;!&ndash;<% } }%>&ndash;&gt;-->
+        <!--&lt;!&ndash;</script>&ndash;&gt;-->
+    <!--</div>-->
+    <!--<div class="container" id="personalViewBox">-->
+        <!--<p class="main-tit" style="font-family: '黑体';">个人总览</p>-->
+
+        <!--&lt;!&ndash;<div id="personalOverView" >&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!---->
+        <!--&lt;!&ndash;<section class="cd-horizontal-timeline" style="margin-bottom: 20px;">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="timeline">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="events-wrapper" style="position: relative;margin-top: 20px;margin-bottom: 0;" id="timeLineBox">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="events" id="timeLine">&ndash;&gt;-->
+        <!--&lt;!&ndash;<ol>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li><a href="#0" data-date="16/01/2017" class="selected">&ndash;&gt;-->
+        <!--&lt;!&ndash;<img src="img/head_pic.png" style="width: 70px;height: 70px;border-radius: 50%;border:1px solid #f8f8f8;">&ndash;&gt;-->
+        <!--&lt;!&ndash;&lt;!&ndash; <img src="img/course02.png"> &ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="viewMain">2014年1月16日 20:06你开启了编程云之旅</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</a>&ndash;&gt;-->
+        <!--&lt;!&ndash;</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li><a href="#0" data-date="18/02/2017">&ndash;&gt;-->
+        <!--&lt;!&ndash;<img src="img/course02.png">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="viewMain">2014年2月18日 20:06你选择了编程云的第一门课程</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</a></li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li><a href="#0" data-date="10/03/2017">&ndash;&gt;-->
+        <!--&lt;!&ndash;<img src="img/course02.png">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="viewMain">2014年3月10日 20:06你选择了编程云的第一门课程</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</a></li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li><a href="#0" data-date="20/05/2017">&ndash;&gt;-->
+        <!--&lt;!&ndash;<img src="img/course02.png">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="viewMain">2014年5月20日 20:06你选择了编程云的第一门课程</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</a></li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li><a href="#0" data-date="20/06/2017">&ndash;&gt;-->
+        <!--&lt;!&ndash;<img src="img/course02.png">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="viewMain">2014年6月20日 20:06你选择了编程云的第一门课程</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</a></li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li><a href="#0" data-date="02/07/2017">&ndash;&gt;-->
+        <!--&lt;!&ndash;<img src="img/course02.png">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="viewMain">2014年7月2日 20:06你选择了编程云的第一门课程</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</a></li>&ndash;&gt;-->
+        <!--&lt;!&ndash;</ol>&ndash;&gt;-->
+        <!--&lt;!&ndash;<span class="filling-line" aria-hidden="true"></span>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div> &lt;!&ndash; .events &ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;</div> &lt;!&ndash; .events-wrapper &ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;<ul class="cd-timeline-navigation">&ndash;&gt;-->
+        <!--&lt;!&ndash; <li><a href="#0" class="prev inactive">Prev</a></li>-->
+        <!--<li><a href="#0" class="next">Next</a></li> &ndash;&gt;-->
+        <!--&lt;!&ndash;</ul> &lt;!&ndash; .cd-timeline-navigation &ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;</div> &lt;!&ndash; .timeline &ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;<script id="content" type="text/html">&ndash;&gt;-->
+            <!--&lt;!&ndash;<%if (value!=null){ %>&ndash;&gt;-->
+            <!--&lt;!&ndash;<section class="cd-horizontal-timeline" style="margin-bottom: 20px;">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="timeline">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="events-wrapper" style="position: relative;margin-top: 20px;margin-bottom: 0;z-index: 0;"&ndash;&gt;-->
+                         <!--&lt;!&ndash;id="timeLineBox">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="events" id="timeLine">&ndash;&gt;-->
+                            <!--&lt;!&ndash;&lt;!&ndash;<ol id="tl">&ndash;&gt;&ndash;&gt;-->
+                                <!--&lt;!&ndash;<li>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<a href="#0" data-date="<%= value[0][0] %>" class="selected">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<img src="<%= value[0][1]==null?'img/head_pic.png':value[0][1] %>"&ndash;&gt;-->
+                                             <!--&lt;!&ndash;style="width: 70px;height: 70px;border-radius: 50%;border:1px solid #f8f8f8;">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="viewMain"><%= value[0][2] %></div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</a>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</li>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<% for (var i = 1; i < value.length; i ++) { %>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<li>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<a href="#0" data-date="<%= value[i][0] %>">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<img src="<%= value[i][1]==null?'img/course02.png':value[i][1] %>">&ndash;&gt;-->
+                                        <!--&lt;!&ndash;<div class="viewMain"><%= value[i][2] %></div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</a>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</li>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<% } %>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</ol>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<span class="filling-line" aria-hidden="true"></span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<ul class="cd-timeline-navigation"></ul>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="events-content">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<ol></ol>&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</section>&ndash;&gt;-->
+            <!--&lt;!&ndash;<% } %>&ndash;&gt;-->
+        <!--&lt;!&ndash;</script>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="events-content">&ndash;&gt;-->
+        <!--&lt;!&ndash;<ol></ol>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div> &lt;!&ndash; .events-content &ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;</section>&ndash;&gt;-->
+    <!--</div>-->
+    <div class="container">
+        <p class="main-tit" style="font-family: '黑体';">学习偏好</p>
+        <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+        <div>
+            <div id="main1" style="width: 600px;height:400px;margin: auto"></div>
+            <script type="text/javascript">
+                //                // 引入 ECharts 主模块
+                //                var echarts = require('echarts');
+
+                // 基于准备好的dom，初始化echarts实例
+                var myChart_1 = echarts.init(document.getElementById('main1'));
+                // 指定图表的配置项和数据
+                var option = {
+//                    title : {
+//                        text: '罗纳尔多 vs 舍普琴科',
+//                        subtext: '完全实况球员数据'
+//                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+//                    legend: {
+//                        x : 'center',
+//                        data:['罗纳尔多','舍普琴科']
+//                    },
+                    toolbox: {
+                        show: false,
+                        feature: {
+                            mark: {show: true},
+                            dataView: {show: true, readOnly: false},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    calculable: true,
+                    polar: [
+                        {
+                            indicator: [
+                                {text: '数据库', max: 100},
+                                {text: '前端开发', max: 100},
+                                {text: '后端开发', max: 100},
+                                {text: '移动开发', max: 100},
+                                {text: '人工智能', max: 100},
+                                {text: '大数据', max: 100}
+                            ],
+                            radius: 130
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '偏好数据',
+                            type: 'radar',
+                            itemStyle: {
+                                normal: {
+                                    areaStyle: {
+                                        type: 'default'
+                                    }
+                                }
+                            },
+                            data: [
+                                {
+                                    value: [97, 42, 88, 94, 90, 86],
+                                    name: '能力'
+                                }
+                            ]
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart_1.setOption(option);
+            </script>
+        </div>
+    </div>
+
+    <div class="container">
+        <p class="main-tit" style="font-family: '黑体';">学习比例</p>
+        <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+        <div>
+            <div id="main2" style="width: 600px;height:500px;margin: auto"></div>
+            <script type="text/javascript">
+                //                // 引入 ECharts 主模块
+                //                var echarts = require('echarts');
+
+                // 基于准备好的dom，初始化echarts实例
+                var myChart_2 = echarts.init(document.getElementById('main2'));
+                // 指定图表的配置项和数据
+                var option = {
+                    //backgroundColor: '#2c343c',
+
+                    // title: {
+                    //     text: 'Customized Pie',
+                    //     left: 'center',
+                    //     top: 20,
+                    //     textStyle: {
+                    //         color: '#000'
+                    //     }
+                    // },
+
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+
+                    visualMap: {
+                        show: false,
+                        min: 80,
+                        max: 600,
+                        inRange: {
+                            colorLightness: [0, 1]
+                        }
+                    },
+                    series: [
+                        {
+                            name: '访问来源',
+                            type: 'pie',
+                            radius: '55%',
+                            center: ['50%', '50%'],
+                            data: [
+                                {value: 335, name: 'Java'},
+                                {value: 310, name: 'Python'},
+                                {value: 274, name: 'C++'},
+                                {value: 235, name: 'Swift'},
+                                {value: 400, name: 'C#'}
+                            ].sort(function (a, b) {
+                                return a.value - b.value;
+                            }),
+                            roseType: 'radius',
+                            label: {
+                                normal: {
+                                    textStyle: {
+                                        color: 'rgba(000, 000, 000, 0.7)'
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    lineStyle: {
+                                        color: 'rgba(0, 0, 0, 0.7)'
+                                    },
+                                    smooth: 0.2,
+                                    length: 10,
+                                    length2: 20
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: '#c23531',
+                                    shadowBlur: 200,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            },
+
+                            animationType: 'scale',
+                            animationEasing: 'elasticOut',
+                            animationDelay: function (idx) {
+                                return Math.random() * 200;
+                            }
+                        }
+                    ]
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart_2.setOption(option);
+            </script>
+        </div>
+    </div>
+
+    <div class="container">
+        <p class="main-tit" style="font-family: '黑体';">掌握情况</p>
+        <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+        <div>
+            <div id="main3" style="width: 900px;height:500px;margin: auto"></div>
+            <script type="text/javascript">
+                //                // 引入 ECharts 主模块
+                //                var echarts = require('echarts');
+
+                // 基于准备好的dom，初始化echarts实例
+                var myChart_3 = echarts.init(document.getElementById('main3'));
+                myChart_3.showLoading();
+                $.get('data/les-miserables.gexf', function (xml) {
+                    myChart_3.hideLoading();
+
+                    var graph = echarts.dataTool.gexf.parse(xml);
+                    var categories = [];
+                    for (var i = 0; i < 9; i++) {
+                        categories[i] = {
+                            //name: '类目' + i
+                        };
+                    }
+                    graph.nodes.forEach(function (node) {
+                        node.itemStyle = null;
+                        node.value = node.symbolSize;
+                        node.symbolSize /= 1.5;
+                        node.label = {
+                            normal: {
+                                show: node.symbolSize > 30
+                            }
+                        };
+                        node.category = node.attributes.modularity_class;
+                    });
+                    option = {
+                        title: {
+                            //text: '权值',
+                            subtext: 'Default layout',
+                            top: 'bottom',
+                            left: 'right'
+                        },
+                        tooltip: {},
+                        legend: [{
+                            // selectedMode: 'single',
+                            data: categories.map(function (a) {
+                                return a.name;
+                            })
+                        }],
+                        animationDuration: 1500,
+                        animationEasingUpdate: 'quinticInOut',
+                        series : [
+                            {
+                                name: '权值',
+                                type: 'graph',
+                                layout: 'none',
+                                data: graph.nodes,
+                                links: graph.links,
+                                categories: categories,
+                                roam: true,
+                                focusNodeAdjacency: true,
+                                itemStyle: {
+                                    normal: {
+                                        borderColor: '#fff',
+                                        borderWidth: 1,
+                                        shadowBlur: 10,
+                                        shadowColor: 'rgba(0, 0, 0, 0.3)'
+                                    }
+                                },
+                                label: {
+                                    position: 'right',
+                                    formatter: '{b}'
+                                },
+                                lineStyle: {
+                                    color: 'source',
+                                    curveness: 0.3
+                                },
+                                emphasis: {
+                                    lineStyle: {
+                                        width: 10
+                                    }
+                                }
+                            }
+                        ]
+                    };
+
+                    myChart_3.setOption(option);
+                }, 'xml');
+
+                //                // 使用刚指定的配置项和数据显示图表。
+                //                myChart_3.setOption(option);
+            </script>
+        </div>
+    </div>
+
+    <div class="container">
+        <p class="main-tit" style="font-family: '黑体';">历史记录</p>
+        <div class="row" id="show1">
+
+        </div>
+        <script id="history" type="text/html">
+            <% for (var i = 0; i < value.length; i ++) { %>
+            <a href="#" data-id=<%= value[i].id %> data-title=<%= value[i].title %> data-desc=<%= value[i].desc %>
+                data-classify=<%= value[i].classify %> data-classTime=<%= value[i].classtime %> data-score=<%=
+                value[i].score %> data-createTime=<%= value[i].createTime %> data-createBy=<%= value[i].createBy %>
+                data-pic=<%= value[i].pic %> data-view=<%= value[i].view %> data-focus=<%= value[i].focus %>
+                onclick="courseDetail('<%= value[i].id %>')">
+                <div class="col-md-3 col-xs-6 courseBox">
+                    <div class="courseMain">
+                        <img src="<%=value[i].pic==null?'img/course.png':value[i].pic%>" class="courseImg">
+                        <div class="zhezhao" style="z-index: 0;">
+                            <p class="courseName"><%=value[i].title%></p>
+                            <p class="courseLong">
+                                <span><%=value[i].classtime%>课时</span><span><%=value[i].score%>学分</span></p>
+                            <div class="checkD">查看详情</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <% } %>
+        </script>
+    </div>
+</div>
+<div class="footer">
+    <div class="container">
+        <ul>
+            <li class="footer-tit">联系与反馈</li>
+            <li><a href="#">联系我们</a></li>
+            <li><a href="#">意见反馈</a></li>
+        </ul>
+        <ul>
+            <li class="footer-tit">资源共享</li>
+            <li><a href="#">学校支持</a></li>
+            <li><a href="#">文章干货</a></li>
+            <li><a href="#">相关下载</a></li>
+        </ul>
+        <ul>
+            <li class="footer-tit">关注我们</li>
+            <li><a href="#">微信公众号</a></li>
+            <li><a href="#">QQ群</a></li>
+        </ul>
+    </div>
+</div>
+
+<!--<div class="panel-group" style="  position: fixed;bottom: 15px;right: 15px;"id="accordion">-->
+
+<!--<div class="panel panel-default">-->
+<!--<div class="panel-heading">-->
+<!--<h4 class="panel-title">-->
+<!--<a data-toggle="collapse" data-parent="#accordion"-->
+<!--href="#collapseOne">-->
+<!--Little ke-->
+<!--</a>-->
+<!--</h4>-->
+<!--</div>-->
+<!--<div id="collapseOne" class="panel-collapse collapse in ">-->
+<!--<div class="panel-body" id="t">-->
+<!--Nihil anim keffiyeh helvetica, craft beer labore wes anderson-->
+<!--cred nesciunt sapiente ea proident. Ad vegan excepteur butcher-->
+<!--vice lomo.-->
+<!--<div> <button>button</button></div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+
+<!--</div>-->
+<div >
+    <div class="chatContainer">
+        <div class="chatBtn">
+            <i class="iconfont icon-xiaoxi1"></i>
+        </div>
+        <!--<div class="chat-message-num">10</div>-->
+        <div class="chatBox" ref="chatBox" style="display: none;">
+            <div class="chatBox-head">
+                <div class="chatBox-head-one">
+                    Conversations
+                    <div class="chat-close" style="margin: 10px 10px 0 0;font-size: 14px">关闭</div>
+                </div>
+                <div class="chatBox-head-two">
+                    <div class="chat-return">返回</div>
+                    <div class="chat-people">
+                        <div class="ChatInfoHead">
+                            <img src="" alt="头像"/>
+                        </div>
+                        <div class="ChatInfoName">这是用户的名字，看看名字到底能有多长</div>
+                    </div>
+                    <div class="chat-close">关闭</div>
+                </div>
+            </div>
+            <div class="chatBox-info">
+                <div class="chatBox-list" ref="chatBoxlist">
+                    <div class="chat-list-people" style="background-color: lightgray">
+                        <div><img src="jqueryChat/img/bigw.png" alt="头像"/></div>
+                        <div class="chat-name">
+                            <p>小可</p>
+                        </div>
+                        <!--<div class="message-num">10</div>-->
+                    </div>
+                    <!--<div class="chat-list-people">-->
+                    <!--<div><img src="jqueryChat/img/icon02.png" alt="头像"/></div>-->
+                    <!--<div class="chat-name">-->
+                    <!--<p>白兰地</p>-->
+                    <!--</div>-->
+                    <!--<div class="message-num">8</div>-->
+                    <!--</div>-->
+                    <!--<div class="chat-list-people">-->
+                    <!--<div><img src="jqueryChat/jqueryChat/img/icon03.png" alt="头像"/></div>-->
+                    <!--<div class="chat-name">-->
+                    <!--<p>威士忌</p>-->
+                    <!--</div>-->
+                    <!--<div class="message-num">2</div>-->
+                    <!--</div>-->
+                    <!--<div class="chat-list-people">-->
+                    <!--<div><img src="jqueryChat/img/icon01.png" alt="头像"/></div>-->
+                    <!--<div class="chat-name">-->
+                    <!--<p>荷兰金酒</p>-->
+                    <!--</div>-->
+                    <!--<div class="message-num">20</div>-->
+                    <!--</div>-->
+                    <!--<div class="chat-list-people">-->
+                    <!--<div><img src="jqueryChat/img/icon03.png" alt="头像"/></div>-->
+                    <!--<div class="chat-name">-->
+                    <!--<p>朗姆酒</p>-->
+                    <!--</div>-->
+                    <!--<div class="message-num">10</div>-->
+                    <!--</div>-->
+                    <!--<div class="chat-list-people">-->
+                    <!--<div><img src="jqueryChat/img/icon02.png" alt="头像"/></div>-->
+                    <!--<div class="chat-name">-->
+                    <!--<p>特其拉酒</p>-->
+                    <!--</div>-->
+                    <!--<div class="message-num">18</div>-->
+                    <!--</div>-->
+                    <!--<div class="chat-list-people">-->
+                    <!--<div><img src="jqueryChat/img/icon02.png" alt="头像"/></div>-->
+                    <!--<div class="chat-name">-->
+                    <!--<p>鸡尾酒</p>-->
+                    <!--</div>-->
+                    <!--<div class="message-num">9</div>-->
+                    <!--</div>-->
+                    <!--<div class="chat-list-people">-->
+                    <!--<div><img src="jqueryChat/img/icon01.png" alt="头像"/></div>-->
+                    <!--<div class="chat-name">-->
+                    <!--<p>虎骨酒</p>-->
+                    <!--</div>-->
+                    <!--<div class="message-num">12</div>-->
+                    <!--</div>-->
+                    <!--<div class="chat-list-people">-->
+                    <!--<div><img src="jqueryChat/img/icon01.png" alt="头像"/></div>-->
+                    <!--<div class="chat-name">-->
+                    <!--<p>琴酒</p>-->
+                    <!--</div>-->
+                    <!--<div class="message-num">99+</div>-->
+                    <!--</div>-->
+                    <!--<div class="chat-list-people">-->
+                    <!--<div><img src="jqueryChat/img/icon02.png" alt="头像"/></div>-->
+                    <!--<div class="chat-name">-->
+                    <!--<p>葡萄酒</p>-->
+                    <!--</div>-->
+                    <!--<div class="message-num"></div>-->
+                    <!--</div>-->
+                    <!--<div class="chat-list-people">-->
+                    <!--<div><img src="jqueryChat/img/icon01.png" alt="头像"/></div>-->
+                    <!--<div class="chat-name">-->
+                    <!--<p>蓝莓酒</p>-->
+                    <!--</div>-->
+                    <!--<div class="message-num"></div>-->
+                    <!--</div>-->
+                    <!--<div class="chat-list-people">-->
+                    <!--<div><img src="jqueryChat/img/icon03.png" alt="头像"/></div>-->
+                    <!--<div class="chat-name">-->
+                    <!--<p>樱花酒</p>-->
+                    <!--</div>-->
+                    <!--<div class="message-num"></div>-->
+                    <!--</div>-->
+                </div>
+                <div class="chatBox-kuang" ref="chatBoxkuang">
+                    <div class="chatBox-content">
+                        <div class="chatBox-content-demo" id="chatBox-content-demo">
+
+                            <div class="clearfloat">
+                                <div class="author-name">
+                                    <small class="chat-date">2017-12-02 14:26:58</small>
+                                </div>
+                                <div class="left">
+                                    <div class="chat-avatars"><img src="jqueryChat/img/bigw.png" alt="头像"/></div>
+                                    <div class="chat-message">
+                                        Hello！我是小可！
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--<div class="clearfloat">-->
+                            <!--<div class="author-name">-->
+                            <!--<small class="chat-date">2017-12-02 14:26:58</small>-->
+                            <!--</div>-->
+                            <!--<div class="left">-->
+                            <!--<div class="chat-avatars"><img src="jqueryChat/img/icon01.png" alt="头像"/></div>-->
+                            <!--<div class="chat-message">-->
+                            <!--<img src="img/1.png" alt="">-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+
+                            <div class="clearfloat">
+                                <div class="author-name">
+                                    <small class="chat-date">2017-12-02 14:26:58</small>
+                                </div>
+                                <div class="right">
+                                    <div class="chat-message">嗨，小可！</div>
+                                    <div class="chat-avatars"><img src="jqueryChat/img/icon01.png" alt="头像"/></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="chatBox-send">
+                        <div class="div-textarea" contenteditable="true"></div>
+                        <div>
+                            <button id="chat-biaoqing" class="btn-default-styles">
+                                <i class="iconfont icon-biaoqing"></i>
+                            </button>
+                            <label id="chat-tuxiang" title="发送图片" for="inputImage" class="btn-default-styles">
+                                <input type="file" onchange="selectImg(this)" accept="image/jpg,image/jpeg,image/png"
+                                       name="file" id="inputImage" class="hidden">
+                                <i class="iconfont icon-tuxiang"></i>
+                            </label>
+                            <button id="chat-fasong" class="btn-default-styles"><i class="iconfont icon-fasong"></i>
+                            </button>
+                        </div>
+                        <div class="biaoqing-photo">
+                            <ul>
+                                <li><span class="emoji-picker-image" style="background-position: -9px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -40px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -71px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -102px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -133px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -164px -18px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -9px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -40px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -71px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -102px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -133px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -164px -52px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -9px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -40px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -71px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -102px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -133px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -164px -86px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -9px -120px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -40px -120px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -71px -120px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -102px -120px;"></span>
+                                </li>
+                                <li><span class="emoji-picker-image" style="background-position: -133px -120px;"></span>
+                                </li>
+                                <li><span class="emoji-picker-image" style="background-position: -164px -120px;"></span>
+                                </li>
+                                <li><span class="emoji-picker-image" style="background-position: -9px -154px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -40px -154px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -71px -154px;"></span></li>
+                                <li><span class="emoji-picker-image" style="background-position: -102px -154px;"></span>
+                                </li>
+                                <li><span class="emoji-picker-image" style="background-position: -133px -154px;"></span>
+                                </li>
+                                <li><span class="emoji-picker-image" style="background-position: -164px -154px;"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script>
+
+        screenFuc();
+        function screenFuc() {
+            var topHeight = $(".chatBox-head").innerHeight();//聊天头部高度
+            //屏幕小于768px时候,布局change
+            var winWidth = $(window).innerWidth();
+            if (winWidth <= 768) {
+                var totalHeight = $(window).height(); //页面整体高度
+                $(".chatBox-info").css("height", totalHeight - topHeight);
+                var infoHeight = $(".chatBox-info").innerHeight();//聊天头部以下高度
+                //中间内容高度
+                $(".chatBox-content").css("height", infoHeight - 46);
+                $(".chatBox-content-demo").css("height", infoHeight - 46);
+
+                $(".chatBox-list").css("height", totalHeight - topHeight);
+                $(".chatBox-kuang").css("height", totalHeight - topHeight);
+                $(".div-textarea").css("width", winWidth - 106);
+            } else {
+                $(".chatBox-info").css("height", 495);
+                $(".chatBox-content").css("height", 448);
+                $(".chatBox-content-demo").css("height", 448);
+                $(".chatBox-list").css("height", 495);
+                $(".chatBox-kuang").css("height", 495);
+                $(".div-textarea").css("width", 260);
+            }
+        }
+        (window.onresize = function () {
+            screenFuc();
+        })();
+        //未读信息数量为空时
+        var totalNum = $(".chat-message-num").html();
+        if (totalNum == "") {
+            $(".chat-message-num").css("padding", 0);
+        }
+        $(".message-num").each(function () {
+            var wdNum = $(this).html();
+            if (wdNum == "") {
+                $(this).css("padding", 0);
+            }
+        });
+
+
+        //打开/关闭聊天框
+        $(".chatBtn").click(function () {
+            $(".chatBox").toggle(10);
+        })
+        $(".chat-close").click(function () {
+            $(".chatBox").toggle(10);
+        })
+        //进聊天页面
+        $(".chat-list-people").each(function () {
+            $(this).click(function () {
+                var n = $(this).index();
+                $(".chatBox-head-one").toggle();
+                $(".chatBox-head-two").toggle();
+                $(".chatBox-list").fadeToggle();
+                $(".chatBox-kuang").fadeToggle();
+
+                //传名字
+                $(".ChatInfoName").text($(this).children(".chat-name").children("p").eq(0).html());
+
+                //传头像
+                $(".ChatInfoHead>img").attr("src", $(this).children().eq(0).children("img").attr("src"));
+
+                //聊天框默认最底部
+                $(document).ready(function () {
+                    $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                });
+            })
+        });
+
+        //返回列表
+        $(".chat-return").click(function () {
+            $(".chatBox-head-one").toggle(1);
+            $(".chatBox-head-two").toggle(1);
+            $(".chatBox-list").fadeToggle(1);
+            $(".chatBox-kuang").fadeToggle(1);
+        });
+
+        //      发送信息
+        $("#chat-fasong").click(function () {
+            var textContent = $(".div-textarea").html().replace(/[\n\r]/g, '<br>')
+            if (textContent != "") {
+                $(".chatBox-content-demo").append("<div class=\"clearfloat\">" +
+                    "<div class=\"author-name\"><small class=\"chat-date\">2017-12-02 14:26:58</small> </div> " +
+                    "<div class=\"right\"> <div class=\"chat-message\"> " + textContent + " </div> " +
+                    "<div class=\"chat-avatars\"><img src=\"jqueryChat/img/icon01.png\" alt=\"头像\" /></div> </div> </div>");
+
+                //发送后清空输入框
+                $(".div-textarea").html("");
+                //聊天框默认最底部
+                $(document).ready(function () {
+                    $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                });
+            }
+            if (textContent == "我比较适合学习什么课程？") {
+                $(".chatBox-content-demo").append("" +
+                    "<div class=\"clearfloat\">" +
+                    "<div class=\"left\"> " +
+                    "<div class=\"author-name\"><small class=\"chat-date\">2017-12-02 14:26:58</small> </div> " +
+                    "<div class=\"chat-avatars\"><img src=\"jqueryChat/img/bigw.png\" alt=\"头像\" /></div> " +
+                    "<div class=\"chat-message\"> " + "你比较适合学习C++语言基础" + " </div> " +
+                    "</div> " +
+                    "</div>");
+
+//                //发送后清空输入框
+//                $(".div-textarea").html("");
+                //聊天框默认最底部
+                $(document).ready(function () {
+                    $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                });
+            }
+            if (textContent == "Java中float有几位有效数字？") {
+                $(".chatBox-content-demo").append("" +
+                    "<div class=\"clearfloat\">" +
+                    "<div class=\"left\"> " +
+                    "<div class=\"author-name\"><small class=\"chat-date\">2017-12-02 14:26:58</small> </div> " +
+                    "<div class=\"chat-avatars\"><img src=\"jqueryChat/img/bigw.png\" alt=\"头像\" /></div> " +
+                    "<div class=\"chat-message\"> " + "Java中float有7位有效数字" + " </div> " +
+                    "</div> " +
+                    "</div>");
+                //聊天框默认最底部
+                $(document).ready(function () {
+                    $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                });
+            }
+            if (textContent == "C++中有几种数据类型？") {
+                $(".chatBox-content-demo").append("" +
+                    "<div class=\"clearfloat\">" +
+                    "<div class=\"left\"> " +
+                    "<div class=\"author-name\"><small class=\"chat-date\">2017-12-02 14:26:58</small> </div> " +
+                    "<div class=\"chat-avatars\"><img src=\"jqueryChat/img/bigw.png\" alt=\"头像\" /></div> " +
+                    "<div class=\"chat-message\"> " + "c++中数据类型分为两种：预定义类型和自定义数据类型。\n预定义类型：整型（int 4个字节）\n字符型\n布尔型 （bool）\n浮点型（4个字节）\n空类型：关键字void，不能用于普通变量的声明和普通的操作，只能用于指针型变量，函数返回值和函数参数。\n指针类型\n自定义类型：数组、结构体（struct）、联合体（union）、枚举（enum）" + " </div> " +
+                    "</div> " +
+                    "</div>");
+                //聊天框默认最底部
+                $(document).ready(function () {
+                    $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                });
+            }
+        });
+
+
+        //      发送表情
+        $("#chat-biaoqing").click(function () {
+            $(".biaoqing-photo").toggle();
+        });
+        $(document).click(function () {
+            $(".biaoqing-photo").css("display", "none");
+        });
+        $("#chat-biaoqing").click(function (event) {
+            event.stopPropagation();//阻止事件
+        });
+
+        $(".emoji-picker-image").each(function () {
+            $(this).click(function () {
+                var bq = $(this).parent().html();
+                console.log(bq)
+                $(".chatBox-content-demo").append("<div class=\"clearfloat\">" +
+                    "<div class=\"author-name\"><small class=\"chat-date\">2017-12-02 14:26:58</small> </div> " +
+                    "<div class=\"right\"> <div class=\"chat-message\"> " + bq + " </div> " +
+                    "<div class=\"chat-avatars\"><img src=\"jqueryChat/img/icon01.png\" alt=\"头像\" /></div> </div> </div>");
+                //发送后关闭表情框
+                $(".biaoqing-photo").toggle();
+                //聊天框默认最底部
+                $(document).ready(function () {
+                    $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                });
+            })
+        });
+
+        //      发送图片
+        function selectImg(pic) {
+            if (!pic.files || !pic.files[0]) {
+                return;
+            }
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                var images = evt.target.result;
+                $(".chatBox-content-demo").append("<div class=\"clearfloat\">" +
+                    "<div class=\"author-name\"><small class=\"chat-date\">2017-12-02 14:26:58</small> </div> " +
+                    "<div class=\"right\"> <div class=\"chat-message\"><img src=" + images + "></div> " +
+                    "<div class=\"chat-avatars\"><img src=\"jqueryChat/img/icon01.png\" alt=\"头像\" /></div> </div> </div>");
+                //聊天框默认最底部
+                $(document).ready(function () {
+                    $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+                });
+            };
+            reader.readAsDataURL(pic.files[0]);
+
+        }
+
+
+    </script>
+    .chatContainer,.chatContainer div, .chatContainer ul, .chatContainer li, .chatContainer p{
+
+
+</div>
+<!--<div class="panel-group" id="accordion" style=" position: fixed;bottom: 15px;right: 15px;">-->
+<!--<div class="panel panel-info" id="t" style="width:200px;">-->
+<!--<div class="panel-heading">-->
+<!--<h4 class="panel-title">-->
+<!--<a data-toggle="collapse" data-parent="#accordion"-->
+<!--href="#collapseexample">-->
+<!--Little ke-->
+<!--</a>-->
+<!--</h4>-->
+<!--</div>-->
+<!--<div id="collapseexample" class="panel-collapse collapse">-->
+<!--<div class="panel-body">-->
+<!--<div class="shhchat">-->
+
+<!--<div class="shhchatleft">-->
+<!--<div class="shhname">-->
+<!--小可<p>08:45</p>-->
+<!--</div>-->
+
+<!--<div class="shhcontext">-->
+<!--<span>hello，我是小可</span>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<div class="shhchatright"></div>-->
+
+<!--</div>-->
+
+
+<!--</div>-->
+<!--<div class="input-group">-->
+<!--<input type="text" style=" height:30px;" class="form-control input-lg"><span-->
+<!--class="input-group-addon btn btn-success">发送</span>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<style>-->
+<!--.shhchat {-->
+<!--width: 100%;-->
+<!--height: 300px;-->
+
+<!--}-->
+
+<!--.chat label {-->
+<!--font-size: 1.5px;-->
+<!--}-->
+
+<!--.chat p {-->
+<!--font-size: 1.5px;-->
+<!--color: #8F938F;-->
+<!--}-->
+
+<!--</style>-->
+<!--<script type="text/javascript">-->
+<!--$(function () {-->
+<!--$('#collapseexample').on('show.bs.collapse', function () {-->
+<!--var temp = document.getElementById("t");-->
+<!--temp.style.width = "200px";-->
+<!--// temp.style.height="400px";-->
+
+<!--})-->
+<!--});-->
+
+<!--$(function () {-->
+<!--$('#collapseexample').on('hidden.bs.collapse', function () {-->
+<!--var temp = document.getElementById("t");-->
+<!--temp.style.width = "100px";-->
+<!--temp.style.height = "30px";-->
+
+<!--})-->
+<!--});-->
+<!--</script>-->
+
+
+<script src="js/mainTime.js"></script> <!-- Resource jQuery -->
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        getPersonalOverview();
+
+        var userMain = JSON.parse(getCookie('loginResult'));
+        if (userMain == "" || userMain == null) {
+            window.location.href = "index.html";
+        }
+        commendCourse();
+        historyCourse();
+        courseImgs();
+//			if(userMain.photo != "" && userMain.photo != null){
+//				$("#userImg").attr("src","")
+//			}
+//			$("#userName").text(userMain.loginName);
+    });
+    $(window).resize(function () {
+        courseImgs();
+    });
+
+    function courseDetail(id) {
+//			var courseid=$(id).data("id");//课程id
+//			var title=$(id).data("title");
+//			var desc=$(id).data("desc");
+//			var overview=$(id).data("overview");
+//			var classify=$(id).data("classify");
+//			var classTime=$(id).data("classTime");
+//			var score=$(id).data("score");
+//			var createTime=$(id).data("createTime");
+//			var createBy=$(id).data("createBy");
+//			var pic=$(id).data("pic");
+//			var view=$(id).data("view");
+//			var focus=$(id).data("focus");
+//			setCookie('courseid',courseid);
+//			setCookie('title',title);
+//			setCookie('desc',desc);
+//			setCookie('overview',overview);
+//			setCookie('classify',classify);
+//			setCookie('classTime',classTime);
+//			setCookie('score',score);
+//			setCookie('createTime',createTime);
+//			setCookie('createBy',createBy);
+//			setCookie('pic',pic);
+//			setCookie('view',view);
+//			setCookie('focus',focus);
+        window.location.href = "courseDetail.html?c=" + id;
+
+    }
+</script>
+</body>
+</html>

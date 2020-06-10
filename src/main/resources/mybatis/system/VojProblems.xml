@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.VojProblemsDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.VojProblems">
+		<id column="problem_id" property="problemId" />
+		<result column="problem_is_public" property="problemIsPublic" />
+		<result column="problem_name" property="problemName" />
+		<result column="problem_time_limit" property="problemTimeLimit" />
+		<result column="problem_memory_limit" property="problemMemoryLimit" />
+		<result column="problem_description" property="problemDescription" />
+		<result column="problem_input_format" property="problemInputFormat" />
+		<result column="problem_output_format" property="problemOutputFormat" />
+		<result column="problem_sample_input" property="problemSampleInput" />
+		<result column="problem_sample_output" property="problemSampleOutput" />
+		<result column="problem_hint" property="problemHint" />
+		<result column="total_submission" property="totalSubmission" />
+		<result column="accepted_submission" property="acceptedSubmission" />
+	</resultMap>
+
+	<select id="selectVojProblemsWithTotalAndAcList" resultMap="BaseResultMap">
+		SELECT DISTINCT(p.problem_id), problem_name, problem_is_public, (
+			SELECT COUNT(*)
+			FROM voj_submissions s
+			WHERE s.problem_id = p.problem_id
+		) AS total_submission, (
+			SELECT COUNT(*)
+			FROM voj_submissions s
+			WHERE s.problem_id = p.problem_id AND s.submission_judge_result = 'AC'
+		) AS accepted_submission
+		FROM voj_problems p
+	</select>
+
+	<insert id="createProblem"
+			parameterType="com.yunjuanyunshu.modules.entity.VojProblems"
+			flushCache="true"
+			keyProperty="problemId"
+			keyColumn="problem_id"
+			useGeneratedKeys="true">
+		INSERT INTO voj_problems (problem_is_public, problem_name, problem_time_limit, problem_memory_limit, problem_description, problem_input_format, problem_output_format, problem_sample_input, problem_sample_output, problem_hint)
+		VALUES (#{problemIsPublic}, #{problemName}, #{problemTimeLimit}, #{problemMemoryLimit}, #{problemDescription}, #{problemInputFormat}, #{problemOutputFormat}, #{problemSampleInput}, #{problemSampleOutput}, #{problemHint})
+	</insert>
+
+</mapper>

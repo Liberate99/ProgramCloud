@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.LogDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.Log">
+		<id column="id" property="id" />
+		<result column="type" property="type" />
+		<result column="title" property="title" />
+		<result column="create_by" property="createBy" />
+		<result column="create_date" property="createDate" />
+		<result column="remote_addr" property="remoteAddr" />
+		<result column="user_agent" property="userAgent" />
+		<result column="request_uri" property="requestUri" />
+		<result column="method" property="method" />
+		<result column="params" property="params" />
+		<result column="exception" property="exception" />
+	</resultMap>
+	<insert id="insertLog" parameterType="com.yunjuanyunshu.modules.entity.Log">
+		insert INTO  sys_log(id,title) VALUES
+		(#{id,jdbcType=VARCHAR} ,#{title,jdbcType=VARCHAR})
+	</insert>
+
+</mapper>

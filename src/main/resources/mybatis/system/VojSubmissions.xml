@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunjuanyunshu.modules.mapper.VojSubmissionsDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.yunjuanyunshu.modules.entity.VojSubmissions">
+		<id column="submission_id" property="submissionId" />
+		<result column="problem_id" property="problemId" />
+		<result column="uid" property="uid" />
+		<result column="language_id" property="languageId" />
+		<result column="submission_submit_time" property="submissionSubmitTime" />
+		<result column="submission_execute_time" property="submissionExecuteTime" />
+		<result column="submission_used_time" property="submissionUsedTime" />
+		<result column="submission_used_memory" property="submissionUsedMemory" />
+		<result column="submission_judge_result" property="submissionJudgeResult" />
+		<result column="submission_judge_score" property="submissionJudgeScore" />
+		<result column="submission_judge_log" property="submissionJudgeLog" />
+		<result column="submission_code" property="submissionCode" />
+	</resultMap>
+
+</mapper>
