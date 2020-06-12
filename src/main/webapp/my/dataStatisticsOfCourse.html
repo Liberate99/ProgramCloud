@@ -76,6 +76,7 @@
 </div>
 <div class="main">
 
+    <!--当前课程数据-->
     <div class="container">
         <div>
             <div style="display:flex;align-items:center;">
@@ -93,152 +94,123 @@
         </div>
     </div>
 
+    <div class="container">
+        <!--选择班级框-->
+        <div class="input-group" style="width: 600px;min-width: 300px; display: flex;">
+            <p style="width: 100px; min-width: 80px;">当前班级：</p>
+            <div class="input-group-btn" style="margin-left: 10px;">
+                <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span id="classNameSelected">选择班级</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" style="min-width: 300px; width: 450px;" id="selectClassTag">
+                    <li>
+                        <a href="javascript:;" onclick="searchClassTag(this)">全部</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--班级数据1 -->
+        <div>
+            <div>
+                <div id="class_data_1" style="width: 600px;height:400px;margin: auto"></div>
+            </div>
+        </div>
+
+        <!--班级数据2-->
+        <div style="margin-top: 50px;">
+            <div>
+                <div id="class_data_2" style="width: 600px;height:400px;margin: auto"></div>
+            </div>
+        </div>
+
+        <!--班级数据3-->
+        <div style="margin-top: 50px;">
+            <div>
+                <div id="class_data_3" style="width: 600px;height:400px;margin: auto"></div>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
-        <div>
-            <p>选择班级：</p>
-        </div>
-
-        <p class="main-tit" style="font-family: '黑体';">学习偏好</p>
-        <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-        <div>
-            <div id="main1" style="width: 600px;height:400px;margin: auto"></div>
-            <!--<script type="text/javascript">-->
-                <!--//                // 引入 ECharts 主模块-->
-                <!--//                var echarts = require('echarts');-->
-
-                <!--// 基于准备好的dom，初始化echarts实例-->
-                <!--var myChart_1 = echarts.init(document.getElementById('main1'));-->
-                <!--// 指定图表的配置项和数据-->
-                <!--var option = {-->
-                    <!--tooltip: {-->
-                        <!--trigger: 'axis'-->
-                    <!--},-->
-                    <!--toolbox: {-->
-                        <!--show: false,-->
-                        <!--feature: {-->
-                            <!--mark: {show: true},-->
-                            <!--dataView: {show: true, readOnly: false},-->
-                            <!--restore: {show: true},-->
-                            <!--saveAsImage: {show: true}-->
-                        <!--}-->
-                    <!--},-->
-                    <!--calculable: true,-->
-                    <!--polar: [-->
-                        <!--{-->
-                            <!--indicator: [-->
-                                <!--{text: '数据库', max: 100},-->
-                                <!--{text: '前端开发', max: 100},-->
-                                <!--{text: '后端开发', max: 100},-->
-                                <!--{text: '移动开发', max: 100},-->
-                                <!--{text: '人工智能', max: 100},-->
-                                <!--{text: '大数据', max: 100}-->
-                            <!--],-->
-                            <!--radius: 130-->
-                        <!--}-->
-                    <!--],-->
-                    <!--series: [-->
-                        <!--{-->
-                            <!--name: '偏好数据',-->
-                            <!--type: 'radar',-->
-                            <!--itemStyle: {-->
-                                <!--normal: {-->
-                                    <!--areaStyle: {-->
-                                        <!--type: 'default'-->
-                                    <!--}-->
-                                <!--}-->
-                            <!--},-->
-                            <!--data: [-->
-                                <!--{-->
-                                    <!--value: [97, 42, 88, 94, 90, 86],-->
-                                    <!--name: '能力'-->
-                                <!--}-->
-                            <!--]-->
-                        <!--}-->
-                    <!--]-->
-                <!--};-->
-                <!--// 使用刚指定的配置项和数据显示图表。-->
-                <!--myChart_1.setOption(option);-->
-            <!--</script>-->
-        </div>
-
 
         <p class="main-tit" style="font-family: '黑体';">学习比例</p>
         <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
         <div>
             <!--<div id="main2" style="width: 600px;height:500px;margin: auto"></div>-->
             <!--<script type="text/javascript">-->
-                <!--//                // 引入 ECharts 主模块-->
-                <!--//                var echarts = require('echarts');-->
+            <!--//                // 引入 ECharts 主模块-->
+            <!--//                var echarts = require('echarts');-->
 
-                <!--// 基于准备好的dom，初始化echarts实例-->
-                <!--var myChart_2 = echarts.init(document.getElementById('main2'));-->
-                <!--// 指定图表的配置项和数据-->
-                <!--var option = {-->
-                    <!--tooltip: {-->
-                        <!--trigger: 'item',-->
-                        <!--formatter: "{a} <br/>{b} : {c} ({d}%)"-->
-                    <!--},-->
+            <!--// 基于准备好的dom，初始化echarts实例-->
+            <!--var myChart_2 = echarts.init(document.getElementById('main2'));-->
+            <!--// 指定图表的配置项和数据-->
+            <!--var option = {-->
+            <!--tooltip: {-->
+            <!--trigger: 'item',-->
+            <!--formatter: "{a} <br/>{b} : {c} ({d}%)"-->
+            <!--},-->
 
-                    <!--visualMap: {-->
-                        <!--show: false,-->
-                        <!--min: 80,-->
-                        <!--max: 600,-->
-                        <!--inRange: {-->
-                            <!--colorLightness: [0, 1]-->
-                        <!--}-->
-                    <!--},-->
-                    <!--series: [-->
-                        <!--{-->
-                            <!--name: '访问来源',-->
-                            <!--type: 'pie',-->
-                            <!--radius: '55%',-->
-                            <!--center: ['50%', '50%'],-->
-                            <!--data: [-->
-                                <!--{value: 335, name: 'Java'},-->
-                                <!--{value: 310, name: 'Python'},-->
-                                <!--{value: 274, name: 'C++'},-->
-                                <!--{value: 235, name: 'Swift'},-->
-                                <!--{value: 400, name: 'C#'}-->
-                            <!--].sort(function (a, b) {-->
-                                <!--return a.value - b.value;-->
-                            <!--}),-->
-                            <!--roseType: 'radius',-->
-                            <!--label: {-->
-                                <!--normal: {-->
-                                    <!--textStyle: {-->
-                                        <!--color: 'rgba(000, 000, 000, 0.7)'-->
-                                    <!--}-->
-                                <!--}-->
-                            <!--},-->
-                            <!--labelLine: {-->
-                                <!--normal: {-->
-                                    <!--lineStyle: {-->
-                                        <!--color: 'rgba(0, 0, 0, 0.7)'-->
-                                    <!--},-->
-                                    <!--smooth: 0.2,-->
-                                    <!--length: 10,-->
-                                    <!--length2: 20-->
-                                <!--}-->
-                            <!--},-->
-                            <!--itemStyle: {-->
-                                <!--normal: {-->
-                                    <!--color: '#c23531',-->
-                                    <!--shadowBlur: 200,-->
-                                    <!--shadowColor: 'rgba(0, 0, 0, 0.5)'-->
-                                <!--}-->
-                            <!--},-->
+            <!--visualMap: {-->
+            <!--show: false,-->
+            <!--min: 80,-->
+            <!--max: 600,-->
+            <!--inRange: {-->
+            <!--colorLightness: [0, 1]-->
+            <!--}-->
+            <!--},-->
+            <!--series: [-->
+            <!--{-->
+            <!--name: '访问来源',-->
+            <!--type: 'pie',-->
+            <!--radius: '55%',-->
+            <!--center: ['50%', '50%'],-->
+            <!--data: [-->
+            <!--{value: 335, name: 'Java'},-->
+            <!--{value: 310, name: 'Python'},-->
+            <!--{value: 274, name: 'C++'},-->
+            <!--{value: 235, name: 'Swift'},-->
+            <!--{value: 400, name: 'C#'}-->
+            <!--].sort(function (a, b) {-->
+            <!--return a.value - b.value;-->
+            <!--}),-->
+            <!--roseType: 'radius',-->
+            <!--label: {-->
+            <!--normal: {-->
+            <!--textStyle: {-->
+            <!--color: 'rgba(000, 000, 000, 0.7)'-->
+            <!--}-->
+            <!--}-->
+            <!--},-->
+            <!--labelLine: {-->
+            <!--normal: {-->
+            <!--lineStyle: {-->
+            <!--color: 'rgba(0, 0, 0, 0.7)'-->
+            <!--},-->
+            <!--smooth: 0.2,-->
+            <!--length: 10,-->
+            <!--length2: 20-->
+            <!--}-->
+            <!--},-->
+            <!--itemStyle: {-->
+            <!--normal: {-->
+            <!--color: '#c23531',-->
+            <!--shadowBlur: 200,-->
+            <!--shadowColor: 'rgba(0, 0, 0, 0.5)'-->
+            <!--}-->
+            <!--},-->
 
-                            <!--animationType: 'scale',-->
-                            <!--animationEasing: 'elasticOut',-->
-                            <!--animationDelay: function (idx) {-->
-                                <!--return Math.random() * 200;-->
-                            <!--}-->
-                        <!--}-->
-                    <!--]-->
-                <!--};-->
-                <!--// 使用刚指定的配置项和数据显示图表。-->
-                <!--myChart_2.setOption(option);-->
+            <!--animationType: 'scale',-->
+            <!--animationEasing: 'elasticOut',-->
+            <!--animationDelay: function (idx) {-->
+            <!--return Math.random() * 200;-->
+            <!--}-->
+            <!--}-->
+            <!--]-->
+            <!--};-->
+            <!--// 使用刚指定的配置项和数据显示图表。-->
+            <!--myChart_2.setOption(option);-->
             <!--</script>-->
         </div>
 
@@ -247,93 +219,103 @@
         <div>
             <!--<div id="main3" style="width: 900px;height:500px;margin: auto"></div>-->
             <!--<script type="text/javascript">-->
-                <!--//                // 引入 ECharts 主模块-->
-                <!--//                var echarts = require('echarts');-->
+            <!--//                // 引入 ECharts 主模块-->
+            <!--//                var echarts = require('echarts');-->
 
-                <!--// 基于准备好的dom，初始化echarts实例-->
-                <!--var myChart_3 = echarts.init(document.getElementById('main3'));-->
-                <!--myChart_3.showLoading();-->
-                <!--$.get('data/les-miserables.gexf', function (xml) {-->
-                    <!--myChart_3.hideLoading();-->
+            <!--// 基于准备好的dom，初始化echarts实例-->
+            <!--var myChart_3 = echarts.init(document.getElementById('main3'));-->
+            <!--myChart_3.showLoading();-->
+            <!--$.get('data/les-miserables.gexf', function (xml) {-->
+            <!--myChart_3.hideLoading();-->
 
-                    <!--var graph = echarts.dataTool.gexf.parse(xml);-->
-                    <!--var categories = [];-->
-                    <!--for (var i = 0; i < 9; i++) {-->
-                        <!--categories[i] = {-->
-                            <!--//name: '类目' + i-->
-                        <!--};-->
-                    <!--}-->
-                    <!--graph.nodes.forEach(function (node) {-->
-                        <!--node.itemStyle = null;-->
-                        <!--node.value = node.symbolSize;-->
-                        <!--node.symbolSize /= 1.5;-->
-                        <!--node.label = {-->
-                            <!--normal: {-->
-                                <!--show: node.symbolSize > 30-->
-                            <!--}-->
-                        <!--};-->
-                        <!--node.category = node.attributes.modularity_class;-->
-                    <!--});-->
-                    <!--option = {-->
-                        <!--title: {-->
-                            <!--//text: '权值',-->
-                            <!--subtext: 'Default layout',-->
-                            <!--top: 'bottom',-->
-                            <!--left: 'right'-->
-                        <!--},-->
-                        <!--tooltip: {},-->
-                        <!--legend: [{-->
-                            <!--// selectedMode: 'single',-->
-                            <!--data: categories.map(function (a) {-->
-                                <!--return a.name;-->
-                            <!--})-->
-                        <!--}],-->
-                        <!--animationDuration: 1500,-->
-                        <!--animationEasingUpdate: 'quinticInOut',-->
-                        <!--series : [-->
-                            <!--{-->
-                                <!--name: '权值',-->
-                                <!--type: 'graph',-->
-                                <!--layout: 'none',-->
-                                <!--data: graph.nodes,-->
-                                <!--links: graph.links,-->
-                                <!--categories: categories,-->
-                                <!--roam: true,-->
-                                <!--focusNodeAdjacency: true,-->
-                                <!--itemStyle: {-->
-                                    <!--normal: {-->
-                                        <!--borderColor: '#fff',-->
-                                        <!--borderWidth: 1,-->
-                                        <!--shadowBlur: 10,-->
-                                        <!--shadowColor: 'rgba(0, 0, 0, 0.3)'-->
-                                    <!--}-->
-                                <!--},-->
-                                <!--label: {-->
-                                    <!--position: 'right',-->
-                                    <!--formatter: '{b}'-->
-                                <!--},-->
-                                <!--lineStyle: {-->
-                                    <!--color: 'source',-->
-                                    <!--curveness: 0.3-->
-                                <!--},-->
-                                <!--emphasis: {-->
-                                    <!--lineStyle: {-->
-                                        <!--width: 10-->
-                                    <!--}-->
-                                <!--}-->
-                            <!--}-->
-                        <!--]-->
-                    <!--};-->
+            <!--var graph = echarts.dataTool.gexf.parse(xml);-->
+            <!--var categories = [];-->
+            <!--for (var i = 0; i < 9; i++) {-->
+            <!--categories[i] = {-->
+            <!--//name: '类目' + i-->
+            <!--};-->
+            <!--}-->
+            <!--graph.nodes.forEach(function (node) {-->
+            <!--node.itemStyle = null;-->
+            <!--node.value = node.symbolSize;-->
+            <!--node.symbolSize /= 1.5;-->
+            <!--node.label = {-->
+            <!--normal: {-->
+            <!--show: node.symbolSize > 30-->
+            <!--}-->
+            <!--};-->
+            <!--node.category = node.attributes.modularity_class;-->
+            <!--});-->
+            <!--option = {-->
+            <!--title: {-->
+            <!--//text: '权值',-->
+            <!--subtext: 'Default layout',-->
+            <!--top: 'bottom',-->
+            <!--left: 'right'-->
+            <!--},-->
+            <!--tooltip: {},-->
+            <!--legend: [{-->
+            <!--// selectedMode: 'single',-->
+            <!--data: categories.map(function (a) {-->
+            <!--return a.name;-->
+            <!--})-->
+            <!--}],-->
+            <!--animationDuration: 1500,-->
+            <!--animationEasingUpdate: 'quinticInOut',-->
+            <!--series : [-->
+            <!--{-->
+            <!--name: '权值',-->
+            <!--type: 'graph',-->
+            <!--layout: 'none',-->
+            <!--data: graph.nodes,-->
+            <!--links: graph.links,-->
+            <!--categories: categories,-->
+            <!--roam: true,-->
+            <!--focusNodeAdjacency: true,-->
+            <!--itemStyle: {-->
+            <!--normal: {-->
+            <!--borderColor: '#fff',-->
+            <!--borderWidth: 1,-->
+            <!--shadowBlur: 10,-->
+            <!--shadowColor: 'rgba(0, 0, 0, 0.3)'-->
+            <!--}-->
+            <!--},-->
+            <!--label: {-->
+            <!--position: 'right',-->
+            <!--formatter: '{b}'-->
+            <!--},-->
+            <!--lineStyle: {-->
+            <!--color: 'source',-->
+            <!--curveness: 0.3-->
+            <!--},-->
+            <!--emphasis: {-->
+            <!--lineStyle: {-->
+            <!--width: 10-->
+            <!--}-->
+            <!--}-->
+            <!--}-->
+            <!--]-->
+            <!--};-->
 
-                    <!--myChart_3.setOption(option);-->
-                <!--}, 'xml');-->
+            <!--myChart_3.setOption(option);-->
+            <!--}, 'xml');-->
 
-                <!--//                // 使用刚指定的配置项和数据显示图表。-->
-                <!--//                myChart_3.setOption(option);-->
+            <!--//                // 使用刚指定的配置项和数据显示图表。-->
+            <!--//                myChart_3.setOption(option);-->
             <!--</script>-->
         </div>
     </div>
+
 </div>
+
+<!--设置课程选择框-->
+<script id="classesTag" type="text/html">
+    <% for (var i = 0; i < value.length; i ++) { %>
+        <li>
+            <a href="javascript:;" data-no=<%= value[i].id %> onclick="searchClassTag(this)"><%=value[i].name%></a>
+        </li>
+    <% } %>
+</script>
 
 <div class="footer">
     <div class="container">
@@ -358,18 +340,16 @@
 
 <script type="text/javascript">
 
-    // 当前课程id
-    var course_id = "";
-    // 当前课程名
-    var course_title = "";
-    // 用户名
-    var user_name = "";
-    // 用户ID
-    var user_id = "";
-    // // 存储班级数组
-    // var classArray = new Array();
+    var course_id = "";// 当前课程id
+    var course_title = "";// 当前课程名
+    var user_name = "";// 用户名
+    var user_id = "";// 用户ID
 
     $(document).ready(function () {
+        // 隐藏图表占用页面
+        document.getElementById("class_data_1").style.display="none";//隐藏
+        document.getElementById("class_data_2").style.display="none";//隐藏
+
 
         // 获取当前课程 id、title
         var href = location.href;
@@ -402,11 +382,6 @@
         if(user_id != null && user_id != "" && course_id != null && course_id !=""){
             getCourseClassesIHave(user_id, course_id);
         }
-
-
-        //todo 6.获取当前班级课程相关数据
-
-
     });
 
     // 获取 当前课程 近一周 相关数据
@@ -538,9 +513,9 @@
         chart_total.setOption(total_option);
     }
 
-    //获取该门课程 该用户创建的班级
+    // 获取该门课程 该用户创建的班级
     function getCourseClassesIHave(userID, courseID){
-        var arr = new Array();
+        // var arr = new Array();
         var data = {
             user:{
                 id:userID
@@ -552,12 +527,238 @@
         request('business.busClass.getClassesByCourseCreatedByUser',data,function callback(result){
             if(result.code == 0){
                 console.log(result.value);
-                arr = result.value;
+                // arr = result.value;
+                var data = {
+                    value : result.value
+                };
                 // todo 1.设置'选择班级'下拉菜单
+                if($("script#classesTag").length){
+                    var classesTag = template('classesTag', data);
+                    $('#selectClassTag').empty().append(classesTag);
+                }
             }else{
                 console.log(result);
             }
         });
+    }
+
+    // 班级选择
+    function searchClassTag(obj) {
+        var textMain = $(obj).html();
+        $("#classNameSelected").html(textMain);
+        $("#classNameSelected").attr("data-no", $(obj).attr("data-no"));
+        // 获取当前班级课程相关数据
+        searchClassStatistic()
+    }
+
+    // 查询班级数据
+    function searchClassStatistic() {
+        var class_id = $("#classNameSelected").attr("data-no");
+        // 获取数据
+        var data = {
+            classID:class_id,
+            courseID:course_id
+        }
+        $.ajax({
+            type: 'GET',
+            data: data,
+            url: 'http://10.1.21.153/hdu/cb/getLastWeekDailyClassStatistics',
+            dataType: 'json',
+            success: function(data){
+                // 显示图表
+                document.getElementById("class_data_1").style.display="";
+                document.getElementById("class_data_2").style.display="";
+                console.log(data)
+                if(data.code == 0){
+                    var week_exp_num = [data.result.expNum[0], data.result.expNum[1], data.result.expNum[2], data.result.expNum[3],
+                        data.result.expNum[4], data.result.expNum[5], data.result.expNum[6]];
+                    var week_duration = [data.result.duration[0], data.result.duration[1], data.result.duration[2], data.result.duration[3],
+                        data.result.duration[4], data.result.duration[5], data.result.duration[6]];
+                    var week_file_upload_num = [data.result.fileUploadNum[0], data.result.fileUploadNum[1], data.result.fileUploadNum[2], data.result.fileUploadNum[3],
+                        data.result.fileUploadNum[4], data.result.fileUploadNum[5], data.result.fileUploadNum[6]];
+                    setEchartsOption_class_1(week_exp_num, week_duration); // 折线图
+                    setEchartsOption_class_2(week_file_upload_num); // 柱状图
+                }else{
+                    var nodata = [0, 0, 0, 0, 0, 0, 0];
+                    setEchartsOption_class_1(nodata,nodata);
+                    setEchartsOption_class_2(nodata);
+                    console.log(data);
+                }
+            },
+            error: function(xhr){
+                console.log(xhr);
+                var nodata = [0, 0, 0, 0, 0, 0, 0];
+                setEchartsOption_class_1(nodata,nodata);
+                setEchartsOption_class_2(nodata);
+            }
+        });
+    }
+
+    // 设置 class_data_1 一周班级实验次数、时长
+    function setEchartsOption_class_1(exp_num, duration){
+        var chart_total = echarts.init(document.getElementById('class_data_1'));
+        var total_option = {
+            title:{
+                left:'center',
+                text:'该班级近期实验次数/实验时长',
+                textStyle:{
+                    //文字颜色
+                    color:'#000000',
+                    //字体风格,'normal','italic','oblique'
+                    fontStyle:'normal',
+                    //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+                    fontWeight:'bold',
+                    //字体系列
+                    fontFamily:'sans-serif',
+                    //字体大小
+                    fontSize:18,
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            legend: {
+                data: [
+                    {name: '实验次数'},
+                    {name: '实验时长'}
+                ],
+                textStyle: {
+                    color: '#000000',
+                    fontSize: 11
+                },
+                y: 'bottom',
+                x: 'center',
+            },
+            xAxis: {
+                type: 'category',
+                data: [GetDateStr(-7), GetDateStr(-6), GetDateStr(-5), GetDateStr(-4), GetDateStr(-3), GetDateStr(-2), GetDateStr(-1)],
+            },
+            yAxis: [
+                {
+                    type : 'value',
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#000000'
+                        },
+                        fontSize: 11,
+                        interval: 'auto',
+                        formatter: '{value}'
+                    },
+                    name : '单位（次）',
+                },
+                {
+                    type : 'value',
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#000'
+                        },
+                        fontSize: 11,
+                        interval: 'auto',
+                        formatter: '{value}'
+                    },
+                    name : '单位（分钟）',
+                },
+            ],
+            series: [
+                //exp num
+                {
+                    name: '实验次数',
+                    data: exp_num,
+                    type: 'line',
+                    yAxisIndex: 0,
+                },
+
+                //duration
+                {
+                    name: '实验时长',
+                    data: duration,
+                    type: 'line',
+                    yAxisIndex: 1,
+                }
+            ]
+        };
+        chart_total.setOption(total_option);
+    }
+
+    // 设置 class_data_2 一周班级上传文件总次数
+    function setEchartsOption_class_2(file_upload_num) {
+        var chart_total = echarts.init(document.getElementById('class_data_2'));
+        var total_option = {
+            color: ['#3398DB'],
+            title:{
+                left:'center',
+                text:'该班级近期文件上传次数',
+                textStyle:{
+                    //文字颜色
+                    color:'#000000',
+                    //字体风格,'normal','italic','oblique'
+                    fontStyle:'normal',
+                    //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+                    fontWeight:'bold',
+                    //字体系列
+                    fontFamily:'sans-serif',
+                    //字体大小
+                    fontSize:18,
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: [GetDateStr(-7), GetDateStr(-6), GetDateStr(-5), GetDateStr(-4), GetDateStr(-3), GetDateStr(-2), GetDateStr(-1)],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLabel: {
+                        show: true,
+                        textStyle: {
+                            color: '#000000'
+                        },
+                        fontSize: 11,
+                        interval: 'auto',
+                        formatter: '{value}'
+                    },
+                }
+            ],
+            series: [
+                {
+                    name: '文件上传次数',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: file_upload_num
+                }
+            ]
+        };
+        chart_total.setOption(total_option);
+    }
+
+    // 设置 class_data_3 课程中每个学生实验数据
+    function setEchartsOption_class_3() {
+        
     }
 
 </script>

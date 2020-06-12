@@ -112,11 +112,11 @@
         </ul>
     </div>
 </div>
+<!--设置-->
 <script id="classify" type="text/html">
     <% for (var i = 0; i < value.length; i ++) { %>
 
-    <a href="javascript:;" class="courseKind" data-no=<%= value[i].value %>
-        onclick="choose(this)"><%=value[i].label%></a>
+    <a href="javascript:;" class="courseKind" data-no=<%= value[i].value %>onclick="choose(this)"><%=value[i].label%></a>
 
     <% } %>
 </script>
@@ -152,7 +152,6 @@
     </a>
     <% } %>
 </script>
-
 <script id="content_new" type="text/html">
     <% for (var i = 0; i < value.length; i ++) { %>
     <a href="#"
@@ -231,7 +230,6 @@
 <script>
     //		document.ready
     $(document).ready(function () {
-//			trace("初始化方法进入二");
         getDict();
 
         var classify = "";//课程分类
@@ -239,8 +237,6 @@
         var title = "";
 
         courseList(classify, title, page, true);
-//			courseImgs();
-
     });
     $(window).resize(function () {
         courseImgs();
@@ -290,7 +286,6 @@
         courseList(classify, title, page, true);
 
     }
-
 
     function courseDetail(id) {
 //        window.open("courseDetail.html?courseId=" + id);

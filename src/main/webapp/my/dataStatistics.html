@@ -107,15 +107,33 @@
                 </div>
             </div>
 
-            <!--图表-->
-            <div class="row" style="width: 70%; height: 400px; margin: 40px auto;">
-                <!--<p sytle="margin: 10px auto; font-family: unset;">近一周实验次数/实验时长</p>-->
+            <!--图表1-->
+            <div class="row" style="min-width: 700px; width: 80%; height: 400px; margin: 40px auto;">
+                <div id="Echarts_last_month"
+                     style="min-width: 700px; width: 850px; height: 400px;
+                            background-color: #ffffff;
+                            -webkit-tap-highlight-color: transparent;
+                            user-select: none;margin: 10px auto;">
+                </div>
+            </div>
+
+            <!--图表2-->
+            <div class="row" style="min-width: 700px; width: 80%; height: 400px; margin: 40px auto;">
+                <div id="Echarts_last_month1"
+                     style="min-width: 700px; width: 850px; height: 400px;
+                            background-color: #ffffff;
+                            -webkit-tap-highlight-color: transparent;
+                            user-select: none;margin: 10px auto;">
+                </div>
+            </div>
+
+            <!--图表3-->
+            <div class="row" style="min-width: 600px; width: 80%; height: 400px; margin: 40px auto;">
                 <div id="Echarts_last_week"
                      style="width: 600px;height: 400px;
                             background-color: #ffffff;
                             -webkit-tap-highlight-color: transparent;
                             user-select: none;margin: 10px auto;">
-
                 </div>
             </div>
         </div>
@@ -209,6 +227,9 @@
 
         // 获取全站累计实验次数、实验时长、文件上传次数
         getFPGATotalStatistics()
+
+        // 获取近一月 实验次数、实验时长、上传文件次数 - echarts
+        getLastMonthStatistics()
 
         // 获取近一周 实验次数、实验时长 - echarts
         getLastWeekStatistics()

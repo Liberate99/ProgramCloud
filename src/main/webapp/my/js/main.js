@@ -518,8 +518,7 @@ function getDict(){
 
 		if($("script#classify").length){
 			var html = template('classify', data);
-			//console.log(html);
-			$('#dict').append(html);	
+			$('#dict').append(html);
 		}
 		if($("script#classifyTag").length){
 			var searchTag = template('classifyTag', data);
@@ -590,6 +589,247 @@ function getFPGATotalStatistics(){
     });
 }
 
+// 获取近一月 实验次数、实验时长
+function getLastMonthStatistics(){
+    $.ajax({
+        type: 'GET',
+        url: 'http://10.1.21.153/hdu/cb/getLastMonthDailyStatistics',
+        dataType: 'json',
+        success: function(data){
+            console.log(data)
+            if(data.code == 0){
+                var month_exp_num = [
+                						data.result.expNum[0], data.result.expNum[1], data.result.expNum[2], data.result.expNum[3], data.result.expNum[4], data.result.expNum[5], data.result.expNum[6],
+									 	data.result.expNum[7], data.result.expNum[8], data.result.expNum[9], data.result.expNum[10], data.result.expNum[11], data.result.expNum[12], data.result.expNum[13],
+                    					data.result.expNum[14],data.result.expNum[15],data.result.expNum[16],data.result.expNum[17], data.result.expNum[18], data.result.expNum[19], data.result.expNum[20],
+										data.result.expNum[21],data.result.expNum[22],data.result.expNum[23],data.result.expNum[24], data.result.expNum[25], data.result.expNum[26], data.result.expNum[27],
+                    					data.result.expNum[28],data.result.expNum[29],data.result.expNum[30]
+                ];
+                var month_duration = [
+                    					data.result.duration[0], data.result.duration[1], data.result.duration[2], data.result.duration[3],  data.result.duration[4],  data.result.duration[5],  data.result.duration[6],
+                    					data.result.duration[7], data.result.duration[8], data.result.duration[9], data.result.duration[10], data.result.duration[11], data.result.duration[12], data.result.duration[13],
+                    					data.result.duration[14],data.result.duration[15],data.result.duration[16],data.result.duration[17], data.result.duration[18], data.result.duration[19], data.result.duration[20],
+                    					data.result.duration[21],data.result.duration[22],data.result.duration[23],data.result.duration[24], data.result.duration[25], data.result.duration[26], data.result.duration[27],
+                    					data.result.duration[28],data.result.duration[29],data.result.duration[30]
+				];
+                var month_file_upload_num = [
+                    					data.result.fileUploadNum[0], data.result.fileUploadNum[1], data.result.fileUploadNum[2], data.result.fileUploadNum[3],  data.result.fileUploadNum[4],  data.result.fileUploadNum[5],  data.result.fileUploadNum[6],
+                    					data.result.fileUploadNum[7], data.result.fileUploadNum[8], data.result.fileUploadNum[9], data.result.fileUploadNum[10], data.result.fileUploadNum[11], data.result.fileUploadNum[12], data.result.fileUploadNum[13],
+                    					data.result.fileUploadNum[14],data.result.fileUploadNum[15],data.result.fileUploadNum[16],data.result.fileUploadNum[17], data.result.fileUploadNum[18], data.result.fileUploadNum[19], data.result.fileUploadNum[20],
+                    					data.result.fileUploadNum[21],data.result.fileUploadNum[22],data.result.fileUploadNum[23],data.result.fileUploadNum[24], data.result.fileUploadNum[25], data.result.fileUploadNum[26], data.result.fileUploadNum[27],
+                    					data.result.fileUploadNum[28],data.result.fileUploadNum[29],data.result.fileUploadNum[30]
+				];
+                setTotalMonthEchartsOption(month_exp_num, month_duration);
+                setTotalMonthEchartsOption1(month_file_upload_num);
+            }else{
+                console.log(data);
+                var nodata = new Array(30).fill(0);
+                setTotalMonthEchartsOption(nodata,nodata);
+                setTotalMonthEchartsOption1(nodata)
+            }
+        },
+        error: function(xhr){
+            console.log(xhr);
+            var nodata = new Array(30).fill(0);
+            setTotalMonthEchartsOption(nodata,nodata);
+            setTotalMonthEchartsOption1(nodata)
+        }
+    });
+}
+function setTotalMonthEchartsOption(month_exp_num, month_duration){
+    var chart_total = echarts.init(document.getElementById('Echarts_last_month'));
+    var total_option = {
+        title:{
+            left:'center',
+            text:'近一月实验次数/实验时长',
+            textStyle:{
+                //文字颜色
+                color:'#000000',
+                //字体风格,'normal','italic','oblique'
+                fontStyle:'normal',
+                //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+                fontWeight:'bold',
+                //字体系列
+                fontFamily:'sans-serif',
+                //字体大小
+                fontSize:18,
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                crossStyle: {
+                    color: '#999'
+                }
+            }
+        },
+        legend: {
+            data: [
+                {name: '实验次数'},
+                {name: '实验时长'}
+            ],
+            textStyle: {
+                color: '#000000',
+                fontSize: 11
+            },
+            y: 'bottom',
+            x: 'center',
+        },
+        xAxis: {
+            axisLabel: {
+                interval:0,
+                rotate:40
+            },
+            type: 'category',
+            data: [GetDateStr(-30), GetDateStr(-29), GetDateStr(-28), GetDateStr(-27), GetDateStr(-26), GetDateStr(-25), GetDateStr(-24), GetDateStr(-23), GetDateStr(-22),
+                GetDateStr(-21), GetDateStr(-20), GetDateStr(-19), GetDateStr(-18), GetDateStr(-17), GetDateStr(-16), GetDateStr(-15),
+                GetDateStr(-14), GetDateStr(-13), GetDateStr(-12), GetDateStr(-11), GetDateStr(-10), GetDateStr(-9), GetDateStr(-8),
+                GetDateStr(-7), GetDateStr(-6), GetDateStr(-5), GetDateStr(-4), GetDateStr(-3), GetDateStr(-2), GetDateStr(-1)],
+        },
+        yAxis: [
+            {
+                type : 'value',
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#000000'
+                    },
+                    fontSize: 11,
+                    interval: 'auto',
+                    formatter: '{value}'
+                },
+                name : '单位（次）',
+            },
+            {
+                type : 'value',
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#000'
+                    },
+                    fontSize: 11,
+                    interval: 'auto',
+                    formatter: '{value}'
+                },
+                name : '单位（分钟）',
+            },
+        ],
+        series: [
+            //exp num
+            {
+                name: '实验次数',
+                data: month_exp_num,
+                type: 'line',
+                yAxisIndex: 0,
+            },
+
+            //duration
+            {
+                name: '实验时长',
+                data: month_duration,
+                type: 'line',
+                yAxisIndex: 1,
+            }
+        ]
+    };
+    chart_total.setOption(total_option);
+}
+function setTotalMonthEchartsOption1(month_file_upload_num) {
+    var dataShadow = [];
+    var yMax = Math.max.apply(null, month_file_upload_num);
+    for (var i = 0; i < month_file_upload_num.length; i++) {
+        dataShadow.push(yMax);
+    }
+    var dataAxis = [GetDateStr(-30), GetDateStr(-29), GetDateStr(-28), GetDateStr(-27), GetDateStr(-26), GetDateStr(-25), GetDateStr(-24), GetDateStr(-23), GetDateStr(-22),
+        GetDateStr(-21), GetDateStr(-20), GetDateStr(-19), GetDateStr(-18), GetDateStr(-17), GetDateStr(-16), GetDateStr(-15),
+        GetDateStr(-14), GetDateStr(-13), GetDateStr(-12), GetDateStr(-11), GetDateStr(-10), GetDateStr(-9), GetDateStr(-8),
+        GetDateStr(-7), GetDateStr(-6), GetDateStr(-5), GetDateStr(-4), GetDateStr(-3), GetDateStr(-2), GetDateStr(-1)];
+
+    var chart_total = echarts.init(document.getElementById('Echarts_last_month1'));
+    var total_option = {
+        title: {
+            text: '近期实验平台文件上传量',
+            subtext: '近三十天数据'
+        },
+        xAxis: {
+            data: dataAxis,
+            axisLabel: {
+                inside: true,
+                textStyle: {
+                    color: '#000'
+                },
+                interval:0,
+                rotate:90
+            },
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            },
+            z: 10
+        },
+        yAxis: {
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#999'
+                }
+            }
+        },
+        dataZoom: [
+            {
+                type: 'inside'
+            }
+        ],
+        series: [
+            { // For shadow
+                type: 'bar',
+                itemStyle: {
+                    color: 'rgba(0,0,0,0.05)'
+                },
+                barGap: '-100%',
+                barCategoryGap: '40%',
+                data: dataShadow,
+                animation: false
+            },
+            {
+                type: 'bar',
+                itemStyle: {
+                    color: new echarts.graphic.LinearGradient(
+                        0, 0, 0, 1,
+                        [
+                            {offset: 0, color: '#83bff6'},
+                            {offset: 0.5, color: '#188df0'},
+                            {offset: 1, color: '#188df0'}
+                        ]
+                    )
+                },
+                emphasis: {
+                    itemStyle: {
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1,
+                            [
+                                {offset: 0, color: '#2378f7'},
+                                {offset: 0.7, color: '#2378f7'},
+                                {offset: 1, color: '#83bff6'}
+                            ]
+                        )
+                    }
+                },
+                data: month_file_upload_num
+            }
+        ]
+	}
+    chart_total.setOption(total_option);
+}
+
 
 // 获取近一周 实验次数、实验时长
 function getLastWeekStatistics(){
@@ -609,22 +849,21 @@ function getLastWeekStatistics(){
 								data.result.duration[4], data.result.duration[5], data.result.duration[6]];
                 var week_file_upload_num = [data.result.fileUploadNum[0], data.result.fileUploadNum[1], data.result.fileUploadNum[2], data.result.fileUploadNum[3],
                     					data.result.fileUploadNum[4], data.result.fileUploadNum[5], data.result.fileUploadNum[6]];
-                setTotalEchartsOption(week_exp_num, week_duration, week_file_upload_num);
+                setTotalWeekEchartsOption(week_exp_num, week_duration, week_file_upload_num);
             }else{
                 console.log(data);
                 var nodata = [0, 0, 0, 0, 0, 0, 0];
-                setTotalEchartsOption(nodata,nodata,nodata);
+                setTotalWeekEchartsOption(nodata,nodata,nodata);
             }
         },
         error: function(xhr){
             console.log(xhr);
             var nodata = [0, 0, 0, 0, 0, 0, 0];
-            setTotalEchartsOption(nodata,nodata,nodata);
+            setTotalWeekEchartsOption(nodata,nodata,nodata);
         }
     });
-
 }
-function setTotalEchartsOption(week_exp_num, week_duration, week_file_upload_num){
+function setTotalWeekEchartsOption(week_exp_num, week_duration, week_file_upload_num){
     var chart_total = echarts.init(document.getElementById('Echarts_last_week'));
     var total_option = {
         title:{
@@ -2026,7 +2265,7 @@ function GetDateStr(AddDayCount) {
     var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();//获取当前几号，不足10补0
 	//var result = y+"-"+m+"-"+d;
     var result = m+"-"+d;
-    console.log(result);
+    // console.log(result);
     return result;
 }
 
