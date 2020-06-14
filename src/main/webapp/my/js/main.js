@@ -216,7 +216,7 @@ function request(func,data,callback,type,loading){
 
 //Cookie存储   onLoad="checkCookie()"
 function getCookie(c_name) {
-	console.log(document.cookie);
+	// console.log(document.cookie);
 	if (document.cookie.length>0) {
 		c_start = document.cookie.indexOf(c_name + "=")
 		if (c_start!=-1) {
@@ -485,7 +485,7 @@ function getClass(){
     }
     // 获取是否加入班级
     request('business.busClass.isJoinClass',data,function callback(result){
-        console.log(result);
+        // console.log(result);
         if (result.code == 1) {
             if(result.value == null){
                 // 没有班级信息
@@ -757,7 +757,7 @@ function setTotalMonthEchartsOption1(month_file_upload_num) {
             axisLabel: {
                 inside: true,
                 textStyle: {
-                    color: '#000'
+                    color: '#82bac7'
                 },
                 interval:0,
                 rotate:90
@@ -1443,7 +1443,8 @@ function courseDetail(courseid,type){
 					$("#parentCap").empty();
 					$("#parentCap").append('<option value="">请选择</option>');
 					for(var key in data.value){
-						console.log("属性：" + key + ",值：" + data.value[key]);
+						console.log("key:   ");console.log(key);
+						console.log("value: ");console.log(data.value[key]);
 						$("#parentCap").append('<option value="'+result.value[key][0].id+'">'+result.value[key][0].title+'</option>');
 					}
 					var html = template('content', data);
@@ -1475,6 +1476,34 @@ function courseDetail(courseid,type){
 					$("#sliderMenuMain").html(html);
 				}
 			}
+		}
+		else if(type==7){
+			//FPGA 实验
+            if(result.code==0){
+                // $('#overview')!=null?$('#overview').html(result.value[0].overview):"";
+                if(result.value){
+                    var data = {
+                        value : result.value,
+                        courseid :courseid
+                    };
+                    // console.log(data.value),
+                    template.config("escape", false);
+                    $("#parentCap").empty();
+                    $("#parentCap").append('<option value="">请选择</option>');
+                    for(var key in data.value){
+                        console.log("key:   ");console.log(key);
+                        console.log("value: ");console.log(data.value[key]);
+                        $("#parentCap").append('<option value="'+result.value[key][0].id+'">'+result.value[key][0].title+'</option>');
+                    }
+                    var html = template('content', data);
+                    $('#show').html(html);
+                    // var html1 = template('train_content', data);
+                    // $('#training').html(html1);
+                    //add content
+                    //$('#training').html(html);
+                    return result.value;
+                }
+            }
 		}
 	});
 }

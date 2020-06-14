@@ -121,6 +121,7 @@
 						</div>
 					</div>
 				<span id="p_tag"></span>
+
 				<!-- 模态框（Modal） -->
 				<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModal1Label" aria-hidden="true">
 					<div class="modal-dialog">
@@ -163,6 +164,7 @@
 						</div><!-- /.modal-content -->
 					</div><!-- /.modal -->
 				</div>
+
 			</div>
 			<div class="row col-md-4 col-sm-4 col-xs-12" style="padding-left: 30px;">
 				<img id="coursePic" src="#" style="width: 100%">
@@ -175,7 +177,7 @@
 					<ul class="nav nav-tabs" style="color: #000">
 						<li role="presentation" id="descs" class="active"><a href="javascript:;" onclick="descs()" class="courseTabLink">教学大纲</a></li>
 						<li role="presentation" id="classs"><a href="javascript:;" onclick="defa()" class="courseTabLink">课件列表</a></li>
-						<li role="presentation" id="train"><a href="javascript:;" onclick="train()" class="courseTabLink">实验列表</a></li>
+						<li role="presentation" id="train"><a id="train_list" href="javascript:;" onclick="train()" class="courseTabLink">实验列表</a></li>
 						<li role="presentation" id="askq"><a href="javascript:;" onclick="newq()" class="courseTabLink">问答</a></li>
 					</ul>
 					<!--<span onclick="defa()" style="cursor: pointer;">章节</span>-->
@@ -238,7 +240,7 @@
 												<i class="fas fa-cogs" style="color: darkblue;"></i>
 											</a>
 											<%}if (value[key][j].type==5){%>
-											<a id="code_button" style="float:right; margin-right: 20px;">
+											<a id="code_button_2" style="float:right; margin-right: 20px;">
 												<i class="fas fa-file-powerpoint" style="color: orangered;"></i>
 											</a>
 											<%}%>
@@ -475,7 +477,6 @@
 					</div>
 				</div>
 			</div>
-
 		</div>
 	</div>
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
@@ -504,7 +505,6 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="footer">
 		<div class="container">
 			<ul>
@@ -527,42 +527,105 @@
 	</div>
 
 	<script>
-			var courseId= window.location.href.split('=')[1];
-//			console.log(courseId);
-			//var teacheruserid=$(#teaid).val();
+		var courseId = window.location.href.split('=')[1];
+		var collegeId = '';
+		var classId = '';
+		var userMain = JSON.parse(getCookie('loginResult'));
+        var teacheruseid=$('#teacherID').text();
+
+
+        $(document).ready(function () {
+            //var teacheruserid=$(#teaid).val();
             hasClass(courseId);
             // 获取班级信息
             isJoinClass(courseId);
             getLastestChapter(courseId);
             getFinishProgress(courseId);
-			courseOverview(courseId);
-            var teacheruseid=$('#teacherID').text();
+            courseOverview(courseId);
             getteacher(teacheruseid);
-            courseDetail(courseId,1);
-			exerciseDetial(courseId,1);
-			// 获取院校信息
-			getCollege();
-			getClass();
-			//展示班级
-            $('#myModal1').on('show.bs.modal', function () {
-                getClassesByCourse(courseId);
-            });
+            //获取课程类型 如果是fpga 不需要实验列表
+            getCourseClassify(courseId);
+            // 获取院校信息
+            getCollege();
+            getClass();
 
-			//弹窗打开时获取用户的积分
-			$('#askLink').on('show.bs.modal',function () {
-				var integral = getUserIntegral();
-				if(integral){
-					$("#m_ask_mycoin").text(integral);
-					$("#bonus").attr("max",integral);
-				}
-			});
+		});
 
+		//展示班级
+		$('#myModal1').on('show.bs.modal', function () {
+			getClassesByCourse(courseId);
+		});
+
+		//弹窗打开时获取用户的积分
+		$('#askLink').on('show.bs.modal',function () {
+			var integral = getUserIntegral();
+			if(integral){
+				$("#m_ask_mycoin").text(integral);
+				$("#bonus").attr("max",integral);
+			}
+		});
 
         var page=1;
         var orderBy="update_date";
         var isasc=false;
         //courseId,page,orderBy,true
         answer(courseId,page,orderBy,isasc,true);
+
+        //获取课程类型
+        function getCourseClassify(course_id) {
+            console.log(course_id);
+            var data={
+                buscourse:{
+                    id:course_id
+                }
+            };
+            request('business.busCourse.getCourseById',data,function callback(result){
+                console.log(result);
+                if(result.code==0){
+					if(result.value.classify == "7"){
+					    // 如果是 FPGA 实验
+						document.getElementById("train_list").innerText = "实验平台";
+                        // 通过课程id获取章节列表
+                        courseDetail(courseId,7);
+                        //todo 设置实验平台页面
+						var plantFormPlane = document.getElementById("training");
+
+						var plantFormFPGA = "<div style='width: 100%; margin-top: 20px;'>" +
+							"					<div style='width: 100%'>" +
+							"						<a onclick='jumpToFPGALab()'>FPGA远程实验平台</a>" +
+							"					</div>" +
+							"					<div style='width: 100%; margin-top: 20px;'>" +
+							"						<a onclick=''>虚拟实验室远程实验平台</a>" +
+							"					</div>" +
+							"				</div>";
+                        plantFormPlane.innerHTML = plantFormFPGA;
+					}else{
+						// 如果不是 FPGA 实验
+                        exerciseDetial(course_id,1);
+                        //通过课程id获取章节列表
+                        courseDetail(courseId,1);
+					}
+                }else{
+					// 请求失败
+                    exerciseDetial(course_id,1);
+                    //通过课程id获取章节列表
+                    courseDetail(courseId,1);
+				}
+            });
+        }
+
+        //
+		function jumpToFPGALab() {
+            getCollege();
+            getClass();
+            var FPGAUrl = "http://10.1.21.153/hdu?" + "chapterId=" + 0 +
+                "&courseId=" + courseId +
+                "&userName=" + userMain.loginName +
+                "&collegeId=" + collegeId +
+                "&classId=" + classId;
+            console.log(FPGAUrl);
+            window.location.href = FPGAUrl;
+        }
 
 		//问题检索
 		function searchQuest() {
@@ -691,9 +754,9 @@
                 answer(courseId,page,orderBy,isasc,true);
 		}
 
-            $('#submit').click(function(){
-                joinClass(window.location.href.split('=')[1]);
-            });
+		$('#submit').click(function(){
+			joinClass(window.location.href.split('=')[1]);
+		});
 
 		function setP(pages,current){
 			$(".pagination").createPage({

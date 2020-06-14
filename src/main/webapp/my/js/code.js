@@ -5,19 +5,19 @@ var language = "";//语言 execjava execCplus execPy
 var chapterId = "";//章节id
 var courseId = "";//课程id
 var collegeId = "";//学校id
-var major = ""//专业
-var classId = ""//班级id
+var major = "";//专业
+var classId = "";//班级id
 var codeId = "";
 var videoUrl = "";//视频url
-var types ="";//类型: 0 写代码 1 播放视频 2 scratch
-var lan_types ="";//语言类型 0 java 1 c++ 2 python
-var al_name ="";//给codemirror选择语言类型用的
-var editor=null;
-var resetContent="";
-var content="";//编辑器里面的内容
-var inputvalue="";//输入框里的值
-var taskId="";//项目任务projectId
-var personProjectId="";
+var types = "";//类型: 0 写代码 1 播放视频 2 scratch 3 FPGA实验 4 机械实习
+var lan_types = "";//语言类型 0 java 1 c++ 2 python
+var al_name = "";//给codemirror选择语言类型用的
+var editor = null;
+var resetContent = "";
+var content = "";//编辑器里面的内容
+var inputvalue = "";//输入框里的值
+var taskId = "";//项目任务projectId
+var personProjectId = "";
 var userMain = "";
 // var userId
 
@@ -34,7 +34,7 @@ $(document).ready(function () {
     var codeFrame = document.getElementById("codeFrame");
     var obj = codeFrame.contentWindow;
     var codeType = lan_types;
-    //判断任务类型
+    //判断任务类型(type 在 getChapterByChapterId() 获取)
     switch (types) {
         //code
         case '0':
@@ -107,14 +107,15 @@ $(document).ready(function () {
             }
             $(codeFrame).attr("src","http://10.1.21.153/hdu?" + "chapterId=" + chapterId + "&courseId=" + courseId + "&userName=" + userMain.loginName + "&collegeId=" + collegeId + "&classId=" + classId);
             $(codeFrame).attr("width","70%");
-                // // $("#codeFrame").attr("src","codeDoc.html?chapterId="+chapterId);
-                // $(codeFrame).attr("src","http://127.0.0.1:8601/frame.html");
-                // // $("#codeFrame").attr("src","scratch/frame.html?projectId=eae211f2654546eda5679992c7c6eeba");
-                // // $("#codeFrame").attr("src","scratch/frame.html?chapterId="+chapterId);
-                // $(codeFrame).attr("width","80%");
-                // $("#a").attr("style","width:20%");
-                // getExample(chapterId);
+            // // $("#codeFrame").attr("src","codeDoc.html?chapterId="+chapterId);
+            // $(codeFrame).attr("src","http://127.0.0.1:8601/frame.html");
+            // // $("#codeFrame").attr("src","scratch/frame.html?projectId=eae211f2654546eda5679992c7c6eeba");
+            // // $("#codeFrame").attr("src","scratch/frame.html?chapterId="+chapterId);
+            // $(codeFrame).attr("width","80%");
+            // $("#a").attr("style","width:20%");
+            // getExample(chapterId);
             break;
+
         //机械实习
         case '4':
             $("#a").css("display","block");
@@ -368,6 +369,53 @@ function iframeIsLoad(iframe,callback){
     }
 }
 
+// 根据章节id获取章节具体信息
+function getChapter(chapterId) {
+    var data={
+        busChapter:{
+            id:chapterId
+        }
+    };
+    request('business.busChapter.getBusChapterWithCourseClassify',data,function callback(result) {
+        //console.log("chapterinfo:"+JSON.stringify(result));
+        if(result.code == 0){
+            // courseId =result.value.busChapter.courseId;
+            videoUrl = result.value.busChapter.resourceUrl;
+            lan_types = result.value.busCourse.classify;
+            $('#courseTit').html(result.value.busChapter.title);
+//            $('#case1').html(result.value.des);
+            $('#caseContent').html(result.value.busChapter.des);
+            types = result.value.busChapter.type;
+            if(types == '1'){
+                courseDetail(courseId, 3);
+                $(".hov").eq(0).html("<a href='javascript:;'>"+result.value.busChapter.title+"</a>");
+            }else{
+                courseDetail(courseId, 2);
+            }
+            var menuLinks = $("a.menuLink");
+            for(var i = 0;i < menuLinks.length;i++){
+                var hrefId = menuLinks[i].href.split("=")[1];
+                if(hrefId == chapterId){
+                    if(i>0){
+                        $("#lastCourse").on("click",function () {
+                            window.location.href = menuLinks[i-1].href;
+                        })
+                    }
+                    if(i<menuLinks.length-1){
+                        $("#nextCourse").on("click",function () {
+                            window.location.href = menuLinks[i+1].href;
+                        })
+                    }
+                    $("#courseTit").text($.trim(menuLinks[i].innerText));
+                    break;
+                }
+            }
+            console.log(result.msg);
+        }else{
+            console.log(result.msg);
+        }
+    },false)
+}
 
 var iflag=0;
 function showMenu() {
@@ -449,55 +497,6 @@ function stopPropagation(e) {
 //         }
 //     });
 // }
-
-// 根据章节id获取章节具体信息
-function getChapter(chapterId) {
-    var data={
-        busChapter:{
-            id:chapterId
-        }
-    };
-    request('business.busChapter.getBusChapterWithCourseClassify',data,function callback(result) {
-        //console.log("chapterinfo:"+JSON.stringify(result));
-        if(result.code == 0){
-            // courseId =result.value.busChapter.courseId;
-            videoUrl = result.value.busChapter.resourceUrl;
-            lan_types = result.value.busCourse.classify;
-            $('#courseTit').html(result.value.busChapter.title);
-//            $('#case1').html(result.value.des);
-            $('#caseContent').html(result.value.busChapter.des);
-            types = result.value.busChapter.type;
-            if(types == '1'){
-                courseDetail(courseId, 3);
-                $(".hov").eq(0).html("<a href='javascript:;'>"+result.value.busChapter.title+"</a>");
-            }else{
-                courseDetail(courseId, 2);
-            }
-            var menuLinks = $("a.menuLink");
-            for(var i = 0;i < menuLinks.length;i++){
-                var hrefId = menuLinks[i].href.split("=")[1];
-                if(hrefId == chapterId){
-                    if(i>0){
-                        $("#lastCourse").on("click",function () {
-                            window.location.href = menuLinks[i-1].href;
-                        })
-                    }
-                    if(i<menuLinks.length-1){
-                        $("#nextCourse").on("click",function () {
-                            window.location.href = menuLinks[i+1].href;
-                        })
-                    }
-                    $("#courseTit").text($.trim(menuLinks[i].innerText));
-                    break;
-                }
-            }
-            console.log(result.msg);
-        }else{
-            console.log(result.msg);
-        }
-    },false)
-
-}
 
 //
 // function resetCode(){
