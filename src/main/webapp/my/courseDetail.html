@@ -587,18 +587,18 @@
 						document.getElementById("train_list").innerText = "实验平台";
                         // 通过课程id获取章节列表
                         courseDetail(courseId,7);
-                        //todo 设置实验平台页面
 						var plantFormPlane = document.getElementById("training");
-
 						var plantFormFPGA = "<div style='width: 100%; margin-top: 20px;'>" +
 							"					<div style='width: 100%'>" +
 							"						<a onclick='jumpToFPGALab()'>FPGA远程实验平台</a>" +
 							"					</div>" +
 							"					<div style='width: 100%; margin-top: 20px;'>" +
-							"						<a onclick=''>虚拟实验室远程实验平台</a>" +
+							"						<a onclick='jumpToVirtualLab()'>虚拟实验室远程实验平台</a>" +
 							"					</div>" +
 							"				</div>";
                         plantFormPlane.innerHTML = plantFormFPGA;
+                        //todo 设置虚拟实验室实验平台页面
+
 					}else{
 						// 如果不是 FPGA 实验
                         exerciseDetial(course_id,1);
@@ -614,7 +614,6 @@
             });
         }
 
-        //
 		function jumpToFPGALab() {
             getCollege();
             getClass();
@@ -625,6 +624,9 @@
                 "&classId=" + classId;
             console.log(FPGAUrl);
             window.location.href = FPGAUrl;
+        }
+        function jumpToVirtualLab() {
+
         }
 
 		//问题检索
