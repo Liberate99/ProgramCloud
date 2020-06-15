@@ -228,8 +228,7 @@ function getCookie(c_name) {
 	}
 	return ""
 }
-function setPathCookie(c_name,value,expiredays,path)
-{
+function setPathCookie(c_name,value,expiredays,path) {
     var exdate=new Date()
     exdate.setDate(exdate.getDate() + expiredays)
     document.cookie = c_name + "=" +
@@ -245,8 +244,7 @@ function setCookie(c_name,value,expiredays) {
 	document.cookie=c_name+ "=" +escape(value)+
 		((expiredays==null) ? "" : ";expires="+exdate.toGMTString());
 }
-function checkCookie()
-{
+function checkCookie() {
 	username=getCookie('username')
 	if (username!=null && username!="")
 	{alert('Welcome again '+username+'!')}
@@ -749,6 +747,7 @@ function setTotalMonthEchartsOption1(month_file_upload_num) {
     var chart_total = echarts.init(document.getElementById('Echarts_last_month1'));
     var total_option = {
         title: {
+            left:'center',
             text: '近期实验平台文件上传量',
             subtext: '近三十天数据'
         },
@@ -955,6 +954,141 @@ function setTotalWeekEchartsOption(week_exp_num, week_duration, week_file_upload
     };
     chart_total.setOption(total_option);
 }
+
+
+// 获取近一周 每天 每两小时 数据
+function getLastWeekHourlyStatistics() {
+    $.ajax({
+        type: 'GET',
+        url: 'http://10.1.21.153/hdu/cb/getLastWeekDailyHourlyStatistics',
+        dataType: 'json',
+        success: function(data){
+            console.log(data)
+            if(data.code == 0){
+                // 获取实验次数
+                var expNum = new Array();
+                var maxValue = 0;
+                var index = 0;
+                for(var i = 0; i < 7; i++){
+                    var expNumData = data.result.expNum[i].split('/');
+                    expNum[i] = new Array();
+                    for(var j = 0; j < 12; j++){
+                    	var tmp = parseInt(expNumData[j]);
+                    	if(tmp > maxValue){
+                    		maxValue = tmp;
+						}
+                        expNum[index++] = [i, j, tmp];
+                    }
+                }
+                console.log(expNum);
+                setLastWeekHourlyEchartsOption(expNum,maxValue);
+            }else{
+                console.log(data);
+                var nodata = [
+                    [0,0,0],[0,1,0],[0,2,0],[0,3,0],[0,4,0],[0,5,0],[0,6,0],[0,7,0],[0,8,0],[0,9,0],[0,10,0],[0,11,0],
+                    [1,0,0],[1,1,0],[1,2,0],[1,3,0],[1,4,0],[1,5,0],[1,6,0],[1,7,0],[1,8,0],[1,9,0],[1,10,0],[1,11,0],
+                    [2,0,0],[2,1,0],[2,2,0],[2,3,0],[2,4,0],[2,5,0],[2,6,0],[2,7,0],[2,8,0],[2,9,0],[2,10,0],[2,11,0],
+                    [3,0,0],[3,1,0],[3,2,0],[3,3,0],[3,4,0],[3,5,0],[3,6,0],[3,7,0],[3,8,0],[3,9,0],[3,10,0],[3,11,0],
+                    [4,0,0],[4,1,0],[4,2,0],[4,3,0],[4,4,0],[4,5,0],[4,6,0],[4,7,0],[4,8,0],[4,9,0],[4,10,0],[4,11,0],
+                    [5,0,0],[5,1,0],[5,2,0],[5,3,0],[5,4,0],[5,5,0],[5,6,0],[5,7,0],[5,8,0],[5,9,0],[5,10,0],[5,11,0],
+                    [6,0,0],[6,1,0],[6,2,0],[6,3,0],[6,4,0],[6,5,0],[6,6,0],[6,7,0],[6,8,0],[6,9,0],[6,10,0],[6,11,0]
+                ];
+                setLastWeekHourlyEchartsOption(nodata,1);
+            }
+        },
+        error: function(xhr){
+            console.log(xhr);
+            var nodata = [
+                [0,0,0],[0,1,0],[0,2,0],[0,3,0],[0,4,0],[0,5,0],[0,6,0],[0,7,0],[0,8,0],[0,9,0],[0,10,0],[0,11,0],
+                [1,0,0],[1,1,0],[1,2,0],[1,3,0],[1,4,0],[1,5,0],[1,6,0],[1,7,0],[1,8,0],[1,9,0],[1,10,0],[1,11,0],
+                [2,0,0],[2,1,0],[2,2,0],[2,3,0],[2,4,0],[2,5,0],[2,6,0],[2,7,0],[2,8,0],[2,9,0],[2,10,0],[2,11,0],
+                [3,0,0],[3,1,0],[3,2,0],[3,3,0],[3,4,0],[3,5,0],[3,6,0],[3,7,0],[3,8,0],[3,9,0],[3,10,0],[3,11,0],
+                [4,0,0],[4,1,0],[4,2,0],[4,3,0],[4,4,0],[4,5,0],[4,6,0],[4,7,0],[4,8,0],[4,9,0],[4,10,0],[4,11,0],
+                [5,0,0],[5,1,0],[5,2,0],[5,3,0],[5,4,0],[5,5,0],[5,6,0],[5,7,0],[5,8,0],[5,9,0],[5,10,0],[5,11,0],
+                [6,0,0],[6,1,0],[6,2,0],[6,3,0],[6,4,0],[6,5,0],[6,6,0],[6,7,0],[6,8,0],[6,9,0],[6,10,0],[6,11,0]
+            ];
+            setLastWeekHourlyEchartsOption(nodata,1);
+        }
+    });
+}
+function setLastWeekHourlyEchartsOption(statistics, maxValue){
+    var hours = ['0a-2a', '2a-4a', '4a-6a', '6a-8a', '8a-10a', '10a-12a', '12a-14p', '14p-16p', '16p-18p', '18p-20p','20p-22p','22p-24p'];
+    var days = [GetDateStr(-7), GetDateStr(-6), GetDateStr(-5), GetDateStr(-4), GetDateStr(-3), GetDateStr(-2), GetDateStr(-1)];
+    var data = statistics;
+    data = data.map(function (item) {
+        return [item[1], item[0], item[2] || '-'];
+    });
+
+    var chart_total = echarts.init(document.getElementById('Echarts_last_week_hourly'));
+    var total_option = {
+        title:{
+            left:'center',
+            text:'近一周实验时段/次数热点图',
+            textStyle:{
+                //文字颜色
+                color:'#000000',
+                //字体风格,'normal','italic','oblique'
+                fontStyle:'normal',
+                //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+                fontWeight:'bold',
+                //字体系列
+                fontFamily:'sans-serif',
+                //字体大小
+                fontSize:18,
+            }
+        },
+        tooltip: {
+            position: 'top'
+        },
+        animation: true,
+        grid: {
+            height: '50%',
+            top: '10%'
+        },
+        xAxis: {
+            type: 'category',
+            data: hours,
+            axisLabel: {
+                interval:0,
+                rotate:45
+            },
+            splitArea: {
+                show: true
+            }
+        },
+        yAxis: {
+            type: 'category',
+            data: days,
+            splitArea: {
+                show: true
+            }
+        },
+        visualMap: {
+            min: 0,
+            max: maxValue,
+            calculable: true,
+            orient: 'horizontal',
+            left: 'center',
+            bottom: '15%'
+        },
+        series: [{
+            name: '实验次数',
+            type: 'heatmap',
+            data: data,
+            label: {
+                show: true
+            },
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+    chart_total.setOption(total_option);
+}
+
 
 // ***************通过search获取相关列表****************
 // function getSearchCourse(classify,title,page){

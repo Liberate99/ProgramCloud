@@ -349,6 +349,7 @@
         // 隐藏图表占用页面
         document.getElementById("class_data_1").style.display="none";//隐藏
         document.getElementById("class_data_2").style.display="none";//隐藏
+        document.getElementById("class_data_3").style.display="none";//隐藏
 
 
         // 获取当前课程 id、title
@@ -531,7 +532,7 @@
                 var data = {
                     value : result.value
                 };
-                // todo 1.设置'选择班级'下拉菜单
+                // 设置'选择班级'下拉菜单
                 if($("script#classesTag").length){
                     var classesTag = template('classesTag', data);
                     $('#selectClassTag').empty().append(classesTag);
@@ -568,6 +569,7 @@
                 // 显示图表
                 document.getElementById("class_data_1").style.display="";
                 document.getElementById("class_data_2").style.display="";
+                document.getElementById("class_data_3").style.display="";
                 console.log(data)
                 if(data.code == 0){
                     var week_exp_num = [data.result.expNum[0], data.result.expNum[1], data.result.expNum[2], data.result.expNum[3],

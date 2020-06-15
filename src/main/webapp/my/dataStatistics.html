@@ -136,6 +136,16 @@
                             user-select: none;margin: 10px auto;">
                 </div>
             </div>
+
+            <!--图表4-->
+            <div class="row" style="min-width: 600px; width: 80%; height: 400px; margin: 40px auto;">
+                <div id="Echarts_last_week_hourly"
+                     style="width: 600px;height: 400px;
+                            background-color: #ffffff;
+                            -webkit-tap-highlight-color: transparent;
+                            user-select: none;margin: 10px auto;">
+                </div>
+            </div>
         </div>
 
     </div>
@@ -233,6 +243,9 @@
 
         // 获取近一周 实验次数、实验时长 - echarts
         getLastWeekStatistics()
+
+        // 获取近一周 每天 每两小时实验次数 - echarts
+        getLastWeekHourlyStatistics()
 
         // 获取所有实验课
         // 获取我所创建的FPGA类课程
