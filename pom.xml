@@ -15,7 +15,7 @@
     <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
     <tomcat.version>2.2</tomcat.version>
     <!-- main version setting -->
-    <spring.version>4.3.5.RELEASE</spring.version>
+    <spring.version>5.2.20.RELEASE</spring.version>
     <validator.version>5.2.4.Final</validator.version>
     <mybaitsplus.version>2.0.8</mybaitsplus.version>
     <druid.version>1.0.18</druid.version>
